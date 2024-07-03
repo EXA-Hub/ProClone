@@ -1,0 +1,23 @@
+# Node.js dependencies
+node_modules/
+
+# Environment variables
+.env
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Ignore SQLite database file within database folder
+database/*.sqlite
+
+
+# IDE-specific files
+.vscode/
+.idea/
+*.sublime-workspace

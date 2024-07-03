@@ -1,0 +1,1240 @@
+[
+  {
+    "id": "971783620849180712",
+    "type": 1,
+    "application_id": "567703512763334685",
+    "version": "1004455018033852447",
+    "name": "ping",
+    "description": "Test the bots response time.",
+    "dm_permission": true,
+    "integration_types": [0],
+    "global_popularity_rank": 30
+  },
+  {
+    "id": "971783620849180713",
+    "type": 1,
+    "application_id": "567703512763334685",
+    "version": "1045099067564372028",
+    "name": "daily",
+    "description": "Get the daily reward link and know when you can claim it again.",
+    "dm_permission": true,
+    "integration_types": [0],
+    "global_popularity_rank": 3
+  },
+  {
+    "id": "971783620849180714",
+    "type": 1,
+    "application_id": "567703512763334685",
+    "version": "1004455018033852449",
+    "name": "help",
+    "description": "Feeling lost?",
+    "options": [
+      {
+        "type": 3,
+        "name": "command",
+        "description": "Shows details about how to use a command."
+      }
+    ],
+    "dm_permission": true,
+    "integration_types": [0],
+    "global_popularity_rank": 22
+  },
+  {
+    "id": "971783620849180715",
+    "type": 1,
+    "application_id": "567703512763334685",
+    "version": "1025961694062723103",
+    "name": "server",
+    "description": "Displays information about the server.",
+    "dm_permission": true,
+    "integration_types": [0],
+    "global_popularity_rank": 16
+  },
+  {
+    "id": "971783620849180716",
+    "type": 1,
+    "application_id": "567703512763334685",
+    "version": "971783621407043617",
+    "name": "roll",
+    "description": "rolling dice.",
+    "options": [
+      { "type": 3, "name": "dice", "description": "Picks a random number" }
+    ],
+    "dm_permission": true,
+    "integration_types": [0],
+    "global_popularity_rank": 38
+  },
+  {
+    "id": "971783620849180717",
+    "type": 1,
+    "application_id": "567703512763334685",
+    "version": "1004455018033852450",
+    "name": "invite",
+    "description": "Looking for the bot invite link?",
+    "dm_permission": true,
+    "integration_types": [0],
+    "global_popularity_rank": 28
+  },
+  {
+    "id": "971783620849180718",
+    "type": 1,
+    "application_id": "567703512763334685",
+    "version": "971783621407043619",
+    "name": "title",
+    "description": "Changes your title in `/profile` command.",
+    "options": [
+      { "type": 3, "name": "new_title", "description": "The new title to set." }
+    ],
+    "dm_permission": true,
+    "integration_types": [0],
+    "global_popularity_rank": 35
+  },
+  {
+    "id": "971783620849180719",
+    "type": 1,
+    "application_id": "567703512763334685",
+    "version": "971783621407043620",
+    "name": "short",
+    "description": "Shortens a URL.",
+    "options": [
+      {
+        "type": 3,
+        "name": "url",
+        "description": "Please enter a url",
+        "required": true
+      }
+    ],
+    "dm_permission": true,
+    "integration_types": [0],
+    "global_popularity_rank": 43
+  },
+  {
+    "id": "971783620849180720",
+    "type": 1,
+    "application_id": "567703512763334685",
+    "version": "971783621407043621",
+    "name": "roles",
+    "description": "Get a list of server roles and member counts.",
+    "dm_permission": true,
+    "integration_types": [0],
+    "global_popularity_rank": 23
+  },
+  {
+    "id": "971783620849180721",
+    "type": 1,
+    "application_id": "567703512763334685",
+    "version": "971783621407043622",
+    "name": "avatar",
+    "description": "Displays your avatar or someone else's avatar.",
+    "options": [
+      {
+        "type": 6,
+        "name": "user",
+        "description": "The user to get avatar for."
+      }
+    ],
+    "dm_permission": true,
+    "integration_types": [0],
+    "global_popularity_rank": 7
+  },
+  {
+    "id": "971783621016948756",
+    "type": 1,
+    "application_id": "567703512763334685",
+    "version": "971783621407043623",
+    "name": "credits",
+    "description": "Shows your or someone's balance or transfer credits for someone",
+    "options": [
+      {
+        "type": 6,
+        "name": "user",
+        "description": "User to show/transfer credits of/to."
+      },
+      {
+        "type": 4,
+        "name": "amount",
+        "description": "Amount of credits to transfer."
+      },
+      {
+        "type": 3,
+        "name": "comment",
+        "description": "An additional comment to the credits transaction."
+      }
+    ],
+    "dm_permission": true,
+    "integration_types": [0],
+    "global_popularity_rank": 5
+  },
+  {
+    "id": "971783621016948757",
+    "type": 1,
+    "application_id": "567703512763334685",
+    "version": "971783621444767774",
+    "name": "profile",
+    "description": "View your or someone else's customizable personal global profile card.",
+    "options": [
+      { "type": 6, "name": "user", "description": "User to get profile of." }
+    ],
+    "dm_permission": true,
+    "integration_types": [0],
+    "global_popularity_rank": 4
+  },
+  {
+    "id": "971783621016948758",
+    "type": 1,
+    "application_id": "567703512763334685",
+    "version": "971783621444767775",
+    "name": "rank",
+    "description": "View your rank card or someone else's in the server.",
+    "options": [
+      { "type": 6, "name": "user", "description": "User to get rank of." }
+    ],
+    "dm_permission": true,
+    "integration_types": [0],
+    "global_popularity_rank": 1
+  },
+  {
+    "id": "971783621016948759",
+    "type": 1,
+    "application_id": "567703512763334685",
+    "version": "1025961694062723104",
+    "name": "user",
+    "description": "Displays information about yourself or another user, such as ID and join date.",
+    "options": [
+      {
+        "type": 6,
+        "name": "user",
+        "description": "User to get information about."
+      }
+    ],
+    "dm_permission": true,
+    "integration_types": [0],
+    "global_popularity_rank": 15
+  },
+  {
+    "id": "971783621016948760",
+    "type": 1,
+    "application_id": "567703512763334685",
+    "version": "1073565719398187048",
+    "name": "top",
+    "description": "Displays the most active members on the server",
+    "options": [
+      {
+        "type": 3,
+        "name": "type",
+        "description": "The leaderboard type either text or voice.",
+        "choices": [
+          { "name": "Text", "value": "text" },
+          { "name": "Voice", "value": "voice" },
+          { "name": "Invite", "value": "invites" }
+        ]
+      },
+      {
+        "type": 3,
+        "name": "duration",
+        "description": "The leaderboard specified duration.",
+        "choices": [
+          { "name": "Day", "value": "day" },
+          { "name": "Week", "value": "week" },
+          { "name": "Month", "value": "month" }
+        ]
+      },
+      {
+        "type": 4,
+        "name": "page",
+        "description": "The leaderboard page number.",
+        "min_value": 1
+      },
+      {
+        "type": 8,
+        "name": "role",
+        "description": "Filter leaderboard for specific members with a role."
+      }
+    ],
+    "dm_permission": true,
+    "integration_types": [0],
+    "global_popularity_rank": 6
+  },
+  {
+    "id": "971783621016948761",
+    "type": 1,
+    "application_id": "567703512763334685",
+    "version": "971783621444767778",
+    "name": "moveme",
+    "description": "Moves you to another voice channel.",
+    "options": [
+      {
+        "type": 3,
+        "name": "input",
+        "description": "Channel/user to be moved to.",
+        "required": true
+      }
+    ],
+    "dm_permission": true,
+    "integration_types": [0],
+    "global_popularity_rank": 42
+  },
+  {
+    "id": "971783621016948763",
+    "type": 1,
+    "application_id": "567703512763334685",
+    "version": "1025961694062723105",
+    "name": "color",
+    "description": "Changes your color in the server",
+    "options": [
+      {
+        "type": 4,
+        "name": "number_of_color",
+        "description": "Number of the color given in the /colors commands",
+        "required": true
+      }
+    ],
+    "dm_permission": true,
+    "integration_types": [0],
+    "global_popularity_rank": 37
+  },
+  {
+    "id": "971783621016948764",
+    "type": 1,
+    "application_id": "567703512763334685",
+    "version": "971783621444767780",
+    "name": "colors",
+    "description": "Lists you all the available colors.",
+    "dm_permission": true,
+    "integration_types": [0],
+    "global_popularity_rank": 39
+  },
+  {
+    "id": "971783621016948765",
+    "type": 1,
+    "application_id": "567703512763334685",
+    "version": "1048709984277508196",
+    "name": "points",
+    "description": "A server based points that can be given by moderators.",
+    "options": [
+      {
+        "type": 1,
+        "name": "increase",
+        "description": "Increase additional points.",
+        "options": [
+          {
+            "type": 6,
+            "name": "user",
+            "description": "User to set points for.",
+            "required": true
+          },
+          {
+            "type": 4,
+            "name": "points",
+            "description": "Points to increase.",
+            "required": true
+          }
+        ]
+      },
+      {
+        "type": 1,
+        "name": "decrease",
+        "description": "Decrease points from a user.",
+        "options": [
+          {
+            "type": 6,
+            "name": "user",
+            "description": "User to set points for.",
+            "required": true
+          },
+          {
+            "type": 4,
+            "name": "points",
+            "description": "Points to decrease.",
+            "required": true
+          }
+        ]
+      },
+      {
+        "type": 1,
+        "name": "set",
+        "description": "Set points to a specific amount.",
+        "options": [
+          {
+            "type": 6,
+            "name": "user",
+            "description": "User to set points for.",
+            "required": true
+          },
+          {
+            "type": 4,
+            "name": "points",
+            "description": "Points to set.",
+            "required": true
+          }
+        ]
+      },
+      {
+        "type": 1,
+        "name": "reset",
+        "description": "Resets the points of all the members or a specific user.",
+        "options": [
+          {
+            "type": 6,
+            "name": "user",
+            "description": "User to reset points for."
+          }
+        ]
+      },
+      {
+        "type": 1,
+        "name": "list",
+        "description": "Show all members points.",
+        "options": [
+          {
+            "type": 8,
+            "name": "filter",
+            "description": "Role to filter points for."
+          },
+          {
+            "type": 4,
+            "name": "page",
+            "description": "Choose a points page number"
+          }
+        ]
+      }
+    ],
+    "dm_permission": true,
+    "integration_types": [0],
+    "global_popularity_rank": 13
+  },
+  {
+    "id": "971783621100851240",
+    "type": 1,
+    "application_id": "567703512763334685",
+    "version": "1058766056077930537",
+    "name": "move",
+    "description": "Moves a member to another voice channel.",
+    "options": [
+      {
+        "type": 1,
+        "name": "user",
+        "description": "Moves a member to another voice channel.",
+        "options": [
+          {
+            "type": 6,
+            "name": "user",
+            "description": "The user to move.",
+            "required": true
+          },
+          {
+            "type": 7,
+            "name": "channel",
+            "description": "Channel to move the user to.",
+            "channel_types": [2]
+          }
+        ]
+      },
+      {
+        "type": 1,
+        "name": "all",
+        "description": "Moves all members to the voice channel to which you are currently connected",
+        "options": [
+          {
+            "type": 7,
+            "name": "channel",
+            "description": "Channel to move the user to.",
+            "channel_types": [2]
+          }
+        ]
+      }
+    ],
+    "dm_permission": true,
+    "integration_types": [0],
+    "global_popularity_rank": 24
+  },
+  {
+    "id": "971783621100851241",
+    "type": 1,
+    "application_id": "567703512763334685",
+    "version": "1028682468309618738",
+    "name": "warnings",
+    "description": "Get a list of warnings for the server or a user.",
+    "options": [
+      {
+        "type": 6,
+        "name": "user",
+        "description": "The user to get warnings for."
+      },
+      { "type": 4, "name": "page", "description": "Choose a page number" }
+    ],
+    "dm_permission": true,
+    "integration_types": [0],
+    "global_popularity_rank": 21
+  },
+  {
+    "id": "971783621100851242",
+    "type": 1,
+    "application_id": "567703512763334685",
+    "version": "971783621478318150",
+    "name": "warn_remove",
+    "description": "Removes warnings from all members or specific user.",
+    "options": [
+      {
+        "type": 3,
+        "name": "input",
+        "description": "[Warn id] or [user] or [all] to remove all warnings",
+        "required": true
+      }
+    ],
+    "dm_permission": true,
+    "integration_types": [0],
+    "global_popularity_rank": 27
+  },
+  {
+    "id": "971783621100851243",
+    "type": 1,
+    "application_id": "567703512763334685",
+    "version": "971783621478318151",
+    "name": "warn",
+    "description": "⚠ Warns a member.",
+    "options": [
+      {
+        "type": 6,
+        "name": "user",
+        "description": "The user to warn.",
+        "required": true
+      },
+      { "type": 3, "name": "reason", "description": "Reason of the warn." }
+    ],
+    "dm_permission": true,
+    "integration_types": [0],
+    "global_popularity_rank": 12
+  },
+  {
+    "id": "971783621100851244",
+    "type": 1,
+    "application_id": "567703512763334685",
+    "version": "1025961694062723107",
+    "name": "setnick",
+    "description": "Changes a member's nickname.",
+    "options": [
+      {
+        "type": 6,
+        "name": "user",
+        "description": "User to set nick for.",
+        "required": true
+      },
+      { "type": 3, "name": "new_nick", "description": "The new nickname." }
+    ],
+    "dm_permission": true,
+    "integration_types": [0],
+    "global_popularity_rank": 31
+  },
+  {
+    "id": "971783621100851245",
+    "type": 1,
+    "application_id": "567703512763334685",
+    "version": "1037523854928662538",
+    "name": "ban",
+    "description": "Bans a member.",
+    "options": [
+      {
+        "type": 6,
+        "name": "user",
+        "description": "User to ban.",
+        "required": true
+      },
+      {
+        "type": 3,
+        "name": "time",
+        "description": "Time duration for the ban."
+      },
+      { "type": 3, "name": "reason", "description": "The reason of the ban." },
+      { "type": 3, "name": "bulk", "description": "User to ban." }
+    ],
+    "dm_permission": true,
+    "integration_types": [0],
+    "global_popularity_rank": 9
+  },
+  {
+    "id": "971783621100851246",
+    "type": 1,
+    "application_id": "567703512763334685",
+    "version": "971783621478318154",
+    "name": "unban",
+    "description": "Unbans a member.",
+    "options": [
+      {
+        "type": 3,
+        "name": "input",
+        "description": "User to remove the ban of.",
+        "required": true
+      }
+    ],
+    "dm_permission": true,
+    "integration_types": [0],
+    "global_popularity_rank": 19
+  },
+  {
+    "id": "971783621100851247",
+    "type": 1,
+    "application_id": "567703512763334685",
+    "version": "1047094715612414053",
+    "name": "mute",
+    "description": "Mute a member from text/voice channels so they cannot type.",
+    "options": [
+      {
+        "type": 1,
+        "name": "text",
+        "description": "Mute a member from text channels so they cannot type",
+        "options": [
+          {
+            "type": 6,
+            "name": "user",
+            "description": "User to mute.",
+            "required": true
+          },
+          {
+            "type": 3,
+            "name": "time",
+            "description": "Time duration for the mute."
+          },
+          { "type": 3, "name": "reason", "description": "Reason of the mute." },
+          { "type": 3, "name": "bulk", "description": "User to mute." }
+        ]
+      },
+      {
+        "type": 1,
+        "name": "voice",
+        "description": "Mute a member from voice channels so they cannot speak",
+        "options": [
+          {
+            "type": 6,
+            "name": "user",
+            "description": "User to mute.",
+            "required": true
+          },
+          {
+            "type": 3,
+            "name": "time",
+            "description": "Time duration for the mute."
+          },
+          { "type": 3, "name": "reason", "description": "Reason of the mute." },
+          { "type": 3, "name": "bulk", "description": "User to mute." }
+        ]
+      }
+    ],
+    "dm_permission": true,
+    "integration_types": [0],
+    "global_popularity_rank": 10
+  },
+  {
+    "id": "971783621100851248",
+    "type": 1,
+    "application_id": "567703512763334685",
+    "version": "1053332675659833354",
+    "name": "unmute",
+    "description": "Unmutes a member.",
+    "options": [
+      {
+        "type": 1,
+        "name": "text",
+        "description": "Unmutes a member from text channels",
+        "options": [
+          {
+            "type": 6,
+            "name": "user",
+            "description": "The user to unmute.",
+            "required": true
+          }
+        ]
+      },
+      {
+        "type": 1,
+        "name": "voice",
+        "description": "Unmutes a member from voice channels",
+        "options": [
+          {
+            "type": 6,
+            "name": "user",
+            "description": "The user to unmute.",
+            "required": true
+          }
+        ]
+      }
+    ],
+    "dm_permission": true,
+    "integration_types": [0],
+    "global_popularity_rank": 17
+  },
+  {
+    "id": "971783621100851249",
+    "type": 1,
+    "application_id": "567703512763334685",
+    "version": "971783621478318157",
+    "name": "kick",
+    "description": "Kicks a member.",
+    "options": [
+      {
+        "type": 6,
+        "name": "user",
+        "description": "The user to kick.",
+        "required": true
+      },
+      { "type": 3, "name": "reason", "description": "Reason of the kick." }
+    ],
+    "dm_permission": true,
+    "integration_types": [0],
+    "global_popularity_rank": 26
+  },
+  {
+    "id": "971783621209899008",
+    "type": 1,
+    "application_id": "567703512763334685",
+    "version": "971783621478318158",
+    "name": "vkick",
+    "description": "Kicks a member from a voice channel",
+    "options": [
+      {
+        "type": 6,
+        "name": "user",
+        "description": "The user to kick from voice channel.",
+        "required": true
+      }
+    ],
+    "dm_permission": true,
+    "integration_types": [0],
+    "global_popularity_rank": 41
+  },
+  {
+    "id": "971783621209899009",
+    "type": 1,
+    "application_id": "567703512763334685",
+    "version": "1005616678958284892",
+    "name": "lock",
+    "description": "🔒 Disables @everyone from sending messages in specific channel.",
+    "options": [
+      {
+        "type": 7,
+        "name": "channel",
+        "description": "Channel to lock.",
+        "channel_types": [0]
+      },
+      { "type": 3, "name": "reason", "description": "Reason of the lock" }
+    ],
+    "dm_permission": true,
+    "integration_types": [0],
+    "global_popularity_rank": 25
+  },
+  {
+    "id": "971783621209899010",
+    "type": 1,
+    "application_id": "567703512763334685",
+    "version": "971783621516083290",
+    "name": "unlock",
+    "description": "🔓 Allows @everyone to send messages in specific channel.",
+    "options": [
+      {
+        "type": 7,
+        "name": "channel",
+        "description": "Channel to unlock.",
+        "channel_types": [0]
+      }
+    ],
+    "dm_permission": true,
+    "integration_types": [0],
+    "global_popularity_rank": 29
+  },
+  {
+    "id": "971783621209899011",
+    "type": 1,
+    "application_id": "567703512763334685",
+    "version": "1074410639482687610",
+    "name": "clear",
+    "description": "Cleans messages from a channel.",
+    "options": [
+      {
+        "type": 4,
+        "name": "number_of_messages",
+        "description": "Number of messages to delete.",
+        "required": true,
+        "min_value": 1
+      },
+      {
+        "type": 6,
+        "name": "filter_by_user",
+        "description": "Filter by user messages."
+      },
+      {
+        "type": 8,
+        "name": "filter_by_role",
+        "description": "Filter by role messages."
+      },
+      {
+        "type": 5,
+        "name": "filter_by_bots",
+        "description": "Filter by bots messages."
+      }
+    ],
+    "dm_permission": true,
+    "integration_types": [0],
+    "global_popularity_rank": 11
+  },
+  {
+    "id": "971783621209899012",
+    "type": 1,
+    "application_id": "567703512763334685",
+    "version": "971783621516083292",
+    "name": "temp",
+    "description": "Makes a temporary channel.",
+    "options": [
+      { "type": 1, "name": "on", "description": "turn on temporary channels." },
+      {
+        "type": 1,
+        "name": "off",
+        "description": "turn off temporary channels."
+      },
+      {
+        "type": 1,
+        "name": "time",
+        "description": "Time to delete the temp channel in seconds.",
+        "options": [
+          {
+            "type": 4,
+            "name": "seconds",
+            "description": "Time the voice channel.",
+            "required": true
+          }
+        ]
+      },
+      {
+        "type": 1,
+        "name": "max",
+        "description": "Max channels user can create at the same time.",
+        "options": [
+          {
+            "type": 4,
+            "name": "number",
+            "description": "Max channels users can create, 0 is unlimited.",
+            "required": true
+          }
+        ]
+      }
+    ],
+    "dm_permission": true,
+    "integration_types": [0],
+    "global_popularity_rank": 45
+  },
+  {
+    "id": "971783621209899013",
+    "type": 1,
+    "application_id": "567703512763334685",
+    "version": "1037523854928662540",
+    "name": "role",
+    "description": "Add/remove a role(s) for a user.",
+    "options": [
+      {
+        "type": 1,
+        "name": "give",
+        "description": "Gives a role to a user.",
+        "options": [
+          {
+            "type": 6,
+            "name": "user",
+            "description": "User to give role for.",
+            "required": true
+          },
+          {
+            "type": 8,
+            "name": "role",
+            "description": "The role to give.",
+            "required": true
+          },
+          { "type": 3, "name": "bulk", "description": "User to give role for." }
+        ]
+      },
+      {
+        "type": 1,
+        "name": "remove",
+        "description": "Removes a role from a user.",
+        "options": [
+          {
+            "type": 6,
+            "name": "user",
+            "description": "User to remove role from.",
+            "required": true
+          },
+          {
+            "type": 8,
+            "name": "role",
+            "description": "The role to remove.",
+            "required": true
+          },
+          {
+            "type": 3,
+            "name": "bulk",
+            "description": "User to remove role from."
+          }
+        ]
+      },
+      {
+        "type": 1,
+        "name": "multiple",
+        "description": "Give / remove multiple users from a role.",
+        "options": [
+          {
+            "type": 3,
+            "name": "give_or_remove",
+            "description": "Pick a type",
+            "required": true,
+            "choices": [
+              { "name": "Give", "value": "give" },
+              { "name": "Remove", "value": "remove" }
+            ]
+          },
+          {
+            "type": 8,
+            "name": "role",
+            "description": "The role to give / remove.",
+            "required": true
+          },
+          {
+            "type": 3,
+            "name": "pick_type",
+            "description": "Pick a type",
+            "required": true,
+            "choices": [
+              { "name": "All", "value": "all" },
+              { "name": "Bots", "value": "bots" },
+              { "name": "Humans", "value": "humans" },
+              { "name": "All With Role", "value": "role" }
+            ]
+          },
+          {
+            "type": 8,
+            "name": "required_role",
+            "description": "The role to give / remove."
+          }
+        ]
+      }
+    ],
+    "dm_permission": true,
+    "integration_types": [0],
+    "global_popularity_rank": 8
+  },
+  {
+    "id": "971783621209899014",
+    "type": 1,
+    "application_id": "567703512763334685",
+    "version": "971783621516083294",
+    "name": "setcolor",
+    "description": "Changes role's colors by hex codes.",
+    "options": [
+      {
+        "type": 8,
+        "name": "role",
+        "description": "Role to set color for.",
+        "required": true
+      },
+      {
+        "type": 3,
+        "name": "hex_code",
+        "description": ":rolling_eyes: - Hex color length must equal 6 or 3",
+        "required": true
+      }
+    ],
+    "dm_permission": true,
+    "integration_types": [0]
+  },
+  {
+    "id": "971783621323141180",
+    "type": 1,
+    "application_id": "567703512763334685",
+    "version": "1025961694125633539",
+    "name": "setlang",
+    "description": "Sets your preferred language for the bot.",
+    "options": [
+      {
+        "type": 3,
+        "name": "language",
+        "description": "Language to change to.",
+        "required": true
+      }
+    ],
+    "dm_permission": true,
+    "integration_types": [0],
+    "global_popularity_rank": 44
+  },
+  {
+    "id": "972831897065500723",
+    "type": 1,
+    "application_id": "567703512763334685",
+    "version": "972831897065500724",
+    "name": "slowmode",
+    "description": "Enable or disable slowmode on a channel.",
+    "options": [
+      {
+        "type": 3,
+        "name": "time",
+        "description": "The time to set for slowmode channel."
+      }
+    ],
+    "dm_permission": true,
+    "integration_types": [0],
+    "global_popularity_rank": 34
+  },
+  {
+    "id": "978714316909969408",
+    "type": 1,
+    "application_id": "567703512763334685",
+    "version": "980060589277737010",
+    "name": "timeout",
+    "description": "⏱ Timeout a user from sending messages, react or join voice channels.",
+    "options": [
+      {
+        "type": 6,
+        "name": "user",
+        "description": "The user to timeout",
+        "required": true
+      },
+      { "type": 3, "name": "time", "description": "The duration of timeout" },
+      { "type": 3, "name": "reason", "description": "The reason of timeout." }
+    ],
+    "dm_permission": true,
+    "integration_types": [0],
+    "global_popularity_rank": 14
+  },
+  {
+    "id": "978714316909969409",
+    "type": 1,
+    "application_id": "567703512763334685",
+    "version": "980060589277737011",
+    "name": "untimeout",
+    "description": "Remove timeout from a user",
+    "options": [
+      {
+        "type": 6,
+        "name": "user",
+        "description": "The user to untimeout",
+        "required": true
+      }
+    ],
+    "dm_permission": true,
+    "integration_types": [0],
+    "global_popularity_rank": 33
+  },
+  {
+    "id": "1005950354975899688",
+    "type": 1,
+    "application_id": "567703512763334685",
+    "version": "1053332675659833355",
+    "name": "reset",
+    "description": "Reset text/voice/invites/limits xp points for all or specific member.",
+    "options": [
+      {
+        "type": 3,
+        "name": "type",
+        "description": "Select the type of reset",
+        "required": true,
+        "choices": [
+          { "name": "Text", "value": "text" },
+          { "name": "Voice", "value": "voice" },
+          { "name": "Invite", "value": "invites" },
+          { "name": "Limits", "value": "limits" }
+        ]
+      },
+      {
+        "type": 9,
+        "name": "target",
+        "description": "The user to reset stats for.",
+        "required": true
+      }
+    ],
+    "dm_permission": true,
+    "integration_types": [0],
+    "global_popularity_rank": 40
+  },
+  {
+    "id": "1025961694062723102",
+    "type": 1,
+    "application_id": "567703512763334685",
+    "version": "1033109876349616190",
+    "name": "vip",
+    "description": "Displays info about your premium bot.",
+    "options": [
+      {
+        "type": 1,
+        "name": "move",
+        "description": "Move your premium bot to a new server.",
+        "options": [
+          {
+            "type": 3,
+            "name": "number",
+            "description": "Your premium bot number or ID.",
+            "required": true
+          }
+        ]
+      },
+      {
+        "type": 1,
+        "name": "transfer",
+        "description": "Transfer ownership of your premium bot to another user.",
+        "options": [
+          {
+            "type": 3,
+            "name": "number",
+            "description": "Your premium bot number or ID.",
+            "required": true
+          },
+          {
+            "type": 6,
+            "name": "user",
+            "description": "The user to whom you want to transfer your premium bot.",
+            "required": true
+          }
+        ]
+      },
+      {
+        "type": 1,
+        "name": "whitelist",
+        "description": "Whitelist a user to allow access to the ProBot panel.",
+        "options": [
+          {
+            "type": 6,
+            "name": "user",
+            "description": "The user you want to allow or remove access from the ProBot panel.",
+            "required": false
+          }
+        ]
+      },
+      {
+        "type": 1,
+        "name": "info",
+        "description": "Displays info about your premium bot."
+      }
+    ],
+    "dm_permission": true,
+    "integration_types": [0],
+    "global_popularity_rank": 20
+  },
+  {
+    "id": "1027925656463491153",
+    "type": 1,
+    "application_id": "567703512763334685",
+    "version": "1028682468309618740",
+    "name": "setxp",
+    "description": "Sets the user's xp",
+    "options": [
+      {
+        "type": 6,
+        "name": "user",
+        "description": "The user for whom you want to set xp",
+        "required": true
+      },
+      {
+        "type": 3,
+        "name": "type",
+        "description": "Type of xp to set either text or voice",
+        "required": true,
+        "choices": [
+          { "name": "Text", "value": "text" },
+          { "name": "Voice", "value": "voice" }
+        ]
+      },
+      {
+        "type": 4,
+        "name": "xp",
+        "description": "The amount of xp to set to the user",
+        "required": true
+      }
+    ],
+    "dm_permission": true,
+    "integration_types": [0],
+    "global_popularity_rank": 18
+  },
+  {
+    "id": "1027925656463491154",
+    "type": 1,
+    "application_id": "567703512763334685",
+    "version": "1028682468309618741",
+    "name": "setlevel",
+    "description": "Sets the user's level",
+    "options": [
+      {
+        "type": 6,
+        "name": "user",
+        "description": "The user for whom you want to set level",
+        "required": true
+      },
+      {
+        "type": 3,
+        "name": "type",
+        "description": "Type of level to set either text or voice",
+        "required": true,
+        "choices": [
+          { "name": "Text", "value": "text" },
+          { "name": "Voice", "value": "voice" }
+        ]
+      },
+      {
+        "type": 4,
+        "name": "level",
+        "description": "The level that you want to set to a user",
+        "required": true
+      }
+    ],
+    "dm_permission": true,
+    "integration_types": [0],
+    "global_popularity_rank": 32
+  },
+  {
+    "id": "1043784498027966545",
+    "type": 1,
+    "application_id": "567703512763334685",
+    "version": "1044897877958332447",
+    "name": "vote",
+    "description": "Get the vote link and see when you can vote again",
+    "dm_permission": true,
+    "integration_types": [0],
+    "global_popularity_rank": 36
+  },
+  {
+    "id": "1058847610443677726",
+    "type": 1,
+    "application_id": "567703512763334685",
+    "version": "1059165186432446574",
+    "name": "rolekick",
+    "description": "Kicks all members with a specific role",
+    "options": [
+      {
+        "type": 8,
+        "name": "role",
+        "description": "Specify the role to kick all members who have it.",
+        "required": true
+      },
+      {
+        "type": 8,
+        "name": "exclude",
+        "description": "Exclude member's with this role from being kicked"
+      }
+    ],
+    "dm_permission": true,
+    "integration_types": [0],
+    "global_popularity_rank": 46
+  },
+  {
+    "id": "1101864147878154453",
+    "type": 1,
+    "application_id": "567703512763334685",
+    "version": "1108971328444313691",
+    "name": "rep",
+    "description": "Award someone a reputation point.",
+    "options": [
+      {
+        "type": 6,
+        "name": "user",
+        "description": "rep_user_description",
+        "required": true
+      }
+    ],
+    "dm_permission": true,
+    "integration_types": [0],
+    "global_popularity_rank": 2
+  }
+]

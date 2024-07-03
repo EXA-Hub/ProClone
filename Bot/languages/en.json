@@ -1,0 +1,74 @@
+{
+  "avatar": "Requested by ",
+  "setLang": [
+    ":white_check_mark: The Language has been changed successfully",
+    ":rolling_eyes: - Supported languages are "
+  ],
+  "server": {
+    "fields": [
+      {
+        "name": ":id: Server ID:",
+        "value": "{guildId}",
+        "inline": true
+      },
+      {
+        "name": ":calendar: Created On",
+        "value": "**<t:{createdTimestamp}:R>**",
+        "inline": true
+      },
+      {
+        "name": ":crown: Owned by",
+        "value": "<@!{ownerId}>",
+        "inline": true
+      },
+      {
+        "name": ":busts_in_silhouette:  Members ({memberCount})",
+        "value": "**{onlineMemberCount}** Online\n**{boostCount}** Boosts :sparkles:",
+        "inline": true
+      },
+      {
+        "name": ":speech_balloon: Channels ({channelCount})",
+        "value": "**{textChannelCount}** Text | **{voiceChannelCount}** Voice",
+        "inline": true
+      },
+      {
+        "name": ":earth_africa: Others",
+        "value": "**Verification Level: **{verificationLevel}",
+        "inline": true
+      },
+      {
+        "name": ":closed_lock_with_key:  Roles ({roleCount})",
+        "value": "To see a list with all roles use **/roles**",
+        "inline": true
+      }
+    ]
+  },
+  "roll": ":rolling_eyes: - \"{option}\" is not a valid input string for #roll.",
+  "help": ["**🙄 - I can't find this command.**", "Examples:", "Usage:"],
+  "user": ["Joined Discord :", "Joined Server :"],
+  "lock": {
+    "noPermission": ":rolling_eyes:  Manage Channels is required for this action.",
+    "lockSuccess": "🔒 {channel} **has been locked.**",
+    "lockError": "There was an error trying to lock the channel.",
+    "unlockSuccess": ":unlock: {channel} **has been unlocked.**",
+    "invalidChannel": "Please specify a valid channel to lock."
+  },
+  "setnick": {
+    "noPermission": ":rolling_eyes: - I couldn't update that user. Please double-check my permissions and role position.",
+    "invalidMember": "Please specify a valid member.",
+    "nickSuccess": ":white_check_mark: **{user}**'s nick has been changed to {newNick}!",
+    "nickSuccessR": ":white_check_mark: **{user}**'s nick has been reset.",
+    "nickError": "There was an error changing the nickname. Please try again later."
+  },
+  "timeout": {
+    "noPermission": "**:rolling_eyes: -  You can't timeout @{user}.**",
+    "invalidMember": "Please specify a valid member.",
+    "invalidDuration": "**:rolling_eyes: - The time limit must be equal to one of the following: (m, h, d, w, mo, y)**",
+    "timeoutSuccess": "**:white_check_mark: @{user} has been timed out!**",
+    "timeoutError": "There was an error timing out the member. Please try again later.",
+    "max": ":x: Timeout duration must be lower or equal to 28 days.",
+    "notTimedOut": ":x: The member is not timed out.",
+    "untimeoutSuccess": "**:white_check_mark: @{user} has been untimeouted!**",
+    "untimeoutError": "There was an error removing the timeout. Please try again later."
+  }
+}
