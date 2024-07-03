@@ -1,0 +1,54 @@
+[
+  { "text": "credits Show your or somebody else's balance." },
+  {
+    "text": "rep Award someone a reputation point. Can only be used once every 24 hours."
+  },
+  { "text": "moveme Moves you to another voice channel." },
+  { "text": "color Change your color on the server." },
+  { "text": "colors Lists you all the available colors." },
+  { "text": "short Shortens a URL." },
+  { "text": "roll rolling dice." },
+  {
+    "text": "profile View your or someone else's customizable personal global profile card."
+  },
+  { "text": "rank View your rank card or someone else's in the server." },
+  { "text": "top Display the top members by text or voice." },
+  { "text": "title Changes your profile title." },
+  { "text": "setxp Sets the user's xp" },
+  { "text": "setlevel Sets the user's level" },
+  {
+    "text": "user Shows information, such as ID and join date, about yourself or a user."
+  },
+  { "text": "avatar Get a user's avatar." },
+  { "text": "server Shows information about the server" },
+  { "text": "roles Get a list of server roles and member counts." },
+  { "text": "setnick Changes the nickname of a member." },
+  { "text": "ban Bans a member." },
+  { "text": "unban Unbans a member." },
+  { "text": "kick Kicks a member." },
+  { "text": "vkick Kicks a member from a voice channel" },
+  { "text": "mute text Mute a member so they can't type in text channels." },
+  { "text": "unmute text Unmutes a member." },
+  { "text": "mute voice Mute a member so they can't speak in voice channels." },
+  { "text": "unmute voice Unmutes a member from voice channels." },
+  { "text": "timeout Timeouts a member." },
+  { "text": "untimeout Removes a timeout from a member." },
+  { "text": "clear Cleans up channel messages." },
+  { "text": "move Moves a member to another voice channel." },
+  { "text": "role Add/remove role(s) for a member." },
+  { "text": "points A server based points that can be given by moderators." },
+  { "text": "warn Warns a member." },
+  { "text": "warn_remove Remove warnings for the server or user." },
+  { "text": "warnings Get the list of warnings for the server or a user." },
+  {
+    "text": "lock Disables @everyone from sending messages in specific channel."
+  },
+  { "text": "unlock Allows @everyone to send messages in specific channel." },
+  { "text": "setcolor Changes role's color by hex codes." },
+  { "text": "slowmode Enable or disable slowmode on a channel." },
+  {
+    "text": "reset Reset text/voice/invites xp points for all or specific members."
+  },
+  { "text": "starboard" },
+  { "text": "vip Shows information about your premium bot." }
+]

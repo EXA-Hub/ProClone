@@ -62,6 +62,7 @@
   },
   "timeout": {
     "noPermission": "**:rolling_eyes: -  You can't timeout @{user}.**",
+    "unoPermission": "**:rolling_eyes: -  You can't untimeout @{user}. **",
     "invalidMember": "Please specify a valid member.",
     "invalidDuration": "**:rolling_eyes: - The time limit must be equal to one of the following: (m, h, d, w, mo, y)**",
     "timeoutSuccess": "**:white_check_mark: @{user} has been timed out!**",
@@ -70,5 +71,9 @@
     "notTimedOut": ":x: The member is not timed out.",
     "untimeoutSuccess": "**:white_check_mark: @{user} has been untimeouted!**",
     "untimeoutError": "There was an error removing the timeout. Please try again later."
+  },
+  "rolekick": {
+    "success": ":white_check_mark: Kicked {count} members with the role `{role}`.",
+    "error": ":x: There was an error kicking members with the role."
   }
 }

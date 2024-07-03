@@ -36,7 +36,13 @@ module.exports = {
       )
     ) {
       return interaction.reply({
-        content: i18n["noPermission"].replace("{user}", member.user.tag),
+        content: i18n["noPermission"].replace("{user}", member.user.username),
+      });
+    }
+
+    if (member.user.id === interaction.client.user.id) {
+      return interaction.reply({
+        content: i18n["unoPermission"].replace("{user}", member.user.username),
       });
     }
 
@@ -50,7 +56,10 @@ module.exports = {
       await member.timeout(null);
 
       await interaction.reply({
-        content: i18n["untimeoutSuccess"].replace("{user}", member.user.tag),
+        content: i18n["untimeoutSuccess"].replace(
+          "{user}",
+          member.user.username
+        ),
       });
     } catch (error) {
       console.error(error);

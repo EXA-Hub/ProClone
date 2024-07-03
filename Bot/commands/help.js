@@ -20,6 +20,9 @@ module.exports = {
     if (cmd) {
       const command = interaction.client.commands.get(cmd);
       if (command) {
+        const helpData = require("../database/help.json").find(
+          (c) => c[command.data.name]
+        );
         const embed = new EmbedBuilder()
           .setTitle("Command: " + command.data.name)
           .setDescription(command.data.description)
@@ -27,14 +30,14 @@ module.exports = {
             {
               name: interaction.client.i18n[
                 await interaction.client.getLanguage(interaction.guild.id)
-              ].help[1],
-              value: `/${command.data.name}`,
+              ].help[2],
+              value: helpData.usage,
             },
             {
               name: interaction.client.i18n[
                 await interaction.client.getLanguage(interaction.guild.id)
-              ].help[2],
-              value: `/${command.data.name}`,
+              ].help[1],
+              value: helpData.examples,
             },
           ]);
 
