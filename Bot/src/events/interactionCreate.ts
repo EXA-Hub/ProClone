@@ -1,4 +1,4 @@
-import { Interaction, PermissionFlagsBits } from "discord.js";
+import { Interaction, Message, PermissionFlagsBits } from "discord.js";
 import { CustomClient } from "../types"; // Make sure to define and import CustomClient type
 
 module.exports = {
@@ -27,17 +27,33 @@ module.exports = {
         if (missingPermissions.length > 0) {
           const lang = await client.getLanguage(interaction.guild!.id);
           const i18n = client.i18n[lang].userPermissionRequired;
-          await interaction.reply({
+          return await interaction.reply({
             content: i18n.replace("{permission}", permissionName),
             ephemeral: true,
           });
-          return;
         }
       }
     }
 
     try {
-      await command.execute(interaction);
+      const response = await command.execute(
+        client,
+        interaction,
+        undefined,
+        interaction.guild,
+        interaction.member,
+        interaction.user,
+        interaction.channel
+      );
+      if (response)
+        await interaction.reply(
+          typeof response === "string"
+            ? {
+                content: response,
+                allowedMentions: { repliedUser: false },
+              }
+            : { ...response, allowedMentions: { repliedUser: false } }
+        );
     } catch (error) {
       console.error(error);
       await interaction.reply({

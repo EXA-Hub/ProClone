@@ -1,9 +1,28 @@
-import { Client, Collection, Interaction, Message } from "discord.js";
+import {
+  APIInteractionGuildMember,
+  Channel,
+  Client,
+  Collection,
+  Guild,
+  GuildMember,
+  Interaction,
+  Message,
+  TextBasedChannel,
+  User,
+} from "discord.js";
 import { QuickDB } from "quick.db";
 import i18nJson from "./languages/en.json";
 
 interface Command {
-  execute: (interaction: Interaction | Message) => Promise<void>;
+  execute: (
+    client?: CustomClient,
+    interaction?: Interaction,
+    message?: Message,
+    guild?: Guild,
+    member?: GuildMember | APIInteractionGuildMember | null,
+    user?: User,
+    channel?: Channel | TextBasedChannel | null
+  ) => Promise<any>;
   data: {
     default_member_permissions?: string;
     description: String;

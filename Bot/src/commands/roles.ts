@@ -1,7 +1,15 @@
 // commands/roles.js
 
 import { CustomClient } from "../types"; // Import CustomClient interface
-import { CommandInteraction } from "discord.js";
+
+import {
+  CommandInteraction,
+  Message,
+  Guild,
+  GuildMember,
+  Channel,
+  User,
+} from "discord.js";
 module.exports = {
   data: {
     name: "roles",
@@ -9,11 +17,18 @@ module.exports = {
     description: "Get a list of server roles and member counts.",
     options: [],
   },
-  execute: async (interaction: CommandInteraction): Promise<void> => {
-    const client = interaction.client as CustomClient; // Cast client to CustomClient
+  execute: async (
+    client: CustomClient,
+    interaction: CommandInteraction,
+    message: Message,
+    guild: Guild,
+    member: GuildMember,
+    user: User,
+    channel: Channel
+  ) => {
     await interaction.deferReply();
 
-    let message = "```";
+    let msg = "```";
     for (const line of interaction
       .guild!.roles.cache.sort((a, b) => b.position - a.position)
       .map((role) => {
@@ -23,15 +38,15 @@ module.exports = {
       })
       .join("\n")
       .split("\n")) {
-      if ((message + line).length > 2000 - 3) {
+      if ((msg + line).length > 2000 - 3) {
         // 3 for the closing ```
-        await interaction.followUp(message + "```");
-        message = "```";
+        await interaction.followUp(msg + "```");
+        msg = "```";
       }
-      message += line + "\n";
+      msg += line + "\n";
     }
-    message += "```";
+    msg += "```";
 
-    await interaction.followUp(message);
+    await interaction.followUp(msg);
   },
 };

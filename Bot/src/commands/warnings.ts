@@ -1,7 +1,16 @@
 // commands/warnings.js
 
 import { CustomClient } from "../types"; // Import CustomClient interface
-import { CommandInteraction, PermissionFlagsBits } from "discord.js";
+
+import { PermissionFlagsBits } from "discord.js";
+import {
+  CommandInteraction,
+  Message,
+  Guild,
+  GuildMember,
+  Channel,
+  User,
+} from "discord.js";
 module.exports = {
   data: {
     name: "warnings",
@@ -21,8 +30,15 @@ module.exports = {
       },
     ],
   },
-  execute: async (interaction: CommandInteraction): Promise<void> => {
-    const client = interaction.client as CustomClient; // Cast client to CustomClient
-    await interaction.reply("Working on that command!");
+  execute: async (
+    client: CustomClient,
+    interaction: CommandInteraction,
+    message: Message,
+    guild: Guild,
+    member: GuildMember,
+    user: User,
+    channel: Channel
+  ) => {
+    return "Working on that command!";
   },
 };

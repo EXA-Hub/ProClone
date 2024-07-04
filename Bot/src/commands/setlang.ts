@@ -9,7 +9,16 @@ function formatSupportedLanguages(languages: String[]) {
 }
 
 import { CustomClient } from "../types"; // Import CustomClient interface
-import { CommandInteraction, PermissionFlagsBits } from "discord.js";
+
+import { PermissionFlagsBits } from "discord.js";
+import {
+  CommandInteraction,
+  Message,
+  Guild,
+  GuildMember,
+  Channel,
+  User,
+} from "discord.js";
 module.exports = {
   data: {
     name: "setlang",
@@ -26,26 +35,32 @@ module.exports = {
       },
     ],
   },
-  execute: async (interaction: CommandInteraction): Promise<void> => {
-    const client = interaction.client as CustomClient; // Cast client to CustomClient
-    const language = interaction.options.get("language")?.value;
+  execute: async (
+    client: CustomClient,
+    interaction: CommandInteraction,
+    message: Message,
+    guild: Guild,
+    member: GuildMember,
+    user: User,
+    channel: Channel
+  ) => {
+    const language = interaction
+      ? interaction.options.get("language")?.value
+      : message.content.split(" ").pop();
 
     // Get the list of supported languages from the client.i18n object
     const supportedLanguages = Object.keys(client.i18n);
 
     if (!supportedLanguages.includes(`${language}`)) {
-      await interaction.reply(
-        client.i18n[await client.getLanguage(interaction.guild!.id)]
-          .setLang[1] + `**${formatSupportedLanguages(supportedLanguages)}.**`
+      return (
+        client.i18n[await client.getLanguage(guild.id)].setLang[1] +
+        `**${formatSupportedLanguages(supportedLanguages)}.**`
       );
-      return;
     }
 
     // Save the preferred language to the database
-    await client.db.set(`guild_${interaction.guild!.id}_language`, language);
+    await client.db.set(`guild_${guild.id}_language`, language);
 
-    await interaction.reply(
-      client.i18n[await client.getLanguage(interaction.guild!.id)].setLang[0]
-    );
+    return client.i18n[await client.getLanguage(guild.id)].setLang[0];
   },
 };

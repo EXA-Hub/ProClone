@@ -3,7 +3,15 @@
 const { EmbedBuilder, ActionRowBuilder, ButtonBuilder } = require("discord.js");
 
 import { CustomClient } from "../types"; // Import CustomClient interface
-import { CommandInteraction } from "discord.js";
+
+import {
+  CommandInteraction,
+  Message,
+  Guild,
+  GuildMember,
+  Channel,
+  User,
+} from "discord.js";
 module.exports = {
   data: {
     name: "help",
@@ -17,8 +25,15 @@ module.exports = {
       },
     ],
   },
-  execute: async (interaction: CommandInteraction): Promise<void> => {
-    const client = interaction.client as CustomClient; // Cast client to CustomClient
+  execute: async (
+    client: CustomClient,
+    interaction: CommandInteraction,
+    message: Message,
+    guild: Guild,
+    member: GuildMember,
+    user: User,
+    channel: Channel
+  ) => {
     const cmd = interaction.options.get("command");
     if (cmd && cmd.value !== "help") {
       const command = client.commands.get(`${cmd.value}`);
@@ -40,28 +55,24 @@ module.exports = {
           .setDescription(command.data.description)
           .setFields([
             {
-              name: client.i18n[await client.getLanguage(interaction.guild!.id)]
-                .help[2],
+              name: client.i18n[await client.getLanguage(guild.id)].help[2],
               value: helpData.usage,
             },
             {
-              name: client.i18n[await client.getLanguage(interaction.guild!.id)]
-                .help[1],
+              name: client.i18n[await client.getLanguage(guild.id)].help[1],
               value: helpData.examples,
             },
           ]);
 
-        await interaction.reply({
+        return {
           embeds: [embed],
           ephemeral: true,
-        });
+        };
       } else
-        interaction.reply({
+        return {
           ephemeral: true,
-          content:
-            client.i18n[await client.getLanguage(interaction.guild!.id)]
-              .help[0],
-        });
+          content: client.i18n[await client.getLanguage(guild.id)].help[0],
+        };
     } else {
       const row = new ActionRowBuilder().addComponents(
         new ButtonBuilder()
@@ -74,14 +85,14 @@ module.exports = {
           .setURL(`https://discord.gg/qGtQqZFr`)
       );
 
-      await interaction.reply({
+      return {
         ephemeral: true,
-        content: `**${interaction.guild!.name}** prefix is \`/\` 
+        content: `**${guild.name}** prefix is \`/\` 
 Commands list at https://probot.io/commands
 Dashboard at https://probot.io/
 Looking for support? https://discord.gg/probot`,
         components: [row],
-      });
+      };
     }
   },
 };

@@ -1,7 +1,15 @@
 // commands/user.js
 const { EmbedBuilder } = require("discord.js");
 import { CustomClient } from "../types"; // Import CustomClient interface
-import { CommandInteraction } from "discord.js";
+
+import {
+  CommandInteraction,
+  Message,
+  Guild,
+  GuildMember,
+  Channel,
+  User,
+} from "discord.js";
 module.exports = {
   data: {
     name: "user",
@@ -16,33 +24,44 @@ module.exports = {
       },
     ],
   },
-  execute: async (interaction: CommandInteraction): Promise<void> => {
-    const client = interaction.client as CustomClient; // Cast client to CustomClient
-    const user = interaction.options.get("user")?.user || interaction.user;
-    const member = await interaction.guild!.members.fetch(user.id);
+  execute: async (
+    client: CustomClient,
+    interaction: CommandInteraction,
+    message: Message,
+    guild: Guild,
+    member: GuildMember,
+    user: User,
+    channel: Channel
+  ) => {
+    const u =
+      (interaction
+        ? interaction.options.get("user")?.user
+        : message.mentions.users.first()) || user;
 
-    const embed = new EmbedBuilder()
-      .setColor(8974168)
-      .addFields(
-        {
-          name: client.i18n[await client.getLanguage(interaction.guild!.id)]
-            .user[0],
-          value: `**<t:${Math.floor(user.createdTimestamp / 1000)}:R>**`,
-          inline: true,
-        },
-        {
-          name: client.i18n[await client.getLanguage(interaction.guild!.id)]
-            .user[1],
-          value: `**<t:${Math.floor(member.joinedTimestamp! / 1000)}:R>**`,
-          inline: true,
-        }
-      )
-      .setThumbnail(user.displayAvatarURL({ size: 1024 }))
-      .setFooter({
-        text: user.username,
-        iconURL: user.displayAvatarURL({ size: 1024 }),
-      });
-
-    await interaction.reply({ embeds: [embed] });
+    return {
+      embeds: [
+        new EmbedBuilder()
+          .setColor(8974168)
+          .addFields(
+            {
+              name: client.i18n[await client.getLanguage(guild.id)].user[0],
+              value: `**<t:${Math.floor(u.createdTimestamp / 1000)}:R>**`,
+              inline: true,
+            },
+            {
+              name: client.i18n[await client.getLanguage(guild.id)].user[1],
+              value: `**<t:${Math.floor(
+                (await guild.members.fetch(u.id)).joinedTimestamp! / 1000
+              )}:R>**`,
+              inline: true,
+            }
+          )
+          .setThumbnail(u.displayAvatarURL({ size: 1024 }))
+          .setFooter({
+            text: u.username,
+            iconURL: u.displayAvatarURL({ size: 1024 }),
+          }),
+      ],
+    };
   },
 };

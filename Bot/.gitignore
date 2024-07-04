@@ -16,8 +16,42 @@ Thumbs.db
 # Ignore SQLite database files within the src/database folder
 src/database/*.sqlite
 
+# Ignore SQLite journal files
+src/database/*.sqlite-journal
 
 # IDE-specific files
 .vscode/
 .idea/
+*.sublime-workspace
+
+# TypeScript compiled files
+dist/
+build/
+out/
+*.js
+*.jsx
+*.js.map
+*.d.ts
+*.d.ts.map
+
+# TypeScript configuration
+tsconfig.tsbuildinfo
+
+# Optional npm cache directory
+.npm
+
+# Yarn cache directory
+.yarn/cache/
+.yarn/unplugged/
+.yarn/build-state.yml
+.pnp.*
+
+# VS Code workspace settings
+.vscode/*
+
+# JetBrains IDEs
+.idea/
+
+# Sublime Text workspace settings
+*.sublime-project
 *.sublime-workspace

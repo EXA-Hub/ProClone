@@ -12,7 +12,15 @@ function isValidURL(str: String) {
 }
 
 import { CustomClient } from "../types"; // Import CustomClient interface
-import { CommandInteraction } from "discord.js";
+
+import {
+  CommandInteraction,
+  Message,
+  Guild,
+  GuildMember,
+  Channel,
+  User,
+} from "discord.js";
 module.exports = {
   data: {
     name: "short",
@@ -27,8 +35,15 @@ module.exports = {
       },
     ],
   },
-  execute: async (interaction: CommandInteraction): Promise<void> => {
-    const client = interaction.client as CustomClient; // Cast client to CustomClient
+  execute: async (
+    client: CustomClient,
+    interaction: CommandInteraction,
+    message: Message,
+    guild: Guild,
+    member: GuildMember,
+    user: User,
+    channel: Channel
+  ) => {
     const url = interaction.options.get("url")?.value as String;
 
     if (!isValidURL(url) || url.includes("i8.ae")) return;
@@ -80,7 +95,7 @@ module.exports = {
                 if (json.error) {
                   return reject(new Error(`API error! message: ${json.error}`));
                 }
-                interaction.reply(`${json.data.shorturl}`);
+                return `${json.data.shorturl}`;
                 resolve(json);
               } catch (error) {
                 reject(new Error("Failed to parse response JSON"));
@@ -97,7 +112,7 @@ module.exports = {
       });
     } catch (error) {
       console.error("Error shortening URL:", error);
-      await interaction.reply("There was an error shortening the URL.");
+      return "There was an error shortening the URL.";
     }
   },
 };

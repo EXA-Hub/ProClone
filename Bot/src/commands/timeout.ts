@@ -1,10 +1,15 @@
 const { PermissionsBitField } = require("discord.js");
 
 import { CustomClient } from "../types"; // Import CustomClient interface
+
 import {
   CommandInteraction,
-  GuildMember,
   PermissionFlagsBits,
+  Message,
+  Guild,
+  GuildMember,
+  Channel,
+  User,
 } from "discord.js";
 module.exports = {
   data: {
@@ -32,45 +37,52 @@ module.exports = {
       },
     ],
   },
-  execute: async (interaction: CommandInteraction): Promise<void> => {
-    const client = interaction.client as CustomClient; // Cast client to CustomClient
-    const lang = await client.getLanguage(interaction.guild!.id);
+  execute: async (
+    client: CustomClient,
+    interaction: CommandInteraction,
+    message: Message,
+    guild: Guild,
+    member: GuildMember,
+    user: User,
+    channel: Channel
+  ) => {
+    const lang = await client.getLanguage(guild.id);
     const i18n = client.i18n[lang].timeout;
 
-    const member = interaction.options.get("user")?.member as GuildMember;
+    const m = interaction.options.get("user")?.member as GuildMember;
     let time = interaction.options.get("time")?.value || "2h";
     const reason =
       interaction.options.get("reason")?.value || "No reason provided";
 
-    if (!member) {
-      interaction.reply({
+    if (!m) {
+      return {
         content: i18n["invalidMember"],
-      });
+      };
       return;
     }
 
     const memberUser = interaction.member as GuildMember;
     // Check if interaction.member!.permissions has the required permission
     if (!memberUser.permissions.has(PermissionsBitField.Flags.ManageChannels)) {
-      interaction.reply({
+      return {
         content: i18n["noPermission"],
-      });
+      };
       return;
     }
 
     const timeInMs = parseDuration(`${time}`);
     if (!timeInMs) {
-      interaction.reply({
+      return {
         content: i18n["invalidDuration"],
-      });
+      };
       return;
     }
 
     // 28 days in milliseconds
     if (timeInMs > 28 * 24 * 60 * 60 * 1000) {
-      interaction.reply({
+      return {
         content: i18n["max"],
-      });
+      };
       return;
     }
 
@@ -89,17 +101,17 @@ module.exports = {
     const finalReason = `By: ${initiator}, REASON: ${reason}, ENDS ON: ${formattedEndDate}`;
 
     try {
-      await member.timeout(timeInMs, finalReason);
+      await m.timeout(timeInMs, finalReason);
 
-      await interaction.reply({
-        content: i18n["timeoutSuccess"].replace("{user}", member.user.username),
-      });
+      return {
+        content: i18n["timeoutSuccess"].replace("{user}", m.user.username),
+      };
     } catch (error) {
       console.error(error);
-      await interaction.reply({
+      return {
         content: i18n["timeoutError"],
         ephemeral: true,
-      });
+      };
     }
   },
 };

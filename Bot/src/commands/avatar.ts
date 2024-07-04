@@ -1,7 +1,15 @@
 // commands/avatar.js
 
 import { CustomClient } from "../types"; // Import CustomClient interface
-import { CommandInteraction, EmbedBuilder } from "discord.js";
+import {
+  EmbedBuilder,
+  CommandInteraction,
+  Message,
+  Guild,
+  GuildMember,
+  Channel,
+  User,
+} from "discord.js";
 
 module.exports = {
   data: {
@@ -16,31 +24,41 @@ module.exports = {
       },
     ],
   },
-  execute: async (interaction: CommandInteraction): Promise<void> => {
-    const client = interaction.client as CustomClient; // Cast client to CustomClient
-
+  execute: async (
+    client: CustomClient,
+    interaction: CommandInteraction,
+    message: Message,
+    guild: Guild,
+    member: GuildMember,
+    user: User,
+    channel: Channel
+  ) => {
     // Assuming interaction is of type CommandInteraction
-    const userOption = interaction.options.get("user");
-    const user = userOption?.user || interaction.user;
+    const targetUser = interaction
+      ? interaction.options.get("user")?.user || interaction.user
+      : message.author;
 
     const embed = new EmbedBuilder()
+      .setTitle("Avatar Link")
+      .setURL(targetUser!.displayAvatarURL({ size: 1024 }))
       .setAuthor({
-        name: user.username,
-        iconURL: user.displayAvatarURL({ size: 1024 }),
+        name: targetUser!.username,
+        iconURL: targetUser!.displayAvatarURL({ size: 1024 }),
       })
-      .setImage(user.displayAvatarURL({ size: 1024 }))
+      .setImage(targetUser!.displayAvatarURL({ size: 1024 }))
       .setFooter({
         text:
-          client.i18n[await client.getLanguage(interaction.guild!.id)].avatar +
-          interaction.user.username,
-        iconURL: interaction.user.displayAvatarURL({
+          client.i18n[
+            await client.getLanguage(interaction ? guild.id : message.guild!.id)
+          ].avatar + user.username,
+        iconURL: user.displayAvatarURL({
           size: 1024,
         }),
       });
 
-    await interaction.reply({
+    return {
       embeds: [embed],
       allowedMentions: { repliedUser: false },
-    });
+    };
   },
 };

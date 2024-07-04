@@ -2,7 +2,15 @@
 const { EmbedBuilder } = require("discord.js");
 
 import { CustomClient } from "../types"; // Import CustomClient interface
-import { CommandInteraction } from "discord.js";
+
+import {
+  CommandInteraction,
+  Message,
+  Guild,
+  GuildMember,
+  Channel,
+  User,
+} from "discord.js";
 module.exports = {
   data: {
     name: "roll",
@@ -16,8 +24,15 @@ module.exports = {
       },
     ],
   },
-  execute: async (interaction: CommandInteraction): Promise<void> => {
-    const client = interaction.client as CustomClient; // Cast client to CustomClient
+  execute: async (
+    client: CustomClient,
+    interaction: CommandInteraction,
+    message: Message,
+    guild: Guild,
+    member: GuildMember,
+    user: User,
+    channel: Channel
+  ) => {
     let min = 0;
     let max = 100; // Default max value for a standard dice roll
 
@@ -29,14 +44,15 @@ module.exports = {
       if (isNaN(max)) {
         const embed = new EmbedBuilder()
           .setDescription(
-            client.i18n[
-              await client.getLanguage(interaction.guild!.id)
-            ].roll.replace("{option}", `${option}`)
+            client.i18n[await client.getLanguage(guild.id)].roll.replace(
+              "{option}",
+              `${option}`
+            )
           )
           .setColor(14423100);
-        await interaction.reply({
+        return {
           embeds: [embed],
-        });
+        };
         return;
       }
     }
@@ -44,6 +60,6 @@ module.exports = {
     // Generate a random number between min and max (inclusive)
     const num = Math.floor(Math.random() * (max - min + 1)) + min;
 
-    await interaction.reply(`${num}`);
+    return `${num}`;
   },
 };

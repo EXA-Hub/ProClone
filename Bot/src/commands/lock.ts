@@ -1,12 +1,16 @@
 import { CustomClient } from "../types"; // Import CustomClient interface
+
 import {
   CommandInteraction,
   GuildChannel,
-  GuildMember,
   PermissionFlagsBits,
   PermissionsBitField,
+  Message,
+  Guild,
+  GuildMember,
+  Channel,
+  User,
 } from "discord.js";
-
 module.exports = {
   data: {
     name: "lock",
@@ -28,34 +32,40 @@ module.exports = {
       },
     ],
   },
-  execute: async (interaction: CommandInteraction): Promise<void> => {
-    const client = interaction.client as CustomClient; // Cast client to CustomClient
-    const lang = await client.getLanguage(interaction.guild!.id);
+  execute: async (
+    client: CustomClient,
+    interaction: CommandInteraction,
+    message: Message,
+    guild: Guild,
+    member: GuildMember,
+    user: User,
+    channel: Channel
+  ) => {
+    const lang = await client.getLanguage(guild.id);
     const i18n = client.i18n[lang].lock;
 
-    const channel = interaction.options.get("channel") || interaction.channel;
+    const c = interaction.options.get("channel") || interaction.channel;
     const reason = interaction.options.get("reason") || "No reason provided";
 
-    if (!channel) {
-      interaction.reply({
+    if (!c) {
+      return {
         content: i18n["invalidChannel"],
         ephemeral: true,
-      });
-      return;
+      };
     }
 
-    const member = interaction.member as GuildMember;
+    const m = interaction.member as GuildMember;
     // Check if interaction.member!.permissions has the required permission
-    if (!member.permissions.has(PermissionsBitField.Flags.ManageChannels)) {
-      interaction.reply({
+    if (!m.permissions.has(PermissionsBitField.Flags.ManageChannels)) {
+      return {
         content: i18n["noPermission"],
-      });
+      };
       return;
     }
 
     try {
       await (interaction.channel as GuildChannel).permissionOverwrites.edit(
-        interaction.guild!.roles.everyone,
+        guild.roles.everyone,
         {
           SendMessages: false,
           CreatePublicThreads: false,
@@ -65,17 +75,17 @@ module.exports = {
         { reason: `${reason}` }
       );
 
-      await interaction.reply({
+      return {
         content: i18n["lockSuccess"]
-          .replace("{channel}", channel.toString())
+          .replace("{channel}", c.toString())
           .replace("{reason}", `${reason}`),
-      });
+      };
     } catch (error) {
       console.error(error);
-      await interaction.reply({
+      return {
         content: i18n["lockError"],
         ephemeral: true,
-      });
+      };
     }
   },
 };

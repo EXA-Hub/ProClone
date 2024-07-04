@@ -3,7 +3,15 @@
 const { EmbedBuilder } = require("discord.js");
 
 import { CustomClient } from "../types"; // Import CustomClient interface
-import { CommandInteraction } from "discord.js";
+
+import {
+  CommandInteraction,
+  Message,
+  Guild,
+  GuildMember,
+  Channel,
+  User,
+} from "discord.js";
 module.exports = {
   data: {
     name: "server",
@@ -11,15 +19,22 @@ module.exports = {
     description: "Displays information about the server.",
     options: [],
   },
-  execute: async (interaction: CommandInteraction): Promise<void> => {
-    const client = interaction.client as CustomClient; // Cast client to CustomClient
+  execute: async (
+    client: CustomClient,
+    interaction: CommandInteraction,
+    message: Message,
+    guild: Guild,
+    member: GuildMember,
+    user: User,
+    channel: Channel
+  ) => {
     let nums = {
       text: 0,
       voice: 0,
       category: 0,
     };
 
-    interaction.guild!.channels.cache.forEach((channel) => {
+    guild.channels.cache.forEach((channel) => {
       if ([5, 0].includes(channel.type)) {
         nums.text++;
       } else if (channel.type === 2) {
@@ -29,7 +44,7 @@ module.exports = {
       }
     });
 
-    const lang = await client.getLanguage(interaction.guild!.id);
+    const lang = await client.getLanguage(guild.id);
     const i18n = client.i18n[lang];
 
     const fields = i18n.server.fields.map((field: any) => {
@@ -38,51 +53,49 @@ module.exports = {
 
       // Replace placeholders with actual values for name
       name = name
-        .replace("{guildId}", interaction.guild!.id)
+        .replace("{guildId}", guild.id)
         .replace(
           "{createdTimestamp}",
-          Math.floor(interaction.guild!.createdTimestamp / 1000)
+          Math.floor(guild.createdTimestamp / 1000)
         )
-        .replace("{ownerId}", interaction.guild!.ownerId)
-        .replace("{memberCount}", interaction.guild!.memberCount)
+        .replace("{ownerId}", guild.ownerId)
+        .replace("{memberCount}", guild.memberCount)
         .replace(
           "{onlineMemberCount}",
-          interaction.guild!.members.cache.filter((member) => member.presence)
-            .size
+          guild.members.cache.filter((member) => member.presence).size
         )
-        .replace("{boostCount}", interaction.guild!.premiumSubscriptionCount)
+        .replace("{boostCount}", guild.premiumSubscriptionCount)
         .replace("{textChannelCount}", nums.text)
         .replace("{voiceChannelCount}", nums.voice)
         .replace(
           "{channelCount}",
-          interaction.guild!.channels.channelCountWithoutThreads - nums.category
+          guild.channels.channelCountWithoutThreads - nums.category
         )
-        .replace("{verificationLevel}", interaction.guild!.verificationLevel)
-        .replace("{roleCount}", interaction.guild!.roles.cache.size);
+        .replace("{verificationLevel}", guild.verificationLevel)
+        .replace("{roleCount}", guild.roles.cache.size);
 
       // Replace placeholders with actual values for value
       value = value
-        .replace("{guildId}", interaction.guild!.id)
+        .replace("{guildId}", guild.id)
         .replace(
           "{createdTimestamp}",
-          Math.floor(interaction.guild!.createdTimestamp / 1000)
+          Math.floor(guild.createdTimestamp / 1000)
         )
-        .replace("{ownerId}", interaction.guild!.ownerId)
-        .replace("{memberCount}", interaction.guild!.memberCount)
+        .replace("{ownerId}", guild.ownerId)
+        .replace("{memberCount}", guild.memberCount)
         .replace(
           "{onlineMemberCount}",
-          interaction.guild!.members.cache.filter((member) => member.presence)
-            .size
+          guild.members.cache.filter((member) => member.presence).size
         )
-        .replace("{boostCount}", interaction.guild!.premiumSubscriptionCount)
+        .replace("{boostCount}", guild.premiumSubscriptionCount)
         .replace("{textChannelCount}", nums.text)
         .replace("{voiceChannelCount}", nums.voice)
         .replace(
           "{channelCount}",
-          interaction.guild!.channels.channelCountWithoutThreads - nums.category
+          guild.channels.channelCountWithoutThreads - nums.category
         )
-        .replace("{verificationLevel}", interaction.guild!.verificationLevel)
-        .replace("{roleCount}", interaction.guild!.roles.cache.size);
+        .replace("{verificationLevel}", guild.verificationLevel)
+        .replace("{roleCount}", guild.roles.cache.size);
 
       return {
         name: name,
@@ -93,19 +106,19 @@ module.exports = {
 
     const embed = new EmbedBuilder()
       .setColor(0)
-      .setAuthor({ name: interaction.guild!.name })
+      .setAuthor({ name: guild.name })
       .addFields(fields);
 
     // Set the guild's icon as the image if it exists
-    if (interaction.guild!.icon) {
-      embed.setThumbnail(interaction.guild!.iconURL({})).setAuthor({
-        name: interaction.guild!.name,
-        iconURL: interaction.guild!.iconURL({}),
+    if (guild.icon) {
+      embed.setThumbnail(guild.iconURL({})).setAuthor({
+        name: guild.name,
+        iconURL: guild.iconURL({}),
       });
     }
 
-    await interaction.reply({
+    return {
       embeds: [embed],
-    });
+    };
   },
 };

@@ -3,7 +3,15 @@
 const { EmbedBuilder } = require("discord.js");
 
 import { CustomClient } from "../types"; // Import CustomClient interface
-import { CommandInteraction } from "discord.js";
+
+import {
+  CommandInteraction,
+  Message,
+  Guild,
+  GuildMember,
+  Channel,
+  User,
+} from "discord.js";
 module.exports = {
   data: {
     name: "ping",
@@ -11,30 +19,38 @@ module.exports = {
     description: "Test the bots response time.",
     options: [],
   },
-  execute: async (interaction: CommandInteraction): Promise<void> => {
-    const client = interaction.client as CustomClient; // Cast client to CustomClient
-    const sent = await interaction.reply({
+  execute: async (
+    client: CustomClient,
+    interaction: CommandInteraction,
+    message: Message,
+    guild: Guild,
+    member: GuildMember,
+    user: User,
+    channel: Channel
+  ) => {
+    const sent = await (interaction || message).reply({
       content: "pong! 🏓",
       fetchReply: true,
+      allowedMentions: { repliedUser: false },
     });
 
-    const timeTaken = sent.createdTimestamp - interaction.createdTimestamp;
-    const microTime = Math.round(client.uptime! % 1000);
-    const wsLatency = client.ws.ping;
-
-    const embed = new EmbedBuilder()
-      .setTitle("pong! :ping_pong:")
-      .setDescription(
-        `:hourglass: **Time:** ${timeTaken} ms
-:sparkles: **Micro:** ${microTime} ms
-:stopwatch: **WS:** ${wsLatency} ms`
-      )
-      .setTimestamp()
-      .setFooter({ text: "IDK >:" })
-      .setColor(8387074);
-
-    await interaction.editReply({
-      embeds: [embed],
+    await sent.edit({
+      embeds: [
+        new EmbedBuilder()
+          .setTitle("pong! :ping_pong:")
+          .setDescription(
+            `:hourglass: **Time:** ${
+              sent.createdTimestamp - (interaction || message).createdTimestamp
+            } ms
+:sparkles: **Micro:** ${Math.round(client.uptime! % 1000)} ms
+:stopwatch: **WS:** ${client.ws.ping} ms`
+          )
+          .setTimestamp()
+          .setFooter({ text: "IDK >:" })
+          .setColor(8387074),
+      ],
+      allowedMentions: { repliedUser: false },
     });
+    return null;
   },
 };

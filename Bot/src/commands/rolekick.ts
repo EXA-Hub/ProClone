@@ -4,8 +4,11 @@ import { CustomClient } from "../types"; // Import CustomClient interface
 import {
   CommandInteraction,
   GuildMember,
+  Message,
   PermissionFlagsBits,
-  PermissionsBitField,
+  Guild,
+  Channel,
+  User,
 } from "discord.js";
 module.exports = {
   data: {
@@ -28,9 +31,16 @@ module.exports = {
       },
     ],
   },
-  execute: async (interaction: CommandInteraction): Promise<void> => {
-    const client = interaction.client as CustomClient; // Cast client to CustomClient
-    const lang = await client.getLanguage(interaction.guild!.id);
+  execute: async (
+    client: CustomClient,
+    interaction: CommandInteraction,
+    message: Message,
+    guild: Guild,
+    member: GuildMember,
+    user: User,
+    channel: Channel
+  ) => {
+    const lang = await client.getLanguage(guild.id);
     const i18n = client.i18n[lang].rolekick;
   },
 };

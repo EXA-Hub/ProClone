@@ -5,8 +5,12 @@ const { PermissionsBitField } = require("discord.js");
 import { CustomClient } from "../types"; // Import CustomClient interface
 import {
   CommandInteraction,
-  GuildMember,
   PermissionFlagsBits,
+  Message,
+  Guild,
+  GuildMember,
+  Channel,
+  User,
 } from "discord.js";
 module.exports = {
   data: {
@@ -28,12 +32,19 @@ module.exports = {
       },
     ],
   },
-  execute: async (interaction: CommandInteraction): Promise<void> => {
-    const client = interaction.client as CustomClient; // Cast client to CustomClient
-    const lang = await client.getLanguage(interaction.guild!.id);
+  execute: async (
+    client: CustomClient,
+    interaction: CommandInteraction,
+    message: Message,
+    guild: Guild,
+    member: GuildMember,
+    user: User,
+    channel: Channel
+  ) => {
+    const lang = await client.getLanguage(guild.id);
     const i18n = client.i18n[lang].setnick;
 
-    const member = interaction.options.get("user")?.member as GuildMember;
+    const m = interaction.options.get("user")?.member as GuildMember;
     const newNick = interaction.options.get("new_nick")?.value;
 
     const memberUser = interaction.member as GuildMember;
@@ -41,40 +52,37 @@ module.exports = {
     if (
       !memberUser.permissions.has(PermissionsBitField.Flags.ManageNicknames)
     ) {
-      interaction.reply({
+      return {
         content: i18n["noPermission"],
-      });
+      };
       return;
     }
 
-    if (!member) {
-      interaction.reply({
+    if (!m) {
+      return {
         content: i18n["invalidMember"],
         ephemeral: true,
-      });
+      };
       return;
     }
 
     try {
-      await member.setNickname(
-        `${newNick}`,
-        `Changed by ${interaction.user.tag}`
-      );
+      await m.setNickname(`${newNick}`, `Changed by ${interaction.user.tag}`);
 
-      await interaction.reply({
+      return {
         content: i18n[newNick ? "nickSuccess" : "nickSuccessR"]
-          .replace("{user}", member.user.tag)
+          .replace("{user}", m.user.tag)
           .replace("{newNick}", `${newNick}`),
-      });
+      };
     } catch (error) {
       console.error(error);
       await interaction.channel?.send({
         content: i18n["noPermission"],
       });
-      await interaction.reply({
+      return {
         content: i18n["nickError"],
         ephemeral: true,
-      });
+      };
     }
   },
 };

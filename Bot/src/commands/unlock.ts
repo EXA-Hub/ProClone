@@ -4,8 +4,12 @@ const { PermissionsBitField } = require("discord.js");
 import { CustomClient } from "../types"; // Import CustomClient interface
 import {
   CommandInteraction,
-  GuildChannel,
+  Message,
+  Guild,
   GuildMember,
+  Channel,
+  User,
+  GuildChannel,
   PermissionFlagsBits,
 } from "discord.js";
 module.exports = {
@@ -23,34 +27,41 @@ module.exports = {
       },
     ],
   },
-  execute: async (interaction: CommandInteraction): Promise<void> => {
-    const client = interaction.client as CustomClient; // Cast client to CustomClient
-    const lang = await client.getLanguage(interaction.guild!.id);
+  execute: async (
+    client: CustomClient,
+    interaction: CommandInteraction,
+    message: Message,
+    guild: Guild,
+    member: GuildMember,
+    user: User,
+    channel: Channel
+  ) => {
+    const lang = await client.getLanguage(guild.id);
     const i18n = client.i18n[lang].lock;
 
-    const channel =
+    const c =
       interaction.options.get("channel")?.channel || interaction.channel;
 
-    if (!channel) {
-      interaction.reply({
+    if (!c) {
+      return {
         content: i18n["invalidChannel"],
         ephemeral: true,
-      });
+      };
       return;
     }
 
-    const member = interaction.member as GuildMember;
+    const m = interaction.member as GuildMember;
     // Check if interaction.member!.permissions has the required permission
-    if (!member.permissions.has(PermissionsBitField.Flags.ManageChannels)) {
-      interaction.reply({
+    if (!m.permissions.has(PermissionsBitField.Flags.ManageChannels)) {
+      return {
         content: i18n["noPermission"],
-      });
+      };
       return;
     }
 
     try {
       await (interaction.channel as GuildChannel).permissionOverwrites.edit(
-        interaction.guild!.roles.everyone,
+        guild.roles.everyone,
         {
           SendMessages: true,
           CreatePublicThreads: true,
@@ -59,15 +70,15 @@ module.exports = {
         }
       );
 
-      await interaction.reply({
-        content: i18n["unlockSuccess"].replace("{channel}", channel.toString()),
-      });
+      return {
+        content: i18n["unlockSuccess"].replace("{channel}", c.toString()),
+      };
     } catch (error) {
       console.error(error);
-      await interaction.reply({
+      return {
         content: i18n["lockError"],
         ephemeral: true,
-      });
+      };
     }
   },
 };

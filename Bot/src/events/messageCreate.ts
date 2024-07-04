@@ -9,33 +9,50 @@ import { CustomClient } from "../types";
 
 module.exports = {
   async execute(message: Message, client: CustomClient) {
-    // Check if the message starts with your prefix and isn't sent by a bot
-    const prefix = "#"; // Replace with your bot's prefix
     if (message.author.bot || !message.guild) return;
 
-    if (!message.content.startsWith(prefix)) {
-      // await client.db.push(`aliases_${message.guild.id}.${"credits"}`, "c");
-
-      const aliases = (await client.db.get(
-        `aliases_${message.guild.id}`
-      )) as any;
-
-      if (!aliases) return;
-
+    // await client.db.push(`aliases_${message.guild.id}.${"untimeout"}`, "ut");
+    const aliases = (await client.db.get(`aliases_${message.guild.id}`)) as any;
+    if (aliases) {
       const aliasKey = Object.keys(aliases).find((key) =>
-        aliases[key].some((alias: string) => message.content.startsWith(alias))
+        aliases[key].some(
+          (alias: string) => message.content.split(" ").shift() === alias
+        )
       );
 
-      if (!aliasKey) return;
+      if (aliasKey) {
+        // Check if the command exists
+        const command = client.commands.get(aliasKey);
 
-      // Check if the command exists
-      const command = client.commands.get(`${aliasKey}`);
-      if (!command) return;
+        if (!command) return;
 
-      message.reply(command.data.name);
+        message.reply(`For Test Only!? ---> \`${command.data.name}\``);
 
-      return;
+        const response = await command.execute(
+          client,
+          undefined,
+          message,
+          message.guild,
+          message.member,
+          message.author,
+          message.channel
+        );
+
+        if (response)
+          message.reply(
+            typeof response === "string"
+              ? {
+                  content: response,
+                  allowedMentions: { repliedUser: false },
+                }
+              : { ...response, allowedMentions: { repliedUser: false } }
+          );
+        return;
+      }
     }
+
+    const prefix = "#"; // Replace with your bot's prefix
+    if (!message.content.startsWith(prefix)) return;
 
     // Split the message content to get the command
     const args = message.content.slice(prefix.length).trim().split(/ +/);
@@ -49,23 +66,22 @@ module.exports = {
 
     // If the command exists, inform the user to use the slash command instead
     if (command.data.name !== "help") {
-      const embed = new EmbedBuilder().setDescription(
-        `**This command moved to Slash Commands \`/${commandName}\`.**`
-      );
-
-      // Create a button row
-      const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
-        new ButtonBuilder()
-          .setLabel("More Info")
-          .setStyle(ButtonStyle.Link)
-          .setURL(
-            `https://discord.com/blog/welcome-to-the-new-era-of-discord-apps?ref=zampx`
-          )
-      );
-
       await message.reply({
-        embeds: [embed],
-        components: [row],
+        embeds: [
+          new EmbedBuilder().setDescription(
+            `**This command moved to Slash Commands \`/${commandName}\`.**`
+          ),
+        ],
+        components: [
+          new ActionRowBuilder<ButtonBuilder>().addComponents(
+            new ButtonBuilder()
+              .setLabel("More Info")
+              .setStyle(ButtonStyle.Link)
+              .setURL(
+                `https://discord.com/blog/welcome-to-the-new-era-of-discord-apps?ref=zampx`
+              )
+          ),
+        ],
         allowedMentions: { repliedUser: false },
       });
     } else if (command.data.name === "help") {
