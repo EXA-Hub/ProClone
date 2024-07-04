@@ -1,0 +1,217 @@
+[
+  {
+    "credits": "Show your or somebody else's balance.",
+    "usage": "/credits\n/credits [user]\n/credits [user] [amount]\n/credits [user] [amount] [reason]",
+    "examples": "/credits\n/credits @zampx\n/credits @zampx 15000\n/credits @zampx 15000 Hello"
+  },
+  {
+    "rep": "Award someone a reputation point. Can only be used once every 24 hours.",
+    "usage": "/rep [user]",
+    "examples": "/rep\n/rep @zampx\n/rep 157605500488384512"
+  },
+  {
+    "moveme": "Moves you to another voice channel.",
+    "usage": "/moveme [channel or user]",
+    "examples": "/moveme general\n/moveme @zampx"
+  },
+  {
+    "color": "Change your color on the server.",
+    "usage": "/color [color's number]",
+    "examples": "/color 15"
+  },
+  {
+    "colors": "Lists you all the available colors.",
+    "usage": "/colors",
+    "examples": "/colors"
+  },
+  {
+    "short": "Shortens a URL.",
+    "usage": "/short [link]",
+    "examples": "/short https://probot.io/This-is-A-Very-Long-Link-lol"
+  },
+  {
+    "roll": "rolling dice.",
+    "usage": "/roll (number)",
+    "examples": "/roll\n/roll 100"
+  },
+  {
+    "profile": "View your or someone else's customizable personal global profile card.",
+    "usage": "/profile (user)",
+    "examples": "/profile\n/profile @zampx\n/profile 157605500488384512"
+  },
+  {
+    "rank": "View your rank card or someone else's in the server.",
+    "usage": "/rank (user)",
+    "examples": "/rank\n/rank @zampx\n/rank 157605500488384512"
+  },
+  {
+    "top": "Display the top members by text or voice.",
+    "usage": "/top (day / week / month)\n/top (text / voice/ invites) (page number)\n/top (text / voice) (role)",
+    "examples": "/top day\n/top week\n/top month\n/top text day \n/top voice week 2\n/top invites\n/top text @members"
+  },
+  {
+    "title": "Changes your profile title.",
+    "usage": "/title\n/title [new title]",
+    "examples": "/title This is a Title"
+  },
+  {
+    "setxp": "Sets the user's xp",
+    "usage": "/setxp [user] [type] [new_xp]",
+    "examples": "/setxp @zampx text 500\n/setxp @zampx voice 500"
+  },
+  {
+    "setlevel": "Sets the user's level",
+    "usage": "/setlevel [user] [type] [new_level]",
+    "examples": "/setlevel @zampx text 20\n/setlevel @zampx voice 20"
+  },
+  {
+    "user": "Shows information, such as ID and join date, about yourself or a user.",
+    "usage": "/user (user)",
+    "examples": "/user\n/user @zampx\n/user 157605500488384512"
+  },
+  {
+    "avatar": "Get a user's avatar.",
+    "usage": "/avatar\n/avatar server\n/avatar [user]",
+    "examples": "/avatar\n/avatar server\n/avatar @zampx\n/avatar 157605500488384512"
+  },
+  {
+    "server": "Shows information about the server",
+    "usage": "/server",
+    "examples": "/server"
+  },
+  {
+    "roles": "Get a list of server roles and member counts.",
+    "usage": "/roles",
+    "examples": "/roles"
+  },
+  {
+    "setlang": "Sets your preferred language for the bot.",
+    "usage": "/setlang [Language Code]",
+    "examples": "/setlang en"
+  },
+  {
+    "setnick": "Changes the nickname of a member.",
+    "usage": "/setnick [user] (New nickname)",
+    "examples": "/setnick @zampx Developer"
+  },
+  {
+    "ban": "Bans a member.",
+    "usage": "/ban [user] (time m/h/d/mo/y) (reason)",
+    "examples": "/ban @zampx\n/ban @zampx spamming\n/ban @zampx 1h spamming\n/ban @zampx 1d spamming\n/ban @zampx 1w"
+  },
+  {
+    "unban": "Unbans a member.",
+    "usage": "/unban [user]",
+    "examples": "/unban Dramex\n/unban 157605500488384512"
+  },
+  {
+    "kick": "Kicks a member.",
+    "usage": "/kick [user] (reason)",
+    "examples": "/kick @zampx\n/kick 157605500488384512"
+  },
+  {
+    "vkick": "Kicks a member from a voice channel",
+    "usage": "/vkick [user]",
+    "examples": "/vkick @zampx"
+  },
+  {
+    "mute": "Mute a member so they can't type in text channels.",
+    "usage": "/mute [user] (time ends with m,h,d,mo,y) (reason)",
+    "examples": "/mute @zampx 1m Spamming\n/mute @zampx 1h\n/mute @zampx 1d\n/mute @zampx 1w\n/mute @zampx 1mo\n/mute @zampx 1y"
+  },
+  {
+    "unmute": "Unmutes a member.",
+    "usage": "/unmute [user]",
+    "examples": "/unmute @zampx\n/unmute 157605500488384512"
+  },
+  {
+    "mute": "Mute a member so they can't speak in voice channels.",
+    "usage": "/vmute [user] (time ends with m,h,d,mo,y) (reason)",
+    "examples": "/vmute @zampx 1m annoying\n/vmute @zampx 1h\n/vmute @zampx 1d\n/vmute @zampx 1mo\n/vmute @zampx 1y"
+  },
+  {
+    "unmute": "Unmutes a member from voice channels.",
+    "usage": "/unvmute [user]",
+    "examples": "/unvmute @zampx\n/unvmute 157605500488384512"
+  },
+  {
+    "timeout": "Timeouts a member.",
+    "usage": "/timeout [user]\n/timeout [user] (time)\n/timeout [user] (reason)",
+    "examples": "/timeout @Fnr\n/timeout @Fnr 1h\n/timeout @Fnr Spamming"
+  },
+  {
+    "untimeout": "Removes a timeout from a member.",
+    "usage": "/untimeout [user]",
+    "examples": "/untimeout @zampx\n/untimeout 157605500488384512"
+  },
+  {
+    "clear": "Cleans up channel messages.",
+    "usage": "/clear (number of messages)\n/clear bots (number of messages)\n/clear [user] (number of messages)",
+    "examples": "/clear\n/clear 1000\n/clear bots 10\n/clear @zampx 10"
+  },
+  {
+    "move": "Moves a member to another voice channel.",
+    "usage": "/move [user] (user or channel)\n/move all",
+    "examples": "/move @zampx \n/move @zampx General"
+  },
+  {
+    "role": "Add/remove role(s) for a member.",
+    "usage": "/role [user] (+/-)(roles names separated by comma)\n/role all (+/-)(role name)",
+    "examples": "/role @zampx Admin\n/role all members\n/role bots System\n/role humans members"
+  },
+  {
+    "points": "A server based points that can be given by moderators.",
+    "usage": "/points - see all points\n/points [user] 1 - set the points of a user\n/points [user] +1 - increase the points of a user\n/points [user] -1 - decrease the points of a user\n/points [user] 0 -  reset the points of a user\n/points reset - resets all points\n/points [role name] - filters the points by a role",
+    "examples": "/points @zampx 1\n/points @zampx +1 \n/points @zampx -1\n/points @zampx 0\n/points reset\n/points Admin"
+  },
+  {
+    "warn": "Warns a member.",
+    "usage": "/warn [user] [reason]",
+    "examples": "/warn @zampx\n/warn @zampx spamming"
+  },
+  {
+    "warn_remove": "Remove warnings for the server or user.",
+    "usage": "/removewarn [warnID]\n/removewarn [user]\n/removewarn all",
+    "examples": "/removewarn 1810\n/removewarn @zampx\n/removewarn all"
+  },
+  {
+    "warnings": "Get the list of warnings for the server or a user.",
+    "usage": "/warnings (user)",
+    "examples": "/warnings\n/warnings @zampx"
+  },
+  {
+    "lock": "Disables @everyone from sending messages in specific channel.",
+    "usage": "/lock (channel) (reason)",
+    "examples": "/lock\n/lock #general\n/lock #general Spamming"
+  },
+  {
+    "unlock": "Allows @everyone to send messages in specific channel.",
+    "usage": "/unlock (channel)",
+    "examples": "/unlock\n/unlock general"
+  },
+  {
+    "setcolor": "Changes role's color by hex codes.",
+    "usage": "/setcolor [role name] [color code]",
+    "examples": "/setcolor members #000001"
+  },
+  {
+    "slowmode": "Enable or disable slowmode on a channel.",
+    "usage": "/slowmode\n/slowmode (time)\n/slowmode off",
+    "examples": "/slowmode\n/slowmode 1\n/slowmode 1h\n/slowmode off"
+  },
+  {
+    "reset": "Reset text/voice/invites xp points for all or specific members.",
+    "usage": "/reset [text / voice / invites / limits) [all / user]",
+    "examples": "/reset text all\n/reset voice all\n/reset invites all\n/reset text @zampx\n/reset limits @zampx"
+  },
+  {
+    "starboard": "",
+    "usage": "/starboard",
+    "examples": "/starboard"
+  },
+  {
+    "vip": "Shows information about your premium bot.",
+    "usage": "/vip\n /vip move (bot's number)\n/vip transfer (bot's number) [user]\n/vip restart\n/vip avatar [avatar link]\n/vip username [new name]\n/vip status (new status)\n/vip whitelist (user)",
+    "examples": "/vip\n/vip move\n/vip move 1000\n/vip transfer 1000 @zampx\n/vip restart\n/vip avatar http://i8.ae/sN6XG\n/vip username SystemBot\n/vip status SystemBot\n/vip whitelist @zampx"
+  }
+]
