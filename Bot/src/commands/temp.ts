@@ -1,12 +1,13 @@
 // commands/temp.js
 
 import { CustomClient } from "../types"; // Import CustomClient interface
-import { CommandInteraction } from "discord.js";
+import { CommandInteraction, PermissionFlagsBits } from "discord.js";
 module.exports = {
   data: {
     name: "temp",
     type: 1,
     description: "Makes a temporary channel.",
+    default_member_permissions: PermissionFlagsBits.Administrator.toString(),
     options: [
       {
         type: 1,

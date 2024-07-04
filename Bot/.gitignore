@@ -13,8 +13,8 @@ npm-debug.log*
 .DS_Store
 Thumbs.db
 
-# Ignore SQLite database file within database folder
-database/*.sqlite
+# Ignore SQLite database files within the src/database folder
+src/database/*.sqlite
 
 
 # IDE-specific files

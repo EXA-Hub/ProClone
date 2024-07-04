@@ -1,12 +1,13 @@
 // commands/mute.js
 
 import { CustomClient } from "../types"; // Import CustomClient interface
-import { CommandInteraction } from "discord.js";
+import { CommandInteraction, PermissionFlagsBits } from "discord.js";
 module.exports = {
   data: {
     name: "mute",
     type: 1,
     description: "Mute a member from text/voice channels so they cannot type.",
+    default_member_permissions: PermissionFlagsBits.ManageRoles.toString(),
     options: [
       {
         type: 1,

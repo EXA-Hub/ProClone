@@ -1,12 +1,13 @@
 // commands/clear.js
 
 import { CustomClient } from "../types"; // Import CustomClient interface
-import { CommandInteraction } from "discord.js";
+import { CommandInteraction, PermissionFlagsBits } from "discord.js";
 module.exports = {
   data: {
     name: "clear",
     type: 1,
     description: "Cleans messages from a channel.",
+    default_member_permissions: PermissionFlagsBits.ManageMessages.toString(),
     options: [
       {
         type: 4,

@@ -1,12 +1,13 @@
 // commands/setxp.js
 
 import { CustomClient } from "../types"; // Import CustomClient interface
-import { CommandInteraction } from "discord.js";
+import { CommandInteraction, PermissionFlagsBits } from "discord.js";
 module.exports = {
   data: {
     name: "setxp",
     type: 1,
     description: "Sets the user's xp",
+    default_member_permissions: PermissionFlagsBits.Administrator.toString(),
     options: [
       {
         type: 6,

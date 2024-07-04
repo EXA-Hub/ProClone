@@ -1,12 +1,13 @@
 // commands/move.js
 
 import { CustomClient } from "../types"; // Import CustomClient interface
-import { CommandInteraction } from "discord.js";
+import { CommandInteraction, PermissionFlagsBits } from "discord.js";
 module.exports = {
   data: {
     name: "move",
     type: 1,
     description: "Moves a member to another voice channel.",
+    default_member_permissions: PermissionFlagsBits.MoveMembers.toString(),
     options: [
       {
         type: 1,

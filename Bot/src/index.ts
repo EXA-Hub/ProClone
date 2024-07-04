@@ -72,3 +72,22 @@ eventFiles.forEach((file) => {
 });
 
 client.login(process.env.DISCORD_BOT_TOKEN);
+
+// Handle unhandled promise rejections globally
+process.on("unhandledRejection", (error) => {
+  console.error("Unhandled promise rejection:", error);
+  // Optionally, you can notify developers or take other actions as necessary
+});
+
+// Handle uncaught exceptions globally
+process.on("uncaughtException", (error) => {
+  console.error("Uncaught exception occurred:", error);
+  // Optionally, you can handle or log the error, perform cleanup, and gracefully exit
+  // process.exit(1); // Exit the process with a non-zero status code (1 indicates an error)
+});
+
+// Handle warnings globally (optional)
+process.on("warning", (warning) => {
+  console.warn("Warning occurred:", warning);
+  // Optionally, you can log the warning or take other actions as necessary
+});

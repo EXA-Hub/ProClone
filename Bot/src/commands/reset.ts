@@ -1,13 +1,14 @@
 // commands/reset.js
 
 import { CustomClient } from "../types"; // Import CustomClient interface
-import { CommandInteraction } from "discord.js";
+import { CommandInteraction, PermissionFlagsBits } from "discord.js";
 module.exports = {
   data: {
     name: "reset",
     type: 1,
     description:
       "Reset text/voice/invites/limits xp points for all or specific member.",
+    default_member_permissions: PermissionFlagsBits.Administrator.toString(),
     options: [
       {
         type: 3,

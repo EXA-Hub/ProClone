@@ -1,12 +1,13 @@
 // commands/vkick.js
 
 import { CustomClient } from "../types"; // Import CustomClient interface
-import { CommandInteraction } from "discord.js";
+import { CommandInteraction, PermissionFlagsBits } from "discord.js";
 module.exports = {
   data: {
     name: "vkick",
     type: 1,
     description: "Kicks a member from a voice channel",
+    default_member_permissions: PermissionFlagsBits.ManageChannels.toString(),
     options: [
       {
         type: 6,

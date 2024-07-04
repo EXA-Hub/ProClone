@@ -1,12 +1,13 @@
 // commands/points.js
 
 import { CustomClient } from "../types"; // Import CustomClient interface
-import { CommandInteraction } from "discord.js";
+import { CommandInteraction, PermissionFlagsBits } from "discord.js";
 module.exports = {
   data: {
     name: "points",
     type: 1,
     description: "A server based points that can be given by moderators.",
+    default_member_permissions: PermissionFlagsBits.ManageGuild.toString(),
     options: [
       {
         type: 1,

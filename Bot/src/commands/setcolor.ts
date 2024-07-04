@@ -1,12 +1,14 @@
 // commands/setcolor.js
 
 import { CustomClient } from "../types"; // Import CustomClient interface
-import { CommandInteraction } from "discord.js";
+import { CommandInteraction, PermissionFlagsBits } from "discord.js";
 module.exports = {
   data: {
     name: "setcolor",
     type: 1,
     description: "Changes role's colors by hex codes.",
+
+    default_member_permissions: PermissionFlagsBits.ManageRoles.toString(),
     options: [
       {
         type: 8,

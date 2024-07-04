@@ -1,5 +1,6 @@
 {
   "avatar": "Requested by ",
+  "userPermissionRequired": ":x: This command requires `{permission}` permission.",
   "setLang": [
     ":white_check_mark: The Language has been changed successfully",
     ":rolling_eyes: - Supported languages are "

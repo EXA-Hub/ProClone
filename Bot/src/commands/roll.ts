@@ -31,7 +31,7 @@ module.exports = {
           .setDescription(
             client.i18n[
               await client.getLanguage(interaction.guild!.id)
-            ].roll.replace("{option}", option)
+            ].roll.replace("{option}", `${option}`)
           )
           .setColor(14423100);
         await interaction.reply({

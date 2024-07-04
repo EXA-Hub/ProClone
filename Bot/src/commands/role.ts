@@ -1,12 +1,13 @@
 // commands/role.js
 
 import { CustomClient } from "../types"; // Import CustomClient interface
-import { CommandInteraction } from "discord.js";
+import { CommandInteraction, PermissionFlagsBits } from "discord.js";
 module.exports = {
   data: {
     name: "role",
     type: 1,
     description: "Add/remove a role(s) for a user.",
+    default_member_permissions: PermissionFlagsBits.ManageRoles.toString(),
     options: [
       {
         type: 1,

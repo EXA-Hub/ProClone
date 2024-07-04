@@ -3,12 +3,17 @@
 const { PermissionsBitField } = require("discord.js");
 
 import { CustomClient } from "../types"; // Import CustomClient interface
-import { CommandInteraction, GuildMember } from "discord.js";
+import {
+  CommandInteraction,
+  GuildMember,
+  PermissionFlagsBits,
+} from "discord.js";
 module.exports = {
   data: {
     name: "setnick",
     type: 1,
     description: "Changes a member's nickname.",
+    default_member_permissions: PermissionFlagsBits.ManageNicknames.toString(),
     options: [
       {
         type: 6,
@@ -59,10 +64,13 @@ module.exports = {
       await interaction.reply({
         content: i18n[newNick ? "nickSuccess" : "nickSuccessR"]
           .replace("{user}", member.user.tag)
-          .replace("{newNick}", newNick),
+          .replace("{newNick}", `${newNick}`),
       });
     } catch (error) {
       console.error(error);
+      await interaction.channel?.send({
+        content: i18n["noPermission"],
+      });
       await interaction.reply({
         content: i18n["nickError"],
         ephemeral: true,

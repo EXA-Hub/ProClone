@@ -11,7 +11,31 @@ module.exports = {
   async execute(message: Message, client: CustomClient) {
     // Check if the message starts with your prefix and isn't sent by a bot
     const prefix = "#"; // Replace with your bot's prefix
-    if (!message.content.startsWith(prefix) || message.author.bot) return;
+    if (message.author.bot || !message.guild) return;
+
+    if (!message.content.startsWith(prefix)) {
+      // await client.db.push(`aliases_${message.guild.id}.${"credits"}`, "c");
+
+      const aliases = (await client.db.get(
+        `aliases_${message.guild.id}`
+      )) as any;
+
+      if (!aliases) return;
+
+      const aliasKey = Object.keys(aliases).find((key) =>
+        aliases[key].some((alias: string) => message.content.startsWith(alias))
+      );
+
+      if (!aliasKey) return;
+
+      // Check if the command exists
+      const command = client.commands.get(`${aliasKey}`);
+      if (!command) return;
+
+      message.reply(command.data.name);
+
+      return;
+    }
 
     // Split the message content to get the command
     const args = message.content.slice(prefix.length).trim().split(/ +/);
@@ -21,7 +45,6 @@ module.exports = {
 
     // Check if the command exists
     const command = client.commands.get(commandName);
-
     if (!command) return;
 
     // If the command exists, inform the user to use the slash command instead
@@ -46,7 +69,6 @@ module.exports = {
         allowedMentions: { repliedUser: false },
       });
     } else if (command.data.name === "help") {
-      await message.react("✅");
       // Create a button row
       const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
         new ButtonBuilder()
@@ -58,13 +80,18 @@ module.exports = {
           .setStyle(ButtonStyle.Link)
           .setURL(`https://discord.gg/qGtQqZFr`)
       );
-      await message.author.send({
-        content: `**${message.guild?.name}** prefix is \`/\` 
+      try {
+        await message.author.send({
+          content: `**${message.guild?.name}** prefix is \`/\`
 Commands list at https://probot.io/commands
 Dashboard at https://probot.io/
 Looking for support? https://discord.gg/probot`,
-        components: [row],
-      });
+          components: [row],
+        });
+        await message.react("✅");
+      } catch (error) {
+        await message.react("❌");
+      }
     }
   },
 };

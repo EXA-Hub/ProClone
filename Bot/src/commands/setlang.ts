@@ -9,12 +9,14 @@ function formatSupportedLanguages(languages: String[]) {
 }
 
 import { CustomClient } from "../types"; // Import CustomClient interface
-import { CommandInteraction } from "discord.js";
+import { CommandInteraction, PermissionFlagsBits } from "discord.js";
 module.exports = {
   data: {
     name: "setlang",
     type: 1,
     description: "Sets your preferred language for the bot.",
+
+    default_member_permissions: PermissionFlagsBits.Administrator.toString(),
     options: [
       {
         type: 3,

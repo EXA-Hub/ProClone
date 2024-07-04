@@ -1,12 +1,13 @@
 // commands/unban.js
 
 import { CustomClient } from "../types"; // Import CustomClient interface
-import { CommandInteraction } from "discord.js";
+import { CommandInteraction, PermissionFlagsBits } from "discord.js";
 module.exports = {
   data: {
     name: "unban",
     type: 1,
     description: "Unbans a member.",
+    default_member_permissions: PermissionFlagsBits.BanMembers.toString(),
     options: [
       {
         type: 3,

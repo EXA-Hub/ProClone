@@ -1,12 +1,13 @@
 // commands/kick.js
 
 import { CustomClient } from "../types"; // Import CustomClient interface
-import { CommandInteraction } from "discord.js";
+import { CommandInteraction, PermissionFlagsBits } from "discord.js";
 module.exports = {
   data: {
     name: "kick",
     type: 1,
     description: "Kicks a member.",
+    default_member_permissions: PermissionFlagsBits.KickMembers.toString(),
     options: [
       {
         type: 6,

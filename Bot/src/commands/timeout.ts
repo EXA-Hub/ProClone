@@ -1,13 +1,18 @@
 const { PermissionsBitField } = require("discord.js");
 
 import { CustomClient } from "../types"; // Import CustomClient interface
-import { CommandInteraction, GuildMember } from "discord.js";
+import {
+  CommandInteraction,
+  GuildMember,
+  PermissionFlagsBits,
+} from "discord.js";
 module.exports = {
   data: {
     name: "timeout",
     type: 1,
     description:
       "⏱ Timeout a user from sending messages, react or join voice channels.",
+    default_member_permissions: PermissionFlagsBits.ModerateMembers.toString(),
     options: [
       {
         type: 6,

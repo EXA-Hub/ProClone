@@ -2,12 +2,18 @@
 const { PermissionsBitField } = require("discord.js");
 
 import { CustomClient } from "../types"; // Import CustomClient interface
-import { CommandInteraction, GuildChannel, GuildMember } from "discord.js";
+import {
+  CommandInteraction,
+  GuildChannel,
+  GuildMember,
+  PermissionFlagsBits,
+} from "discord.js";
 module.exports = {
   data: {
     name: "unlock",
     type: 1,
     description: "🔓 Allows @everyone to send messages in specific channel.",
+    default_member_permissions: PermissionFlagsBits.ManageChannels.toString(),
     options: [
       {
         type: 7,

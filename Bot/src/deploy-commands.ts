@@ -18,7 +18,7 @@ const loadCommands = () => {
   const commands: CommandData[] = [];
   const commandFiles = fs
     .readdirSync(path.join(__dirname, "commands"))
-    .filter((file) => file.endsWith(".js"));
+    .filter((file) => file.endsWith(".ts"));
 
   for (const file of commandFiles) {
     const command = require(`./commands/${file}`); // TypeScript may give a warning here due to dynamic import

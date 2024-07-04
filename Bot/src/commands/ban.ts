@@ -1,12 +1,13 @@
 // commands/ban.js
 
 import { CustomClient } from "../types"; // Import CustomClient interface
-import { CommandInteraction } from "discord.js";
+import { CommandInteraction, PermissionFlagsBits } from "discord.js";
 module.exports = {
   data: {
     name: "ban",
     type: 1,
     description: "Bans a member.",
+    default_member_permissions: PermissionFlagsBits.BanMembers.toString(),
     options: [
       {
         type: 6,
@@ -31,6 +32,7 @@ module.exports = {
       },
     ],
   },
+
   execute: async (interaction: CommandInteraction): Promise<void> => {
     const client = interaction.client as CustomClient; // Cast client to CustomClient
     await interaction.reply("Working on that command!");

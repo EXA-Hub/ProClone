@@ -3,6 +3,7 @@ import {
   CommandInteraction,
   GuildChannel,
   GuildMember,
+  PermissionFlagsBits,
   PermissionsBitField,
 } from "discord.js";
 
@@ -12,6 +13,7 @@ module.exports = {
     type: 1,
     description:
       "🔒 Disables @everyone from sending messages in specific channel.",
+    default_member_permissions: PermissionFlagsBits.ManageChannels.toString(),
     options: [
       {
         type: 7,
@@ -66,7 +68,7 @@ module.exports = {
       await interaction.reply({
         content: i18n["lockSuccess"]
           .replace("{channel}", channel.toString())
-          .replace("{reason}", reason),
+          .replace("{reason}", `${reason}`),
       });
     } catch (error) {
       console.error(error);
