@@ -2,18 +2,21 @@ import dotenv from "dotenv";
 import { Client, GatewayIntentBits, Collection } from "discord.js";
 import path from "path";
 import fs from "fs";
-import { QuickDB } from "quick.db";
+import { QuickDB, JSONDriver } from "quick.db";
 
 dotenv.config();
 
 // Define CustomClient interface extending Client
-interface CustomClient extends Client {
-  i8: string;
-  db: QuickDB;
-  commands: Collection<any, any>;
-  i18n: Record<string, any>;
-  getLanguage(guildId: string): Promise<string>;
-}
+// interface CustomClient extends Client {
+//   cmdsec: any;
+//   i8: string;
+//   db: QuickDB;
+//   commands: Collection<any, any>;
+//   i18n: Record<string, any>;
+//   getLanguage(guildId: string): Promise<string>;
+// }
+
+import { CustomClient } from "./types";
 
 // Create a new instance of CustomClient
 const client: CustomClient = new Client({
@@ -27,9 +30,7 @@ const client: CustomClient = new Client({
 
 client.i8 = `${process.env.I8PHPSESSID}`;
 
-client.db = new QuickDB({
-  filePath: "./src/database/data.sqlite",
-});
+client.db = new QuickDB({ driver: new JSONDriver("./src/database/data.json") });
 
 client.commands = new Collection();
 
@@ -55,6 +56,8 @@ for (const file of commandFiles) {
   const command = require(path.join(__dirname, "commands", `${file}`));
   client.commands.set(command.data.name, command);
 }
+
+client.cmdsec = require("./database/sections.json");
 
 const eventFiles = fs
   .readdirSync(path.join(__dirname, "events"))

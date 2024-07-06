@@ -1,0 +1,72 @@
+{
+  "json": [
+    {
+      "id": "commands_1153834735102070855",
+      "value": {
+        "profile": {
+          "enabled": false,
+          "disabledChannels": [],
+          "enabledChannels": [],
+          "disabledRoles": [],
+          "enabledRoles": ["1156818631649402950"],
+          "deleteCommandMsg": false,
+          "deleteReply": false,
+          "deleteWithInvocation": false
+        }
+      }
+    },
+    {
+      "id": "aliases_1153834735102070855",
+      "value": {
+        "avatar": ["avatar"],
+        "ban": ["ban"],
+        "clear": ["clear"],
+        "color": ["color"],
+        "colors": ["colors"],
+        "credits": ["credits"],
+        "daily": ["daily"],
+        "help": ["help"],
+        "invite": ["invite"],
+        "kick": ["kick"],
+        "lock": ["lock"],
+        "move": ["move"],
+        "moveme": ["moveme"],
+        "mute": ["mute"],
+        "ping": ["ping"],
+        "points": ["points"],
+        "profile": ["profile"],
+        "rank": ["rank"],
+        "rep": ["rep"],
+        "reset": ["reset"],
+        "role": ["role"],
+        "rolekick": ["rolekick"],
+        "roles": ["roles"],
+        "roll": ["roll"],
+        "server": ["server"],
+        "setcolor": ["setcolor"],
+        "setlang": ["setlang"],
+        "setlevel": ["setlevel"],
+        "setnick": ["setnick"],
+        "setxp": ["setxp"],
+        "short": ["short"],
+        "slowmode": ["slowmode"],
+        "temp": ["temp"],
+        "timeout": ["timeout"],
+        "title": ["title"],
+        "top": ["top"],
+        "unban": ["unban"],
+        "unlock": ["unlock"],
+        "unmute": ["unmute"],
+        "untimeout": ["untimeout"],
+        "user": ["user"],
+        "vip": ["vip"],
+        "vkick": ["vkick"],
+        "vote": ["vote"],
+        "warn": ["warn"],
+        "warnings": ["warnings"],
+        "warn_remove": ["warn_remove"]
+      }
+    },
+    { "id": "guild_1153834735102070855_language", "value": "en" }
+  ]
+}

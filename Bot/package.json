@@ -14,7 +14,8 @@
     "discord.js": "^14.15.3",
     "dotenv": "^16.4.5",
     "form-data": "^4.0.0",
-    "quick.db": "^9.1.7"
+    "quick.db": "^9.1.7",
+    "write-file-atomic": "^5.0.1"
   },
   "devDependencies": {
     "@types/lodash": "^4.17.6",

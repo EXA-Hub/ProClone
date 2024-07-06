@@ -40,7 +40,8 @@ module.exports = {
     guild: Guild,
     member: GuildMember,
     user: User,
-    channel: Channel
+    channel: Channel,
+    args: String[]
   ) => {
     return "Working on that command!";
   },

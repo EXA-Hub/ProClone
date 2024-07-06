@@ -32,7 +32,8 @@ module.exports = {
     guild: Guild,
     member: GuildMember,
     user: User,
-    channel: Channel
+    channel: Channel,
+    args: String[]
   ) => {
     const i18n = client.i18n[await client.getLanguage(guild.id)].timeout;
 

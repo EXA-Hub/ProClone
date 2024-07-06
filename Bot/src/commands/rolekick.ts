@@ -38,7 +38,8 @@ module.exports = {
     guild: Guild,
     member: GuildMember,
     user: User,
-    channel: Channel
+    channel: Channel,
+    args: String[]
   ) => {
     const lang = await client.getLanguage(guild.id);
     const i18n = client.i18n[lang].rolekick;

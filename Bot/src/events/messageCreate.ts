@@ -4,14 +4,23 @@ import {
   ActionRowBuilder,
   ButtonBuilder,
   ButtonStyle,
+  PermissionFlagsBits,
 } from "discord.js";
-import { CustomClient } from "../types";
+import { CustomClient, commandData } from "../types";
 
 module.exports = {
   async execute(message: Message, client: CustomClient) {
-    if (message.author.bot || !message.guild) return;
+    if (message.author.bot) return;
+    if (!message.guild) return;
 
-    // await client.db.push(`aliases_${message.guild.id}.${"untimeout"}`, "ut");
+    // Added all commands to aliases fo test Only!?
+
+    // let commandsJSal: { [key: string]: string[] } = {};
+    // client.commands.forEach(async ({ data }) => {
+    //   commandsJSal[`${data.name}`] = [data.name];
+    // });
+    // await client.db.set(`aliases_${message.guild!.id}`, commandsJSal);
+
     const aliases = (await client.db.get(`aliases_${message.guild.id}`)) as any;
     if (aliases) {
       const aliasKey = Object.keys(aliases).find((key) =>
@@ -24,18 +33,98 @@ module.exports = {
         // Check if the command exists
         const command = client.commands.get(aliasKey);
 
-        if (!command) return;
+        if (!command) return message.reply(`> !? ---> \`${aliasKey}\``);
 
-        message.reply(`For Test Only!? ---> \`${command.data.name}\``);
+        if (
+          await (async () => {
+            for (const key of Object.keys(client.cmdsec)) {
+              if (
+                client.cmdsec[key].includes(command.data.name) &&
+                (await client.db.get(key + message.guild!.id))
+              )
+                return true;
+            }
+            return false;
+          })()
+        )
+          return;
+
+        // await client.db.set(
+        //   `commands_${message.guild.id}.${command.data.name}`,
+        //   {
+        //     enabled: false,
+        //     disabledChannels: [],
+        //     enabledChannels: [],
+        //     disabledRoles: [],
+        //     enabledRoles: [],
+        //     deleteCommandMsg: false,
+        //     deleteReply: false,
+        //     deleteWithInvocation: false,
+        //   }
+        // );
+
+        const cmData = (await client.db.get(
+          `commands_${message.guild.id}.${command.data.name}`
+        )) as commandData;
+
+        if (
+          cmData &&
+          (cmData.enabled ||
+            (cmData.disabledChannels &&
+              cmData.disabledChannels.length > 0 &&
+              cmData.disabledChannels.includes(message.channel!.id)) ||
+            (cmData.enabledChannels &&
+              cmData.enabledChannels.length > 0 &&
+              !cmData.enabledChannels.includes(message.channel!.id)) ||
+            (cmData.disabledRoles &&
+              cmData.disabledRoles.length > 0 &&
+              cmData.disabledRoles.some((role) =>
+                message.member!.roles.cache.has(role)
+              )) ||
+            (cmData.enabledRoles &&
+              cmData.enabledRoles.length > 0 &&
+              !cmData.enabledRoles.some((role) =>
+                message.member!.roles.cache.has(role)
+              )))
+        )
+          return;
+
+        const requiredPermissions = command.data.default_member_permissions;
+        if (requiredPermissions) {
+          // Find the permission name from the PermissionFlagsBits object
+          const permissionName = Object.keys(PermissionFlagsBits).find(
+            (key) =>
+              PermissionFlagsBits[key as keyof typeof PermissionFlagsBits] ===
+              BigInt(requiredPermissions)
+          );
+          if (message.member && message.member.permissions && permissionName) {
+            const missingPermissions = message.member.permissions.missing([
+              PermissionFlagsBits[
+                permissionName as keyof typeof PermissionFlagsBits
+              ],
+            ]);
+            if (missingPermissions.length > 0) {
+              return await message.reply({
+                content: client.i18n[
+                  await client.getLanguage(message.guild!.id)
+                ].userPermissionRequired.replace(
+                  "{permission}",
+                  permissionName
+                ),
+              });
+            }
+          }
+        }
 
         const response = await command.execute(
           client,
           undefined,
           message,
           message.guild,
-          message.member,
+          message.member!,
           message.author,
-          message.channel
+          message.channel,
+          message.content.split(" ")
         );
 
         if (response)
@@ -62,7 +151,7 @@ module.exports = {
 
     // Check if the command exists
     const command = client.commands.get(commandName);
-    if (!command) return;
+    if (!command) return message.reply(`> !? ---> \`${commandName}\``);
 
     // If the command exists, inform the user to use the slash command instead
     if (command.data.name !== "help") {

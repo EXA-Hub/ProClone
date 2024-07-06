@@ -1,0 +1,43 @@
+{
+  "utility": [
+    "moveme",
+    "profile",
+    "user",
+    "avatar",
+    "server",
+    "daily",
+    "vote",
+    "rep",
+    "credits",
+    "roll",
+    "short",
+    "ping",
+    "roles",
+    "points"
+  ],
+  "mod": [
+    "setnick",
+    "ban",
+    "unban",
+    "kick",
+    "vkick",
+    "mute text",
+    "unmute text",
+    "mute voice",
+    "unmute voice",
+    "timeout",
+    "untimeout",
+    "clear",
+    "move",
+    "role",
+    "points",
+    "warn",
+    "warn_remove",
+    "warnings",
+    "lock",
+    "unlock",
+    "setcolor",
+    "slowmode",
+    "reset"
+  ]
+}

@@ -1,13 +1,125 @@
-import { Interaction, Message, PermissionFlagsBits } from "discord.js";
-import { CustomClient } from "../types"; // Make sure to define and import CustomClient type
+import {
+  GuildMemberRoleManager,
+  Interaction,
+  PermissionFlagsBits,
+} from "discord.js";
+import { commandData, CustomClient } from "../types"; // Make sure to define and import CustomClient type
+
+// const commandData = await client.db.get(
+//   interaction.guild.id + command.data.name
+// );
+/**
+default  {
+    "disabledChannels": [],
+    "enabledChannels": [],
+    "disabledRoles": [],
+    "enabledRoles": [],
+    "skipRoles": []
+    "deleteCommandMsg": false,
+    "deleteReply": false,
+    "deletewithinvocation": false,
+    "enabled": false,
+  }
+ */
 
 module.exports = {
   async execute(interaction: Interaction, client: CustomClient) {
-    if (!interaction.isCommand() || !interaction.guild) return;
-
+    if (!interaction.isCommand()) return;
+    if (!interaction.guild) return;
     const command = client.commands.get(interaction.commandName);
 
-    if (!command) return;
+    if (!command)
+      return interaction.reply(`> !? ---> \`${interaction.commandName}\``);
+
+    if (
+      await (async () => {
+        for (const key of Object.keys(client.cmdsec)) {
+          if (
+            client.cmdsec[key].includes(command.data.name) &&
+            (await client.db.get(key + interaction.guild!.id))
+          )
+            return true;
+        }
+        return false;
+      })()
+    )
+      return await interaction.reply({
+        content:
+          client.i18n[await client.getLanguage(interaction.guild!.id)].disabled
+            .module,
+        ephemeral: true,
+      });
+
+    // await client.db.set(
+    //   `commands_${interaction.guild.id}.${command.data.name}.${command.data.name}`,
+    //   {
+    //     enabled: false,
+    //     disabledChannels: [],
+    //     enabledChannels: ["1153868013657927720"],
+    //     disabledRoles: [],
+    //     enabledRoles: [],
+    //     deleteCommandMsg: false,
+    //     deleteReply: false,
+    //     deleteWithInvocation: false,
+    //   }
+    // );
+
+    const cmData = (await client.db.get(
+      `commands_${interaction.guild.id}.${command.data.name}`
+    )) as commandData;
+
+    if (cmData) {
+      if (cmData.enabled) {
+        return interaction.reply({
+          content:
+            client.i18n[await client.getLanguage(interaction.guild!.id)]
+              .disabled.command,
+          ephemeral: true,
+        });
+      }
+
+      if (
+        (cmData.disabledChannels &&
+          cmData.disabledChannels.length > 0 &&
+          cmData.disabledChannels.includes(interaction.channel!.id)) ||
+        (cmData.enabledChannels &&
+          cmData.enabledChannels.length > 0 &&
+          !cmData.enabledChannels.includes(interaction.channel!.id))
+      ) {
+        return interaction.reply({
+          content:
+            client.i18n[await client.getLanguage(interaction.guild!.id)]
+              .disabled.channel + `<#${interaction.channelId}>`,
+          ephemeral: true,
+        });
+      }
+
+      if (
+        (cmData.disabledRoles &&
+          cmData.disabledRoles.length > 0 &&
+          cmData.disabledRoles.some((role) =>
+            (interaction.member!.roles as GuildMemberRoleManager).cache.has(
+              role
+            )
+          )) ||
+        (cmData.enabledRoles &&
+          cmData.enabledRoles.length > 0 &&
+          !cmData.enabledRoles.some((role) =>
+            (interaction.member!.roles as GuildMemberRoleManager).cache.has(
+              role
+            )
+          ))
+      ) {
+        return interaction.reply({
+          content:
+            client.i18n[await client.getLanguage(interaction.guild!.id)]
+              .disabled.role,
+          ephemeral: true,
+        });
+      }
+    }
+
+    // If no conditions were met to return early, the command continues execution.
 
     const requiredPermissions = command.data.default_member_permissions;
     if (requiredPermissions) {
@@ -17,7 +129,6 @@ module.exports = {
           PermissionFlagsBits[key as keyof typeof PermissionFlagsBits] ===
           BigInt(requiredPermissions)
       );
-
       if (interaction.memberPermissions && permissionName) {
         const missingPermissions = interaction.memberPermissions.missing([
           PermissionFlagsBits[
@@ -25,10 +136,10 @@ module.exports = {
           ],
         ]);
         if (missingPermissions.length > 0) {
-          const lang = await client.getLanguage(interaction.guild!.id);
-          const i18n = client.i18n[lang].userPermissionRequired;
           return await interaction.reply({
-            content: i18n.replace("{permission}", permissionName),
+            content: client.i18n[
+              await client.getLanguage(interaction.guild!.id)
+            ].userPermissionRequired.replace("{permission}", permissionName),
             ephemeral: true,
           });
         }
@@ -41,12 +152,13 @@ module.exports = {
         interaction,
         undefined,
         interaction.guild,
-        interaction.member,
+        interaction.member!,
         interaction.user,
-        interaction.channel
+        interaction.channel!,
+        undefined
       );
       if (response)
-        await interaction.reply(
+        return await interaction.reply(
           typeof response === "string"
             ? {
                 content: response,
@@ -56,7 +168,7 @@ module.exports = {
         );
     } catch (error) {
       console.error(error);
-      await interaction.reply({
+      return await interaction.reply({
         content: "There was an error while executing this command!",
         ephemeral: true,
       });

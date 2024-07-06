@@ -31,35 +31,33 @@ module.exports = {
     guild: Guild,
     member: GuildMember,
     user: User,
-    channel: Channel
+    channel: Channel,
+    args: String[]
   ) => {
-    let min = 0;
     let max = 100; // Default max value for a standard dice roll
 
-    const option = interaction.options.get("dice")?.value;
+    const option = interaction
+      ? interaction.options.get("dice")?.value
+      : args[1];
+
+    // fix args
 
     if (option) {
-      // If the user provides a custom dice number, parse it
-      max = parseInt(`${option}`);
-      if (isNaN(max)) {
-        const embed = new EmbedBuilder()
-          .setDescription(
-            client.i18n[await client.getLanguage(guild.id)].roll.replace(
-              "{option}",
-              `${option}`
-            )
-          )
-          .setColor(14423100);
+      if (isNaN(parseInt(`${option}`)))
         return {
-          embeds: [embed],
+          embeds: [
+            new EmbedBuilder()
+              .setDescription(
+                client.i18n[await client.getLanguage(guild.id)].roll.replace(
+                  "{option}",
+                  `${option}`
+                )
+              )
+              .setColor(14423100),
+          ],
         };
-        return;
-      }
     }
 
-    // Generate a random number between min and max (inclusive)
-    const num = Math.floor(Math.random() * (max - min + 1)) + min;
-
-    return `${num}`;
+    return Math.floor(Math.random() * (max + 1));
   },
 };

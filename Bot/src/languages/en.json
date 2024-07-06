@@ -1,6 +1,12 @@
 {
   "avatar": "Requested by ",
   "userPermissionRequired": ":x: This command requires `{permission}` permission.",
+  "disabled": {
+    "module": ":x: The module of the command is not enabled",
+    "command": ":x: This command is not enabled",
+    "channel": ":x: This command is not enabled on ",
+    "role": ":x: You are not allowed to use this command."
+  },
   "setLang": [
     ":white_check_mark: The Language has been changed successfully",
     ":rolling_eyes: - Supported languages are "

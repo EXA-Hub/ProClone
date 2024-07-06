@@ -32,11 +32,15 @@ module.exports = {
     guild: Guild,
     member: GuildMember,
     user: User,
-    channel: Channel
+    channel: Channel,
+    args: string[]
   ) => {
-    const cmd = interaction.options.get("command");
-    if (cmd && cmd.value !== "help") {
-      const command = client.commands.get(`${cmd.value}`);
+    const cmd = interaction
+      ? interaction.options.get("command")?.value
+      : args[1];
+
+    if (cmd && cmd !== "help") {
+      const command = client.commands.get(`${cmd}`);
       if (command) {
         // Define the type of each object in help.json
         type HelpItem = {

@@ -26,7 +26,8 @@ module.exports = {
     guild: Guild,
     member: GuildMember,
     user: User,
-    channel: Channel
+    channel: Channel,
+    args: String[]
   ) => {
     const sent = await (interaction || message).reply({
       content: "pong! 🏓",

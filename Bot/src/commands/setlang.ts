@@ -42,11 +42,12 @@ module.exports = {
     guild: Guild,
     member: GuildMember,
     user: User,
-    channel: Channel
+    channel: Channel,
+    args: String[]
   ) => {
     const language = interaction
       ? interaction.options.get("language")?.value
-      : message.content.split(" ").pop();
+      : args[1];
 
     // Get the list of supported languages from the client.i18n object
     const supportedLanguages = Object.keys(client.i18n);
