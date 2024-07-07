@@ -35,7 +35,7 @@ module.exports = {
       allowedMentions: { repliedUser: false },
     });
 
-    await sent.edit({
+    return await sent.edit({
       embeds: [
         new EmbedBuilder()
           .setTitle("pong! :ping_pong:")
@@ -52,6 +52,5 @@ module.exports = {
       ],
       allowedMentions: { repliedUser: false },
     });
-    return null;
   },
 };

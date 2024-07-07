@@ -2,6 +2,9 @@ import {
   GuildMemberRoleManager,
   Interaction,
   PermissionFlagsBits,
+  VoiceChannel,
+  GuildChannel,
+  TextChannel,
 } from "discord.js";
 import { commandData, CustomClient } from "../types"; // Make sure to define and import CustomClient type
 
@@ -78,21 +81,30 @@ module.exports = {
         });
       }
 
+      // Fetch the interaction channel and its parent (category)
+      const { parentId } = interaction.channel as
+        | TextChannel
+        | GuildChannel
+        | VoiceChannel;
+
       if (
         (cmData.disabledChannels &&
           cmData.disabledChannels.length > 0 &&
-          cmData.disabledChannels.includes(interaction.channel!.id)) ||
+          (cmData.disabledChannels.includes(interaction.channel!.id) ||
+            (parentId && cmData.disabledChannels.includes(parentId)))) ||
         (cmData.enabledChannels &&
           cmData.enabledChannels.length > 0 &&
-          !cmData.enabledChannels.includes(interaction.channel!.id))
-      ) {
+          !(
+            cmData.enabledChannels.includes(interaction.channel!.id) ||
+            (parentId && cmData.enabledChannels.includes(parentId))
+          ))
+      )
         return interaction.reply({
           content:
             client.i18n[await client.getLanguage(interaction.guild!.id)]
               .disabled.channel + `<#${interaction.channelId}>`,
           ephemeral: true,
         });
-      }
 
       if (
         (cmData.disabledRoles &&
@@ -157,8 +169,8 @@ module.exports = {
         interaction.channel!,
         undefined
       );
-      if (response)
-        return await interaction.reply(
+      if (response) {
+        const msg = await interaction.reply(
           typeof response === "string"
             ? {
                 content: response,
@@ -166,6 +178,13 @@ module.exports = {
               }
             : { ...response, allowedMentions: { repliedUser: false } }
         );
+
+        if (cmData.deleteReply) {
+          setTimeout(() => {
+            msg.delete().catch(console.error);
+          }, 5 * 1000);
+        }
+      }
     } catch (error) {
       console.error(error);
       return await interaction.reply({

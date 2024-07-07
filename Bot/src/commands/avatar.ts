@@ -37,16 +37,16 @@ module.exports = {
     // Assuming interaction is of type CommandInteraction
     const targetUser = interaction
       ? interaction.options.get("user")?.user || interaction.user
-      : message.author;
+      : message.mentions.users.first() || message.author;
 
     const embed = new EmbedBuilder()
       .setTitle("Avatar Link")
-      .setURL(targetUser!.displayAvatarURL({ size: 1024 }))
+      .setURL(targetUser.displayAvatarURL({ size: 1024 }))
       .setAuthor({
-        name: targetUser!.username,
-        iconURL: targetUser!.displayAvatarURL({ size: 1024 }),
+        name: targetUser.username,
+        iconURL: targetUser.displayAvatarURL({ size: 1024 }),
       })
-      .setImage(targetUser!.displayAvatarURL({ size: 1024 }))
+      .setImage(targetUser.displayAvatarURL({ size: 1024 }))
       .setFooter({
         text:
           client.i18n[

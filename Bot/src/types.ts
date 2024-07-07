@@ -38,6 +38,7 @@ export interface CustomClient extends Client {
   commands: Collection<string, Command>;
   cmdsec: { [key: string]: string[] }; // Correct type for cmdsec
   i18n: { [key: string]: typeof i18nJson };
+  deletedMessages: Collection<Snowflake, Snowflake>;
   getLanguage: (guildId: string) => Promise<string>;
 }
 
@@ -49,6 +50,6 @@ export interface commandData {
   // skipRoles: string[];
   deleteCommandMsg: Boolean;
   deleteReply: Boolean;
-  deletewithinvocation: Boolean;
+  deleteWithInvocation: Boolean;
   enabled: Boolean;
 }

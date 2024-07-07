@@ -11,7 +11,7 @@ import { CustomClient, commandData } from "../types";
 module.exports = {
   async execute(message: Message, client: CustomClient) {
     if (message.author.bot) return;
-    if (!message.guild) return;
+    if (!message.inGuild()) return;
 
     // Added all commands to aliases fo test Only!?
 
@@ -22,7 +22,64 @@ module.exports = {
     // await client.db.set(`aliases_${message.guild!.id}`, commandsJSal);
 
     const aliases = (await client.db.get(`aliases_${message.guild.id}`)) as any;
-    if (aliases) {
+    const prefix = "#"; // Replace with your bot's prefix
+    if (message.content.startsWith(prefix)) {
+      // Split the message content to get the command
+      const args = message.content.slice(prefix.length).trim().split(/ +/);
+      const commandName = args.shift()?.toLowerCase();
+
+      if (!commandName) return;
+
+      // Check if the command exists
+      const command = client.commands.get(commandName);
+      if (!command) return message.reply(`> !? ---> \`${commandName}\``);
+
+      // If the command exists, inform the user to use the slash command instead
+      if (command.data.name !== "help") {
+        await message.reply({
+          embeds: [
+            new EmbedBuilder().setDescription(
+              `**This command moved to Slash Commands \`/${commandName}\`.**`
+            ),
+          ],
+          components: [
+            new ActionRowBuilder<ButtonBuilder>().addComponents(
+              new ButtonBuilder()
+                .setLabel("More Info")
+                .setStyle(ButtonStyle.Link)
+                .setURL(
+                  `https://discord.com/blog/welcome-to-the-new-era-of-discord-apps?ref=zampx`
+                )
+            ),
+          ],
+          allowedMentions: { repliedUser: false },
+        });
+      } else if (command.data.name === "help") {
+        // Create a button row
+        const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
+          new ButtonBuilder()
+            .setLabel("Add to your server")
+            .setStyle(ButtonStyle.Link)
+            .setURL(`https://discord.gg/qGtQqZFr`),
+          new ButtonBuilder()
+            .setLabel("ProBot Dashboard")
+            .setStyle(ButtonStyle.Link)
+            .setURL(`https://discord.gg/qGtQqZFr`)
+        );
+        try {
+          await message.author.send({
+            content: `**${message.guild?.name}** prefix is \`/\`
+Commands list at https://probot.io/commands
+Dashboard at https://probot.io/
+Looking for support? https://discord.gg/probot`,
+            components: [row],
+          });
+          await message.react("✅");
+        } catch (error) {
+          await message.react("❌");
+        }
+      }
+    } else if (aliases) {
       const aliasKey = Object.keys(aliases).find((key) =>
         aliases[key].some(
           (alias: string) => message.content.split(" ").shift() === alias
@@ -72,10 +129,18 @@ module.exports = {
           (cmData.enabled ||
             (cmData.disabledChannels &&
               cmData.disabledChannels.length > 0 &&
-              cmData.disabledChannels.includes(message.channel!.id)) ||
+              (cmData.disabledChannels.includes(message.channel!.id) ||
+                (message.channel.parentId &&
+                  cmData.disabledChannels.includes(
+                    message.channel.parentId
+                  )))) ||
             (cmData.enabledChannels &&
               cmData.enabledChannels.length > 0 &&
-              !cmData.enabledChannels.includes(message.channel!.id)) ||
+              !(
+                cmData.enabledChannels.includes(message.channel!.id) ||
+                (message.channel.parentId &&
+                  cmData.enabledChannels.includes(message.channel.parentId))
+              )) ||
             (cmData.disabledRoles &&
               cmData.disabledRoles.length > 0 &&
               cmData.disabledRoles.some((role) =>
@@ -127,75 +192,33 @@ module.exports = {
           message.content.split(" ")
         );
 
-        if (response)
-          message.reply(
-            typeof response === "string"
-              ? {
-                  content: response,
-                  allowedMentions: { repliedUser: false },
-                }
-              : { ...response, allowedMentions: { repliedUser: false } }
-          );
-        return;
-      }
-    }
+        if (response) {
+          const replyMsg = (
+            response.deletable
+              ? response
+              : await message.reply(
+                  typeof response === "string"
+                    ? {
+                        content: response,
+                        allowedMentions: { repliedUser: false },
+                      }
+                    : { ...response, allowedMentions: { repliedUser: false } }
+                )
+          ) as Message;
 
-    const prefix = "#"; // Replace with your bot's prefix
-    if (!message.content.startsWith(prefix)) return;
-
-    // Split the message content to get the command
-    const args = message.content.slice(prefix.length).trim().split(/ +/);
-    const commandName = args.shift()?.toLowerCase();
-
-    if (!commandName) return;
-
-    // Check if the command exists
-    const command = client.commands.get(commandName);
-    if (!command) return message.reply(`> !? ---> \`${commandName}\``);
-
-    // If the command exists, inform the user to use the slash command instead
-    if (command.data.name !== "help") {
-      await message.reply({
-        embeds: [
-          new EmbedBuilder().setDescription(
-            `**This command moved to Slash Commands \`/${commandName}\`.**`
-          ),
-        ],
-        components: [
-          new ActionRowBuilder<ButtonBuilder>().addComponents(
-            new ButtonBuilder()
-              .setLabel("More Info")
-              .setStyle(ButtonStyle.Link)
-              .setURL(
-                `https://discord.com/blog/welcome-to-the-new-era-of-discord-apps?ref=zampx`
-              )
-          ),
-        ],
-        allowedMentions: { repliedUser: false },
-      });
-    } else if (command.data.name === "help") {
-      // Create a button row
-      const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
-        new ButtonBuilder()
-          .setLabel("Add to your server")
-          .setStyle(ButtonStyle.Link)
-          .setURL(`https://discord.gg/qGtQqZFr`),
-        new ButtonBuilder()
-          .setLabel("ProBot Dashboard")
-          .setStyle(ButtonStyle.Link)
-          .setURL(`https://discord.gg/qGtQqZFr`)
-      );
-      try {
-        await message.author.send({
-          content: `**${message.guild?.name}** prefix is \`/\`
-Commands list at https://probot.io/commands
-Dashboard at https://probot.io/
-Looking for support? https://discord.gg/probot`,
-          components: [row],
-        });
-        await message.react("✅");
-      } catch (error) {
-        await message.react("❌");
+          if (cmData.deleteWithInvocation)
+            client.deletedMessages.set(message.id, replyMsg.id);
+          if (cmData.deleteCommandMsg && message.deletable)
+            message.delete().catch(console.error);
+          if (
+            cmData.deleteReply &&
+            replyMsg.deletable &&
+            !(cmData.deleteWithInvocation && cmData.deleteCommandMsg)
+          )
+            setTimeout(() => {
+              replyMsg.delete().catch(console.error);
+            }, 5 * 1000);
+        }
       }
     }
   },

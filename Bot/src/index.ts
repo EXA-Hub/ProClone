@@ -32,6 +32,7 @@ client.i8 = `${process.env.I8PHPSESSID}`;
 
 client.db = new QuickDB({ driver: new JSONDriver("./src/database/data.json") });
 
+client.deletedMessages = new Collection();
 client.commands = new Collection();
 
 const i18n: Record<string, any> = {};
