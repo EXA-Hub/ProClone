@@ -7,6 +7,7 @@ import {
   GuildMember,
   Interaction,
   Message,
+  ReplyOptions,
   Snowflake,
   TextBasedChannel,
   User,
@@ -24,7 +25,7 @@ interface Command {
     user?: User,
     channel?: Channel | TextBasedChannel,
     arg?: String[]
-  ) => Promise<any>;
+  ) => Promise<ReplyOptions | String | Message>;
   data: {
     default_member_permissions?: string;
     description: String;

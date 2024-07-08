@@ -1,6 +1,6 @@
 {
-  "watch": ["src/**/*.ts"],
-  "ignore": ["src/database/*.sqlite*", "node_modules/**"],
+  "watch": ["src/**/*.ts", "src/**/*.json"],
+  "ignore": ["node_modules/**"],
   "exec": "ts-node src/index.ts",
   "ext": "ts,json"
 }

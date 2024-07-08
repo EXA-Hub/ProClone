@@ -328,18 +328,9 @@
         "ping": {
           "enabled": false,
           "disabledChannels": [],
-          "enabledChannels": [
-            "1153856654283116574",
-            "1153850903464513566",
-            "1161319941627199501"
-          ],
+          "enabledChannels": [],
           "disabledRoles": [],
-          "enabledRoles": [
-            "1258248352710266945",
-            "1154968603037270138",
-            "1153835497349726290",
-            "1257363564470075395"
-          ],
+          "enabledRoles": [],
           "deleteCommandMsg": false,
           "deleteReply": true,
           "deleteWithInvocation": false

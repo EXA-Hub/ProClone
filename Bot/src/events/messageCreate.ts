@@ -194,7 +194,7 @@ Looking for support? https://discord.gg/probot`,
 
         if (response) {
           const replyMsg = (
-            response.deletable
+            response instanceof Message
               ? response
               : await message.reply(
                   typeof response === "string"

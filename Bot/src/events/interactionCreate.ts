@@ -5,6 +5,7 @@ import {
   VoiceChannel,
   GuildChannel,
   TextChannel,
+  Message,
 } from "discord.js";
 import { commandData, CustomClient } from "../types"; // Make sure to define and import CustomClient type
 
@@ -169,15 +170,19 @@ module.exports = {
         interaction.channel!,
         undefined
       );
+
       if (response) {
-        const msg = await interaction.reply(
-          typeof response === "string"
-            ? {
-                content: response,
-                allowedMentions: { repliedUser: false },
-              }
-            : { ...response, allowedMentions: { repliedUser: false } }
-        );
+        const msg =
+          response instanceof Message
+            ? response
+            : await interaction.reply(
+                typeof response === "string"
+                  ? {
+                      content: response,
+                      allowedMentions: { repliedUser: false },
+                    }
+                  : { ...response, allowedMentions: { repliedUser: false } }
+              );
 
         if (cmData.deleteReply) {
           setTimeout(() => {
