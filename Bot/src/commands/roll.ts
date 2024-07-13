@@ -32,7 +32,7 @@ module.exports = {
     member: GuildMember,
     user: User,
     channel: Channel,
-    args: String[]
+    args: string[]
   ) => {
     let max = 100; // Default max value for a standard dice roll
 
@@ -43,7 +43,8 @@ module.exports = {
     // fix args
 
     if (option) {
-      if (isNaN(parseInt(`${option}`)))
+      const num = parseInt(`${option}`);
+      if (isNaN(num))
         return {
           embeds: [
             new EmbedBuilder()
@@ -56,8 +57,9 @@ module.exports = {
               .setColor(14423100),
           ],
         };
+      else max = num;
     }
 
-    return Math.floor(Math.random() * (max + 1));
+    return `${Math.floor(Math.random() * (max + 1))}`;
   },
 };

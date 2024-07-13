@@ -1,5 +1,5 @@
-const { PermissionsBitField } = require("discord.js");
-
+import parseDuration from "../methods/timeString";
+import getUsersSortedByPermission from "../methods/memberSorter";
 import { CustomClient } from "../types"; // Import CustomClient interface
 
 import {
@@ -45,64 +45,68 @@ module.exports = {
     member: GuildMember,
     user: User,
     channel: Channel,
-    args: String[]
+    args: string[]
   ) => {
-    const lang = await client.getLanguage(guild.id);
-    const i18n = client.i18n[lang].timeout;
+    const i18n = client.i18n[await client.getLanguage(guild.id)].timeout;
 
-    const m = interaction.options.get("user")?.member as GuildMember;
-    let time = interaction.options.get("time")?.value || "2h";
+    const m = (
+      interaction
+        ? interaction.options.get("user")?.member
+        : message.mentions.members?.first() || guild.members.cache.get(args[1])
+    ) as GuildMember;
+
+    let time =
+      (interaction
+        ? interaction.options.get("time")?.value?.toString()
+        : args[2]) || "2h";
+
     const reason =
-      interaction.options.get("reason")?.value || "No reason provided";
+      (interaction
+        ? interaction.options.get("reason")?.value?.toString()
+        : args[3]) || "No reason provided";
 
-    if (!m) {
+    if (!m)
       return {
         content: i18n["invalidMember"],
       };
-      return;
-    }
 
-    const memberUser = interaction.member as GuildMember;
-    // Check if interaction.member!.permissions has the required permission
-    if (!memberUser.permissions.has(PermissionsBitField.Flags.ManageChannels)) {
-      return {
-        content: i18n["noPermission"],
-      };
-      return;
-    }
+    if (
+      m.id === client.user?.id ||
+      getUsersSortedByPermission(
+        guild.id,
+        [member, m],
+        PermissionFlagsBits.ModerateMembers
+      ).shift()?.id === m.id
+    )
+      return i18n.uNonMember.replace("{username}", m.displayName);
 
-    const timeInMs = parseDuration(`${time}`);
-    if (!timeInMs) {
+    const timeInMs = parseDuration(time);
+    if (!timeInMs)
       return {
         content: i18n["invalidDuration"],
       };
-      return;
-    }
 
     // 28 days in milliseconds
-    if (timeInMs > 28 * 24 * 60 * 60 * 1000) {
+    if (timeInMs > 28 * 24 * 60 * 60 * 1000)
       return {
         content: i18n["max"],
       };
-      return;
-    }
-
-    const endDate = new Date(Date.now() + timeInMs);
-    const formattedEndDate = endDate.toLocaleString("en-US", {
-      timeZone: "UTC", // Adjust to your preferred timezone
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-      hour: "numeric",
-      minute: "numeric",
-      hour12: false,
-    });
-
-    const initiator = interaction.user.tag;
-    const finalReason = `By: ${initiator}, REASON: ${reason}, ENDS ON: ${formattedEndDate}`;
 
     try {
-      await m.timeout(timeInMs, finalReason);
+      await m.timeout(
+        timeInMs,
+        `By: ${user.tag}, REASON: ${reason}, ENDS ON: ${new Date(
+          Date.now() + timeInMs
+        ).toLocaleString("en-US", {
+          timeZone: "UTC", // Adjust to your preferred timezone
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+          hour: "numeric",
+          minute: "numeric",
+          hour12: false,
+        })}`
+      );
 
       return {
         content: i18n["timeoutSuccess"].replace("{user}", m.user.username),
@@ -116,30 +120,3 @@ module.exports = {
     }
   },
 };
-
-function parseDuration(duration: String) {
-  const match = duration.match(/^(\d+)([smhdwmoY])$/i);
-  if (!match) return null;
-
-  const value = parseInt(match[1], 10);
-  const unit = match[2];
-
-  switch (unit) {
-    case "s":
-      return value * 1000;
-    case "m":
-      return value * 1000 * 60;
-    case "h":
-      return value * 1000 * 60 * 60;
-    case "d":
-      return value * 1000 * 60 * 60 * 24;
-    case "w":
-      return value * 1000 * 60 * 60 * 24 * 7;
-    case "mo":
-      return value * 1000 * 60 * 60 * 24 * 30;
-    case "y":
-      return value * 1000 * 60 * 60 * 24 * 365;
-    default:
-      return null;
-  }
-}

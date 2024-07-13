@@ -40,32 +40,27 @@ module.exports = {
     member: GuildMember,
     user: User,
     channel: Channel,
-    args: String[]
+    args: string[]
   ) => {
-    const lang = await client.getLanguage(guild.id);
-    const i18n = client.i18n[lang].lock;
+    const i18n = client.i18n[await client.getLanguage(guild.id)].lock;
 
-    const c = interaction.options.get("channel") || interaction.channel;
-    const reason = interaction.options.get("reason") || "No reason provided";
+    const c = ((interaction
+      ? interaction.options.get("channel")
+      : message.mentions.channels.first() ||
+        guild.channels.cache.get(args[1])) || channel) as GuildChannel;
 
-    if (!c) {
+    const reason =
+      (interaction ? interaction.options.get("reason") : args[2]) ||
+      "No reason provided";
+
+    if (!c)
       return {
         content: i18n["invalidChannel"],
         ephemeral: true,
       };
-    }
-
-    const m = interaction.member as GuildMember;
-    // Check if interaction.member!.permissions has the required permission
-    if (!m.permissions.has(PermissionsBitField.Flags.ManageChannels)) {
-      return {
-        content: i18n["noPermission"],
-      };
-      return;
-    }
 
     try {
-      await (interaction.channel as GuildChannel).permissionOverwrites.edit(
+      await c.permissionOverwrites.edit(
         guild.roles.everyone,
         {
           SendMessages: false,

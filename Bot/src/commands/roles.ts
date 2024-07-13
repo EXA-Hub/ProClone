@@ -1,6 +1,6 @@
 // commands/roles.js
 
-import { CustomClient } from "../types"; // Import CustomClient interface
+import { commandData, CustomClient } from "../types"; // Import CustomClient interface
 
 import {
   CommandInteraction,
@@ -9,6 +9,8 @@ import {
   GuildMember,
   Channel,
   User,
+  TextChannel,
+  Snowflake,
 } from "discord.js";
 module.exports = {
   data: {
@@ -24,14 +26,16 @@ module.exports = {
     guild: Guild,
     member: GuildMember,
     user: User,
-    channel: Channel,
-    args: String[]
+    channel: TextChannel,
+    args: string[]
   ) => {
-    await interaction.deferReply();
+    if (interaction) await interaction.deferReply();
+
+    let repls: Snowflake[] = [];
 
     let msg = "```";
-    for (const line of interaction
-      .guild!.roles.cache.sort((a, b) => b.position - a.position)
+    for (const line of guild.roles.cache
+      .sort((a, b) => b.position - a.position)
       .map((role) => {
         let roleName = role.name.padEnd(20, " "); // Pad if shorter
         const memberCount = role.members.size;
@@ -41,13 +45,48 @@ module.exports = {
       .split("\n")) {
       if ((msg + line).length > 2000 - 3) {
         // 3 for the closing ```
-        await interaction.followUp(msg + "```");
+        const reply = await (interaction
+          ? await interaction.followUp(msg + "```")
+          : channel.send(msg + "```"));
+        repls.push(reply.id);
         msg = "```";
       }
       msg += line + "\n";
     }
     msg += "```";
 
-    await interaction.followUp(msg);
+    const lastReply = await (interaction
+      ? await interaction.followUp(msg)
+      : channel.send(msg));
+
+    const cmData = (await client.db.get(
+      `commands_${guild.id}.roles`
+    )) as commandData;
+
+    repls.push(lastReply.id);
+
+    if (cmData && cmData.deleteReply) {
+      const msgs = await Promise.all(
+        repls.map(async (repl) => {
+          return await channel.messages.fetch(repl);
+        })
+      );
+
+      setTimeout(() => {
+        msgs.forEach((msg) => {
+          console.log(msg.id);
+          msg.delete().catch(console.error);
+        });
+      }, 5 * 1000);
+    }
+
+    if (message && cmData) {
+      if (cmData.deleteWithInvocation)
+        client.deletedMessages.set(message.id, repls);
+      if (cmData.deleteCommandMsg && message.deletable)
+        message.delete().catch(console.error);
+    }
+
+    return lastReply;
   },
 };

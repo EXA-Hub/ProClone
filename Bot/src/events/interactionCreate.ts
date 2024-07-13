@@ -6,6 +6,7 @@ import {
   GuildChannel,
   TextChannel,
   Message,
+  CommandInteraction,
 } from "discord.js";
 import { commandData, CustomClient } from "../types"; // Make sure to define and import CustomClient type
 
@@ -27,9 +28,13 @@ default  {
  */
 
 module.exports = {
-  async execute(interaction: Interaction, client: CustomClient) {
+  async execute(interaction: CommandInteraction, client: CustomClient) {
+    if (!interaction.guild)
+      return interaction.reply({
+        content: client.i18n["en"].disabled.serverOnly,
+        ephemeral: true,
+      });
     if (!interaction.isCommand()) return;
-    if (!interaction.guild) return;
     const command = client.commands.get(interaction.commandName);
 
     if (!command)
@@ -149,7 +154,7 @@ module.exports = {
           ],
         ]);
         if (missingPermissions.length > 0) {
-          return await interaction.reply({
+          return interaction.reply({
             content: client.i18n[
               await client.getLanguage(interaction.guild!.id)
             ].userPermissionRequired.replace("{permission}", permissionName),
@@ -184,7 +189,7 @@ module.exports = {
                   : { ...response, allowedMentions: { repliedUser: false } }
               );
 
-        if (cmData.deleteReply) {
+        if (cmData && cmData.deleteReply) {
           setTimeout(() => {
             msg.delete().catch(console.error);
           }, 5 * 1000);

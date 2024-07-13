@@ -43,7 +43,7 @@ module.exports = {
     member: GuildMember,
     user: User,
     channel: Channel,
-    args: String[]
+    args: string[]
   ) => {
     const language = interaction
       ? interaction.options.get("language")?.value

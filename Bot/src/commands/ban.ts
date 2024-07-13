@@ -1,5 +1,6 @@
 // commands/ban.js
 
+import parseDuration from "../methods/timeString";
 import { CustomClient } from "../types"; // Import CustomClient interface
 
 import {
@@ -10,6 +11,7 @@ import {
   GuildMember,
   Channel,
   User,
+  APIInteractionDataResolvedGuildMember,
 } from "discord.js";
 
 module.exports = {
@@ -51,7 +53,7 @@ module.exports = {
     member: GuildMember,
     user: User,
     channel: Channel,
-    args: String[]
+    args: string[]
   ) => {
     return "Working on that command!";
   },

@@ -7,7 +7,7 @@
   {
     "rep": "Award someone a reputation point. Can only be used once every 24 hours.",
     "usage": "/rep [user]",
-    "examples": "/rep\n/rep @zampx\n/rep 157605500488384512"
+    "examples": "/rep\n/rep @zampx\n/rep 635933198035058700"
   },
   {
     "moveme": "Moves you to another voice channel.",
@@ -37,12 +37,12 @@
   {
     "profile": "View your or someone else's customizable personal global profile card.",
     "usage": "/profile (user)",
-    "examples": "/profile\n/profile @zampx\n/profile 157605500488384512"
+    "examples": "/profile\n/profile @zampx\n/profile 635933198035058700"
   },
   {
     "rank": "View your rank card or someone else's in the server.",
     "usage": "/rank (user)",
-    "examples": "/rank\n/rank @zampx\n/rank 157605500488384512"
+    "examples": "/rank\n/rank @zampx\n/rank 635933198035058700"
   },
   {
     "top": "Display the top members by text or voice.",
@@ -67,12 +67,12 @@
   {
     "user": "Shows information, such as ID and join date, about yourself or a user.",
     "usage": "/user (user)",
-    "examples": "/user\n/user @zampx\n/user 157605500488384512"
+    "examples": "/user\n/user @zampx\n/user 635933198035058700"
   },
   {
     "avatar": "Get a user's avatar.",
     "usage": "/avatar\n/avatar server\n/avatar [user]",
-    "examples": "/avatar\n/avatar server\n/avatar @zampx\n/avatar 157605500488384512"
+    "examples": "/avatar\n/avatar server\n/avatar @zampx\n/avatar 635933198035058700"
   },
   {
     "server": "Shows information about the server",
@@ -102,12 +102,12 @@
   {
     "unban": "Unbans a member.",
     "usage": "/unban [user]",
-    "examples": "/unban Dramex\n/unban 157605500488384512"
+    "examples": "/unban Dramex\n/unban 635933198035058700"
   },
   {
     "kick": "Kicks a member.",
     "usage": "/kick [user] (reason)",
-    "examples": "/kick @zampx\n/kick 157605500488384512"
+    "examples": "/kick @zampx\n/kick 635933198035058700"
   },
   {
     "vkick": "Kicks a member from a voice channel",
@@ -122,7 +122,7 @@
   {
     "unmute": "Unmutes a member.",
     "usage": "/unmute [user]",
-    "examples": "/unmute @zampx\n/unmute 157605500488384512"
+    "examples": "/unmute @zampx\n/unmute 635933198035058700"
   },
   {
     "mute": "Mute a member so they can't speak in voice channels.",
@@ -132,7 +132,7 @@
   {
     "unmute": "Unmutes a member from voice channels.",
     "usage": "/unvmute [user]",
-    "examples": "/unvmute @zampx\n/unvmute 157605500488384512"
+    "examples": "/unvmute @zampx\n/unvmute 635933198035058700"
   },
   {
     "timeout": "Timeouts a member.",
@@ -142,7 +142,7 @@
   {
     "untimeout": "Removes a timeout from a member.",
     "usage": "/untimeout [user]",
-    "examples": "/untimeout @zampx\n/untimeout 157605500488384512"
+    "examples": "/untimeout @zampx\n/untimeout 635933198035058700"
   },
   {
     "clear": "Cleans up channel messages.",

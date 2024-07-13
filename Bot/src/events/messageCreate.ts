@@ -206,18 +206,20 @@ Looking for support? https://discord.gg/probot`,
                 )
           ) as Message;
 
-          if (cmData.deleteWithInvocation)
-            client.deletedMessages.set(message.id, replyMsg.id);
-          if (cmData.deleteCommandMsg && message.deletable)
-            message.delete().catch(console.error);
-          if (
-            cmData.deleteReply &&
-            replyMsg.deletable &&
-            !(cmData.deleteWithInvocation && cmData.deleteCommandMsg)
-          )
-            setTimeout(() => {
-              replyMsg.delete().catch(console.error);
-            }, 5 * 1000);
+          if (cmData) {
+            if (cmData.deleteWithInvocation)
+              client.deletedMessages.set(message.id, [replyMsg.id]);
+            if (cmData.deleteCommandMsg && message.deletable)
+              message.delete().catch(console.error);
+            if (
+              cmData.deleteReply &&
+              replyMsg.deletable &&
+              !(cmData.deleteWithInvocation && cmData.deleteCommandMsg)
+            )
+              setTimeout(() => {
+                replyMsg.delete().catch(console.error);
+              }, 5 * 1000);
+          }
         }
       }
     }

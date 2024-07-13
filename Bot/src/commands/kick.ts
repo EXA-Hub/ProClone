@@ -1,5 +1,6 @@
 // commands/kick.js
 
+import getUsersSortedByPermission from "../methods/memberSorter";
 import { CustomClient } from "../types"; // Import CustomClient interface
 import {
   CommandInteraction,
@@ -38,8 +39,50 @@ module.exports = {
     member: GuildMember,
     user: User,
     channel: Channel,
-    args: String[]
+    args: string[]
   ) => {
-    return "Working on that command!";
+    const i18n = client.i18n[await client.getLanguage(guild.id)].kick;
+
+    // Resolve the member to kick
+    const memberToKick = (
+      interaction
+        ? interaction.options.get("user")?.member
+        : message.mentions.members?.first() || guild.members.cache.get(args[1])
+    ) as GuildMember;
+
+    if (
+      memberToKick.id === client.user?.id ||
+      getUsersSortedByPermission(
+        guild.id,
+        [member, memberToKick],
+        PermissionFlagsBits.ModerateMembers
+      ).shift()?.id === memberToKick.id
+    )
+      return i18n.uNonMember.replace("{username}", memberToKick.displayName);
+
+    // Check if a valid member is provided
+    if (!memberToKick)
+      return {
+        content: i18n.invalidMember,
+      };
+
+    // Fetch the reason for the kick
+    const reason = interaction
+      ? interaction.options.get("reason")?.value?.toString()
+      : args.slice(2).join(" ");
+
+    try {
+      // Kick the member
+      await memberToKick.kick(reason);
+
+      return {
+        content: i18n.kickSuccess.replace("{user}", memberToKick.user.username),
+      };
+    } catch (error) {
+      console.error(error);
+      return {
+        content: i18n.kickError,
+      };
+    }
   },
 };

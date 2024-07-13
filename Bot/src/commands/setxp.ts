@@ -56,7 +56,7 @@ module.exports = {
     member: GuildMember,
     user: User,
     channel: Channel,
-    args: String[]
+    args: string[]
   ) => {
     return "Working on that command!";
   },

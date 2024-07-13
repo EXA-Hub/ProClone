@@ -35,41 +35,28 @@ module.exports = {
     member: GuildMember,
     user: User,
     channel: Channel,
-    args: String[]
+    args: string[]
   ) => {
-    const lang = await client.getLanguage(guild.id);
-    const i18n = client.i18n[lang].lock;
+    const i18n = client.i18n[await client.getLanguage(guild.id)].lock;
 
-    const c =
-      interaction.options.get("channel")?.channel || interaction.channel;
+    const c = ((interaction
+      ? interaction.options.get("channel")?.channel
+      : message.mentions.channels.first() ||
+        guild.channels.cache.get(args[1])) || channel) as GuildChannel;
 
-    if (!c) {
+    if (!c)
       return {
         content: i18n["invalidChannel"],
         ephemeral: true,
       };
-      return;
-    }
-
-    const m = interaction.member as GuildMember;
-    // Check if interaction.member!.permissions has the required permission
-    if (!m.permissions.has(PermissionsBitField.Flags.ManageChannels)) {
-      return {
-        content: i18n["noPermission"],
-      };
-      return;
-    }
 
     try {
-      await (interaction.channel as GuildChannel).permissionOverwrites.edit(
-        guild.roles.everyone,
-        {
-          SendMessages: true,
-          CreatePublicThreads: true,
-          CreatePrivateThreads: true,
-          SendMessagesInThreads: true,
-        }
-      );
+      await c.permissionOverwrites.edit(guild.roles.everyone, {
+        SendMessages: true,
+        CreatePublicThreads: true,
+        CreatePrivateThreads: true,
+        SendMessagesInThreads: true,
+      });
 
       return {
         content: i18n["unlockSuccess"].replace("{channel}", c.toString()),

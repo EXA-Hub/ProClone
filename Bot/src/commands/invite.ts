@@ -27,7 +27,7 @@ module.exports = {
     member: GuildMember,
     user: User,
     channel: Channel,
-    args: String[]
+    args: string[]
   ) => {
     const embed = new EmbedBuilder()
       .setTitle("Invite Links")

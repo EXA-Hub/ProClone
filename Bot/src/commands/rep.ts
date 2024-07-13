@@ -9,6 +9,8 @@ import {
   GuildMember,
   Channel,
   User,
+  ReplyOptions,
+  MessageReplyOptions,
 } from "discord.js";
 module.exports = {
   data: {
@@ -32,8 +34,23 @@ module.exports = {
     member: GuildMember,
     user: User,
     channel: Channel,
-    args: String[]
+    args: string[]
   ) => {
-    return "Working on that command!";
+    return {
+      content: ":x: Only membership subscribers can rep users!",
+      components: [
+        {
+          type: 1,
+          components: [
+            {
+              type: 2,
+              style: 5,
+              label: "More info",
+              url: "https://probot.io",
+            },
+          ],
+        },
+      ],
+    };
   },
 };

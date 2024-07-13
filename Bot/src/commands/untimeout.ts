@@ -1,3 +1,4 @@
+import getUsersSortedByPermission from "../methods/memberSorter";
 import { CustomClient } from "../types"; // Import CustomClient interface
 
 import {
@@ -33,14 +34,14 @@ module.exports = {
     member: GuildMember,
     user: User,
     channel: Channel,
-    args: String[]
+    args: string[]
   ) => {
     const i18n = client.i18n[await client.getLanguage(guild.id)].timeout;
 
     const m = (
       interaction
         ? interaction.options.get("user")?.member
-        : message.mentions.members?.first()
+        : message.mentions.members?.first() || guild.members.cache.get(args[1])
     ) as GuildMember;
 
     if (!m)
@@ -48,15 +49,15 @@ module.exports = {
         content: i18n["invalidMember"],
       };
 
-    if (!member.permissions.has(PermissionsBitField.Flags.ManageChannels))
-      return {
-        content: i18n["noPermission"],
-      };
-
-    if (m.user.id === client.user!.id)
-      return {
-        content: i18n["unoPermission"].replace("{user}", m.user.username),
-      };
+    if (
+      m.id === client.user?.id ||
+      getUsersSortedByPermission(
+        guild.id,
+        [member, m],
+        PermissionFlagsBits.ModerateMembers
+      ).shift()?.id === m.id
+    )
+      return i18n.uNonMember.replace("{username}", m.displayName);
 
     if (!m.isCommunicationDisabled())
       return {

@@ -2,15 +2,16 @@
 
 import { CustomClient } from "../types"; // Import CustomClient interface
 
-import { PermissionFlagsBits } from "discord.js";
+import { PermissionFlagsBits, TextChannel } from "discord.js";
 import {
   CommandInteraction,
   Message,
   Guild,
   GuildMember,
-  Channel,
   User,
 } from "discord.js";
+import parseDuration from "../methods/timeString";
+
 module.exports = {
   data: {
     name: "slowmode",
@@ -32,9 +33,51 @@ module.exports = {
     guild: Guild,
     member: GuildMember,
     user: User,
-    channel: Channel,
-    args: String[]
+    channel: TextChannel,
+    args: string[]
   ) => {
-    return "Working on that command!";
+    const timeString = interaction
+      ? interaction.options.get("time")?.value?.toString()
+      : args[1];
+
+    const timeLang = client.i18n[await client.getLanguage(guild.id)].slowMode;
+
+    if (!timeString)
+      return {
+        content: timeLang["slowMode"].replace(
+          "{seconds}",
+          channel.rateLimitPerUser.toString()
+        ),
+        ephemeral: true,
+      };
+
+    let seconds = parseDuration(timeString);
+    if (seconds === null) {
+      await channel.setRateLimitPerUser(0); // Disable slowmode
+      return {
+        content: timeLang["invalid"],
+        ephemeral: true,
+      };
+    } else seconds /= 1000;
+
+    if (seconds > 21600)
+      return {
+        content: timeLang["max_time_exceeded"],
+        ephemeral: true,
+      };
+
+    try {
+      await channel.setRateLimitPerUser(seconds);
+      return {
+        content: timeLang["success"].replace("{seconds}", seconds.toString()),
+        ephemeral: true,
+      };
+    } catch (error) {
+      console.error(error);
+      return {
+        content: timeLang["error"],
+        ephemeral: true,
+      };
+    }
   },
 };

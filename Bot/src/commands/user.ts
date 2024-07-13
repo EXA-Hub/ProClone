@@ -32,12 +32,15 @@ module.exports = {
     member: GuildMember,
     user: User,
     channel: Channel,
-    args: String[]
+    args: string[]
   ) => {
+    const userLang = client.i18n[await client.getLanguage(guild.id)].user;
+
     const u =
       (interaction
         ? interaction.options.get("user")?.user
-        : message.mentions.users.first()) || user;
+        : message.mentions.users.first() || client.users.cache.get(args[1])) ||
+      user;
 
     return {
       embeds: [
@@ -45,12 +48,12 @@ module.exports = {
           .setColor(8974168)
           .addFields(
             {
-              name: client.i18n[await client.getLanguage(guild.id)].user[0],
+              name: userLang[0],
               value: `**<t:${Math.floor(u.createdTimestamp / 1000)}:R>**`,
               inline: true,
             },
             {
-              name: client.i18n[await client.getLanguage(guild.id)].user[1],
+              name: userLang[1],
               value: `**<t:${Math.floor(
                 (await guild.members.fetch(u.id)).joinedTimestamp! / 1000
               )}:R>**`,

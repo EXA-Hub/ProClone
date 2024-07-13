@@ -31,8 +31,14 @@ module.exports = {
     member: GuildMember,
     user: User,
     channel: Channel,
-    args: String[]
+    args: string[]
   ) => {
-    return "Working on that command!";
+    const title = interaction
+      ? interaction.options.get("new_title")?.value?.toString()
+      : args.slice(1).join(" ");
+    if (!title || title.length > 140)
+      return client.i18n[await client.getLanguage(guild.id)].title.long;
+    client.db.set("title_" + user.id, title);
+    return client.i18n[await client.getLanguage(guild.id)].title.true;
   },
 };

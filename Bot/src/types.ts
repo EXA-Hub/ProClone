@@ -3,6 +3,7 @@ import {
   Channel,
   Client,
   Collection,
+  CommandInteraction,
   Guild,
   GuildMember,
   Interaction,
@@ -10,6 +11,7 @@ import {
   ReplyOptions,
   Snowflake,
   TextBasedChannel,
+  TextChannel,
   User,
 } from "discord.js";
 import { QuickDB } from "quick.db";
@@ -18,12 +20,12 @@ import i18nJson from "./languages/en.json";
 interface Command {
   execute: (
     client?: CustomClient,
-    interaction?: Interaction,
+    interaction?: Interaction | CommandInteraction,
     message?: Message,
     guild?: Guild,
     member?: GuildMember | APIInteractionGuildMember,
     user?: User,
-    channel?: Channel | TextBasedChannel,
+    channel?: TextChannel | TextBasedChannel,
     arg?: String[]
   ) => Promise<ReplyOptions | String | Message>;
   data: {
@@ -39,7 +41,7 @@ export interface CustomClient extends Client {
   commands: Collection<string, Command>;
   cmdsec: { [key: string]: string[] }; // Correct type for cmdsec
   i18n: { [key: string]: typeof i18nJson };
-  deletedMessages: Collection<Snowflake, Snowflake>;
+  deletedMessages: Collection<Snowflake, Snowflake[]>;
   getLanguage: (guildId: string) => Promise<string>;
 }
 

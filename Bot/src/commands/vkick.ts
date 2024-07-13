@@ -11,6 +11,7 @@ import {
   Channel,
   User,
 } from "discord.js";
+import getUsersSortedByPermission from "../methods/memberSorter";
 module.exports = {
   data: {
     name: "vkick",
@@ -34,8 +35,49 @@ module.exports = {
     member: GuildMember,
     user: User,
     channel: Channel,
-    args: String[]
+    args: string[]
   ) => {
-    return "Working on that command!";
+    const i18n = client.i18n[await client.getLanguage(guild.id)].vkick;
+
+    // Resolve the member to kick from voice channel
+    const memberToKick = (
+      interaction
+        ? interaction.options.get("user")?.member
+        : message.mentions.members?.first() || guild.members.cache.get(args[1])
+    ) as GuildMember;
+
+    // Check if a valid member is provided
+    if (!memberToKick)
+      return {
+        content: i18n.invalidMember,
+      };
+
+    if (
+      memberToKick.id === client.user?.id ||
+      getUsersSortedByPermission(
+        guild.id,
+        [member, memberToKick],
+        PermissionFlagsBits.ModerateMembers
+      ).shift()?.id === memberToKick.id
+    )
+      return i18n.uNonMember.replace("{username}", memberToKick.displayName);
+
+    try {
+      if (!memberToKick.voice.channelId) return i18n.notVC;
+      // Kick the member from the voice channel
+      await memberToKick.voice.disconnect();
+
+      return {
+        content: i18n.vkickSuccess.replace(
+          "{user}",
+          memberToKick.user.username
+        ),
+      };
+    } catch (error) {
+      console.error(error);
+      return {
+        content: i18n.vkickError,
+      };
+    }
   },
 };

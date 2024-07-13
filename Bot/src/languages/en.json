@@ -1,11 +1,76 @@
 {
+  "ban": {
+    "invalidMember": "Please mention a valid member or provide a valid member ID.",
+    "banSuccess": "Successfully banned {user}.",
+    "banError": ":rolling_eyes: - I couldn't ban that user. Please double-check my permissions and role position."
+  },
+  "vkick": {
+    "invalidMember": "Please mention a valid member or provide a valid member ID.",
+    "vkickSuccess": ":white_check_mark: **@{user} kicked from the voice! **",
+    "vkickError": ":rolling_eyes: - I couldn't kick that user. Please double-check my permissions.",
+    "uNonMember": ":rolling_eyes: - ** You can't kick {username}. **",
+    "notVC": ":rolling_eyes: -  **The member is not connected to a voice channel!**"
+  },
+  "kick": {
+    "invalidMember": "Please mention a valid member or provide a valid member ID.",
+    "kickSuccess": "Successfully kicked {user}.",
+    "kickError": ":rolling_eyes: - I couldn't kick that user. Please double-check my permissions.",
+    "uNonMember": ":rolling_eyes: - ** You can't kick {username}. **"
+  },
+  "clear": {
+    "success": "```javascript\n{number} message has been deleted.```",
+    "noMessages": "No messages found matching the filters.",
+    "failure": "Failed to delete messages."
+  },
+  "setcolor": {
+    "invalid_input": ":rolling_eyes: - Hex color length must equal 6 or 3",
+    "invalid_role": ":rolling_eyes: ** I couldn't find that role :confused:**",
+    "embed": {
+      "desc": ":white_check_mark: **  {role}'s color has been changed successfully.**",
+      "foot": "Requested by {user}"
+    },
+    "error": ":rolling_eyes: -  I couldn't change that role. Please double-check my permissions and role position."
+  },
+  "slowMode": {
+    "max_time_exceeded": ":x: Time should be less than or equal to **6 hours**.",
+    "invalid": ":stopwatch: This channel's Slowmode has been disabled.",
+    "slowMode": ":stopwatch: This channel slowmode is **{seconds} seconds**.",
+    "success": ":stopwatch: This channel slowmode has been set to **{seconds} seconds**.",
+    "error": ":x: DiscordRESTError [50013]: Missing Permissionss"
+  },
+  "title": {
+    "true": "✅",
+    "long": ":rolling_eyes: - **title too long.**"
+  },
   "avatar": "Requested by ",
+  "color": {
+    "invalidColorNumber": "Wrong color number",
+    "success": "Color has been changed successfully.",
+    "requested": "Requested by {member}"
+  },
   "userPermissionRequired": ":x: This command requires `{permission}` permission.",
+  "moveme": {
+    "userNotInVoice": "{target} is not in a voice channel.",
+    "moveChannelSuccess": "**:white_check_mark: {member} moved to {channel}!**",
+    "notVoiceChannel": ":rolling_eyes: - **I can't find this member**",
+    "notFound": ":rolling_eyes: - **I can't find this member**",
+    "alreadyInVoiceChannel": ":white_check_mark: **{member} already in the voice channel!**"
+  },
   "disabled": {
     "module": ":x: The module of the command is not enabled",
     "command": ":x: This command is not enabled",
     "channel": ":x: This command is not enabled on ",
-    "role": ":x: You are not allowed to use this command."
+    "role": ":x: You are not allowed to use this command.",
+    "serverOnly": ":x: Slash commands only work on servers"
+  },
+  "credits": {
+    "balance": ":bank: | **{username}, your account balance is `${balance}`.**",
+    "otherBalance": "** {username} :credit_card: balance is `${balance}`.**",
+    "noBots": ":thinking: | **{username}**, bots do not have credits!",
+    "transfer": ":atm: | Transfer Receipt ```You have received ${credits} from user {senderName} (ID: {senderID})\nReason: {reason} \n```",
+    "transferSuccess": "**:moneybag: | {senderName}, has transferred `${credits}` to <@!{ID}> **",
+    "insufficientBalance": "** :interrobang: | {username}, type the credit you need to transfer!**",
+    "lessMoney": "** :thinking: | zampx, Your balance is not enough for that!**"
   },
   "setLang": [
     ":white_check_mark: The Language has been changed successfully",
@@ -54,7 +119,6 @@
   "help": ["**🙄 - I can't find this command.**", "Examples:", "Usage:"],
   "user": ["Joined Discord :", "Joined Server :"],
   "lock": {
-    "noPermission": ":rolling_eyes:  Manage Channels is required for this action.",
     "lockSuccess": "🔒 {channel} **has been locked.**",
     "lockError": "There was an error trying to lock the channel.",
     "unlockSuccess": ":unlock: {channel} **has been unlocked.**",
@@ -68,19 +132,23 @@
     "nickError": "There was an error changing the nickname. Please try again later."
   },
   "timeout": {
-    "noPermission": "**:rolling_eyes: -  You can't timeout @{user}.**",
-    "unoPermission": "**:rolling_eyes: -  You can't untimeout @{user}. **",
+    "max": ":x: Timeout duration must be lower or equal to 28 days.",
+    "notTimedOut": ":x: The member is not timed out.",
+    "uNonMember": ":rolling_eyes: - ** You can't timeout @{username}. **",
     "invalidMember": "Please specify a valid member.",
     "invalidDuration": "**:rolling_eyes: - The time limit must be equal to one of the following: (m, h, d, w, mo, y)**",
     "timeoutSuccess": "**:white_check_mark: @{user} has been timed out!**",
-    "timeoutError": "There was an error timing out the member. Please try again later.",
-    "max": ":x: Timeout duration must be lower or equal to 28 days.",
-    "notTimedOut": ":x: The member is not timed out.",
     "untimeoutSuccess": "**:white_check_mark: @{user} has been untimeouted!**",
-    "untimeoutError": "There was an error removing the timeout. Please try again later."
+    "timeoutError": ":rolling_eyes: - I couldn't timeout that user. Please double-check my permissions and role position.",
+    "untimeoutError": ":rolling_eyes: - I couldn't untimeout that user. Please double-check my permissions and role position."
   },
   "rolekick": {
-    "success": ":white_check_mark: Kicked {count} members with the role `{role}`.",
-    "error": ":x: There was an error kicking members with the role."
+    "kickSuccess": ":white_check_mark: Kicked {count} members with the role `{role}`.",
+    "kickError": ":x: There was an error kicking members with the role.",
+    "invalidRole": "Invalid role specified.",
+    "roleNotFound": "The specified role was not found.",
+    "noMembers": "No members found with the specified role.",
+    "kickReason": "Kicked for having the role: {role}",
+    "ownerOnly": "This command can only be executed by the server owner."
   }
 }

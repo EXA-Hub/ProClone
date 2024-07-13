@@ -3,15 +3,17 @@ import { CustomClient } from "../types";
 
 module.exports = {
   async execute(message: Message, client: CustomClient) {
-    const originalMsgId = client.deletedMessages.get(message.id);
-    if (originalMsgId) {
+    const originalMsgIds = client.deletedMessages.get(message.id);
+    if (originalMsgIds) {
       client.deletedMessages.delete(message.id);
-      const originalMsg = await message.channel.messages
-        .fetch(originalMsgId)
-        .catch(() => null);
-      if (originalMsg && originalMsg.deletable) {
-        await originalMsg.delete().catch(console.error);
-      }
+      originalMsgIds.forEach(async (originalMsgId) => {
+        const originalMsg = await message.channel.messages
+          .fetch(originalMsgId)
+          .catch(() => null);
+        if (originalMsg && originalMsg.deletable) {
+          await originalMsg.delete().catch(console.error);
+        }
+      });
     }
   },
 };

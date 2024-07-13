@@ -32,7 +32,7 @@ module.exports = {
     member: GuildMember,
     user: User,
     channel: Channel,
-    args: String[]
+    args: string[]
   ) => {
     // Assuming interaction is of type CommandInteraction
     const targetUser = interaction
@@ -49,9 +49,8 @@ module.exports = {
       .setImage(targetUser.displayAvatarURL({ size: 1024 }))
       .setFooter({
         text:
-          client.i18n[
-            await client.getLanguage(interaction ? guild.id : message.guild!.id)
-          ].avatar + user.username,
+          client.i18n[await client.getLanguage(guild.id)].avatar +
+          user.username,
         iconURL: user.displayAvatarURL({
           size: 1024,
         }),

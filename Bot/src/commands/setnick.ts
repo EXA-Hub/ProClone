@@ -11,6 +11,7 @@ import {
   GuildMember,
   Channel,
   User,
+  TextChannel,
 } from "discord.js";
 module.exports = {
   data: {
@@ -39,36 +40,28 @@ module.exports = {
     guild: Guild,
     member: GuildMember,
     user: User,
-    channel: Channel,
-    args: String[]
+    channel: TextChannel,
+    args: string[]
   ) => {
-    const lang = await client.getLanguage(guild.id);
-    const i18n = client.i18n[lang].setnick;
+    const i18n = client.i18n[await client.getLanguage(guild.id)].setnick;
+    const m = (
+      interaction
+        ? interaction.options.get("user")?.member
+        : message.mentions.members?.first() ||
+          guild.members.cache.get(args[1].toString())
+    ) as GuildMember;
+    const newNick = interaction
+      ? interaction.options.get("new_nick")?.value?.toString()
+      : args.slice(2).join(" ").slice(0, 32);
 
-    const m = interaction.options.get("user")?.member as GuildMember;
-    const newNick = interaction.options.get("new_nick")?.value;
-
-    const memberUser = interaction.member as GuildMember;
-    // Check if interaction.member!.permissions has the required permission
-    if (
-      !memberUser.permissions.has(PermissionsBitField.Flags.ManageNicknames)
-    ) {
-      return {
-        content: i18n["noPermission"],
-      };
-      return;
-    }
-
-    if (!m) {
+    if (!m)
       return {
         content: i18n["invalidMember"],
         ephemeral: true,
       };
-      return;
-    }
 
     try {
-      await m.setNickname(`${newNick}`, `Changed by ${interaction.user.tag}`);
+      await m.setNickname(newNick || null, `Changed by ${user.tag}`);
 
       return {
         content: i18n[newNick ? "nickSuccess" : "nickSuccessR"]
@@ -77,7 +70,7 @@ module.exports = {
       };
     } catch (error) {
       console.error(error);
-      await interaction.channel?.send({
+      await channel.send({
         content: i18n["noPermission"],
       });
       return {
