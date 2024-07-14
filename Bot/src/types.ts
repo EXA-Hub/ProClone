@@ -15,7 +15,7 @@ import {
   User,
 } from "discord.js";
 import { QuickDB } from "quick.db";
-import i18nJson from "./languages/en.json";
+import i18nJson from "./languages/en";
 
 interface Command {
   execute: (
