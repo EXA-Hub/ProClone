@@ -15,6 +15,7 @@ const emojis = {
   busts_in_silhouette: "👥",
   speech_balloon: "💬",
   earth_africa: "🌍",
+  lock: "🔒",
   closed_lock_with_key: "🔐",
   unlock: "🔓",
   id: "🆔",
@@ -44,7 +45,7 @@ export default {
     not_found: `${emojis.rolling_eyes} - **I can't find {user} in the ban list**`,
   },
   ban: {
-    success_single: `${emojis.white_check_mark} **{user} banned from the server! :airplane:**`,
+    success_single: `${emojis.white_check_mark} **{user} banned from the server! ${emojis.airplane}**`,
     failed: `${emojis.rolling_eyes} - I couldn't ban that user. Please double-check my permissions and role position.`,
     no_member: `No valid member or bulk users specified for ban.`,
     non: `${emojis.rolling_eyes} - ** You can't ban @{user}. **`,
@@ -78,10 +79,10 @@ export default {
   },
   slowMode: {
     max_time_exceeded: `${emojis.x} Time should be less than or equal to **6 hours**.`,
-    invalid: `:stopwatch: This channel's Slowmode has been disabled.`,
-    slowMode: `:stopwatch: This channel slowmode is **{seconds} seconds**.`,
-    success: `:stopwatch: This channel slowmode has been set to **{seconds} seconds**.`,
-    error: `${emojis.x} DiscordRESTError [50013]: Missing Permissionss`,
+    invalid: `${emojis.stop_watch} This channel's Slowmode has been disabled.`,
+    slowMode: `${emojis.stop_watch} This channel slowmode is **{seconds} seconds**.`,
+    success: `${emojis.stop_watch} This channel slowmode has been set to **{seconds} seconds**.`,
+    error: `${emojis.x} DiscordRESTError [50013]: Missing Permissions`,
   },
   title: {
     true: `${emojis.white_check_mark}`,
@@ -96,7 +97,7 @@ export default {
   userPermissionRequired: `${emojis.x} This command requires \`{permission}\` permission.`,
   moveme: {
     userNotInVoice: `{target} is not in a voice channel.`,
-    moveChannelSuccess: `**${emojis.white_check_mark} {member} moved to {channel}!**`,
+    moveChannelSuccess: `${emojis.white_check_mark} **{member} moved to {channel}!**`,
     notVoiceChannel: `${emojis.rolling_eyes} - **I can't find this member**`,
     notFound: `${emojis.rolling_eyes} - **I can't find this member**`,
     alreadyInVoiceChannel: `${emojis.white_check_mark} **{member} already in the voice channel!**`,
@@ -109,13 +110,13 @@ export default {
     serverOnly: `${emojis.x} Slash commands only work on servers`,
   },
   credits: {
-    balance: `:bank: | **{username}, your account balance is \`\${balance}\`.**`,
-    otherBalance: `** {username} :credit_card: balance is \`\${balance}\`.**`,
-    noBots: `:thinking: | **{username}**, bots do not have credits!`,
-    transfer: `:atm: | Transfer Receipt \`\`\`You have received \${credits} from user {senderName} (ID: {senderID})\nReason: {reason} \n\`\`\``,
-    transferSuccess: `**:moneybag: | {senderName}, has transferred \`\${credits}\` to <@!{ID}> **`,
-    insufficientBalance: `** :interrobang: | {username}, type the credit you need to transfer!**`,
-    lessMoney: `** :thinking: | zampx, Your balance is not enough for that!**`,
+    balance: `${emojis.bank} | **{username}, your account balance is \`\${balance}\`.**`,
+    otherBalance: `** {username} ${emojis.credit_card} balance is \`\${balance}\`.**`,
+    noBots: `${emojis.thinking} | **{username}**, bots do not have credits!`,
+    transfer: `${emojis.atm} | Transfer Receipt \`\`\`You have received \${credits} from user {senderName} (ID: {senderID})\nReason: {reason} \n\`\`\``,
+    transferSuccess: `**${emojis.money_bag} | {senderName}, has transferred \`\${credits}\` to <@!{ID}> **`,
+    insufficientBalance: `** ${emojis.interrobang} | {username}, type the credit you need to transfer!**`,
+    lessMoney: `** ${emojis.thinking} | {username}, Your balance is not enough for that!**`,
   },
   setLang: [
     ` The Language has been changed successfully`,
@@ -124,37 +125,37 @@ export default {
   server: {
     fields: [
       {
-        name: `:id: Server ID:`,
+        name: `${emojis.id} Server ID:`,
         value: `{guildId}`,
         inline: true,
       },
       {
-        name: `:calendar: Created On`,
+        name: `${emojis.calendar} Created On`,
         value: `**<t:{createdTimestamp}:R>**`,
         inline: true,
       },
       {
-        name: `:crown: Owned by`,
+        name: `${emojis.crown} Owned by`,
         value: `<@!{ownerId}>`,
         inline: true,
       },
       {
-        name: `:busts_in_silhouette:  Members ({memberCount})`,
-        value: `**{onlineMemberCount}** Online\n**{boostCount}** Boosts :sparkles:`,
+        name: `${emojis.busts_in_silhouette}  Members ({memberCount})`,
+        value: `**{onlineMemberCount}** Online\n**{boostCount}** Boosts ${emojis.sparkles}`,
         inline: true,
       },
       {
-        name: `:speech_balloon: Channels ({channelCount})`,
+        name: `${emojis.speech_balloon} Channels ({channelCount})`,
         value: `**{textChannelCount}** Text | **{voiceChannelCount}** Voice`,
         inline: true,
       },
       {
-        name: `:earth_africa: Others`,
+        name: `${emojis.earth_africa} Others`,
         value: `**Verification Level: **{verificationLevel}`,
         inline: true,
       },
       {
-        name: `:closed_lock_with_key:  Roles ({roleCount})`,
+        name: `${emojis.closed_lock_with_key}  Roles ({roleCount})`,
         value: `To see a list with all roles use **/roles**`,
         inline: true,
       },
@@ -168,9 +169,9 @@ export default {
   ],
   user: [`Joined Discord :`, `Joined Server :`],
   lock: {
-    lockSuccess: `🔒 {channel} **has been locked.**`,
+    lockSuccess: `${emojis.lock} {channel} **has been locked.**`,
     lockError: `There was an error trying to lock the channel.`,
-    unlockSuccess: `:unlock: {channel} **has been unlocked.**`,
+    unlockSuccess: `${emojis.unlock} {channel} **has been unlocked.**`,
     invalidChannel: `Please specify a valid channel to lock.`,
   },
   setnick: {
