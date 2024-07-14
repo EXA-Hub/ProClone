@@ -1,8 +1,29 @@
 {
+  "mute": {
+    "success": "Successfully {action}d members in {type} channels: {members}.",
+    "failed": "Failed to {action} members in {type} channels.",
+    "no_members": "No valid members specified.",
+    "no_mute_role": "No 'Muted' role found. Please create one."
+  },
+  "role": {
+    "success": ":white_check_mark: Changing roles for {count} members, {action}{roles}",
+    "failed": ":rolling_eyes: - I couldn't change the user's roles. Please double-check my permissions and role position.",
+    "no_members": ":rolling_eyes: - **Please specify a member**",
+    "no_members_or_roles": "No valid members or roles specified.",
+    "no_required_role": ":rolling_eyes: - **Please specify a role**",
+    "ownerOnly": "This command can only be executed by the server `owner`."
+  },
+  "unban": {
+    "success": ":white_check_mark: **{user} unbanned!**",
+    "failed": ":rolling_eyes: - I couldn't unban that user. Please check my permissions.",
+    "invalid_input": "No valid input provided for unban.",
+    "not_found": ":rolling_eyes: - **I can't find {user} in the ban list**"
+  },
   "ban": {
-    "invalidMember": "Please mention a valid member or provide a valid member ID.",
-    "banSuccess": "Successfully banned {user}.",
-    "banError": ":rolling_eyes: - I couldn't ban that user. Please double-check my permissions and role position."
+    "success_single": ":white_check_mark: **{user} banned from the server! :airplane:**",
+    "failed": ":rolling_eyes: - I couldn't ban that user. Please double-check my permissions and role position.",
+    "no_member": "No valid member or bulk users specified for ban.",
+    "non": ":rolling_eyes: - ** You can't ban @{user}. **"
   },
   "vkick": {
     "invalidMember": "Please mention a valid member or provide a valid member ID.",
