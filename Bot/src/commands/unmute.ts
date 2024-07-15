@@ -56,6 +56,58 @@ module.exports = {
     channel: Channel,
     args: string[]
   ) => {
-    return "Working on that command!";
+    const i18 = client.i18n[await client.getLanguage(guild.id)].unmute;
+
+    const handleUnmute = async (
+      members: GuildMember[],
+      type: "text" | "voice"
+    ) => {
+      try {
+        for (const member of members) {
+          if (type === "text") {
+            const muteRole = guild.roles.cache.find(
+              (role) => role.name.toLowerCase() === "muted"
+            );
+            if (!muteRole) return i18.no_mute_role;
+
+            await member.roles.remove(muteRole);
+          } else if (type === "voice") {
+            await member.voice.setMute(false);
+          }
+        }
+
+        return i18.success
+          .replace("{type}", type)
+          .replace("{members}", members.map((m) => m.displayName).join(", "));
+      } catch (error) {
+        console.error(`Failed to unmute members:`, error);
+        return i18.failed.replace("{type}", type);
+      }
+    };
+
+    if (interaction) {
+      const subCommand = interaction.options.data[0].name as "text" | "voice";
+      const targetUser = interaction.options.get("user")?.user;
+
+      if (!targetUser) return i18.no_members;
+
+      const members: GuildMember[] = [guild.members.cache.get(targetUser.id)!];
+
+      if (!members.length) return i18.no_members;
+
+      return handleUnmute(members, subCommand);
+    } else if (message) {
+      args.shift();
+      const target = args.shift();
+      const type = args.shift() as "text" | "voice";
+
+      const targetMember =
+        guild.members.cache.get(target!) || message.mentions.members?.first();
+      if (!targetMember) return i18.no_members;
+
+      const members: GuildMember[] = [targetMember];
+
+      return handleUnmute(members, type);
+    }
   },
 };

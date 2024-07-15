@@ -26,6 +26,7 @@ module.exports = {
         type: 3,
         name: "reason",
         description: "Reason of the warn.",
+        required: true,
       },
     ],
   },
@@ -39,6 +40,26 @@ module.exports = {
     channel: Channel,
     args: string[]
   ) => {
-    return "Working on that command!";
+    const i18n = client.i18n[await client.getLanguage(guild.id)].warn;
+    const targetUser = interaction
+      ? (interaction.options.get("user")?.member as GuildMember)
+      : message.mentions.members!.first() || guild.members.cache.get(args[1]);
+
+    if (!targetUser) return;
+
+    const reason = interaction
+      ? interaction.options.get("reason")?.value
+      : args.slice(2).join(" ");
+
+    if (!reason) return i18n.noreason;
+
+    await client.db.push(`warns.${guild.id}`, {
+      user: targetUser.id,
+      reason,
+      moderator: user.id,
+      timestamp: Date.now(),
+    });
+
+    return i18n.warned.replace("{user}", targetUser.user.username);
   },
 };

@@ -38,10 +38,12 @@ client.commands = new Collection();
 const i18n: Record<string, any> = {};
 const languageFiles = fs.readdirSync(path.join(__dirname, "languages"));
 languageFiles.forEach((file) => {
-  const lang = path.parse(file).name;
-  i18n[lang] = require(path.join(__dirname, "languages", file));
+  i18n[path.parse(file).name] = require(path.join(
+    __dirname,
+    "languages",
+    file
+  )).default;
 });
-
 client.i18n = i18n;
 
 client.getLanguage = async (guildId: string) => {
