@@ -35,7 +35,7 @@ module.exports = {
   ) => {
     const title = interaction
       ? interaction.options.get("new_title")?.value?.toString()
-      : args.slice(1).join(" ");
+      : args.slice(1).join(" ").replace("\n", "");
     if (!title || title.length > 140)
       return client.i18n[await client.getLanguage(guild.id)].title.long;
     client.db.set("title_" + user.id, title);

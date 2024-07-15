@@ -41,11 +41,13 @@ const emojis = {
   check: "✔️",
   information_source: "ℹ️",
   mag: "🔍",
+  robot: "🤖",
 };
 
 export { emojis };
 
 export default {
+  profile: `${emojis.robot}  **| {user}**, bots do not have ranks!`,
   warnings: {
     warningsTitle: "Warnings",
     requestedBy: "Requested by",
