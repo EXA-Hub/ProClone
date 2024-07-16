@@ -28,7 +28,7 @@ interface Command {
     user?: User,
     channel?: TextChannel | TextBasedChannel,
     arg?: String[]
-  ) => Promise<ReplyOptions | String | Message>;
+  ) => Promise<ReplyOptions | String | Message | undefined>;
   data: {
     default_member_permissions?: string;
     description: String;

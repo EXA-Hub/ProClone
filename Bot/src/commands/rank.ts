@@ -75,7 +75,7 @@ module.exports = {
         .sort((a: any, b: any) => b[1].voiceXP - a[1].voiceXP)
         .findIndex((u: any) => u[0] === targetUser.id) + 1;
 
-    const backgroundFile = "12.png";
+    const backgroundFile = "17.png";
 
     // Prepare rank card canvas
     const canvas = createCanvas(500, 210);

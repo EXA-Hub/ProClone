@@ -73,10 +73,10 @@ module.exports = {
     const title =
       (await client.db.get("title_" + userId)) || "@zampx made that bot";
 
-    const backgroundFile = "3mk gojo.png";
+    const backgroundFile = "490.png";
     // Array of badge filenames
-    const badgeFiles = [
-      "001-sign.png",
+    const badgeFiles: string | any[] = [
+      // "001-sign.png",
       // "003-axe.png",
       // "fernandez.png",
       // "006-tent.png",

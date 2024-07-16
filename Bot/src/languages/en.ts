@@ -48,6 +48,9 @@ const emojis = {
 export { emojis };
 
 export default {
+  reset: {
+    xp: `${emojis.white_check_mark} ** Stats have been reset successfully. **`,
+  },
   setlvl: {
     bot: `${emojis.robot} This action cannot be taken against bots.`,
     done: `**${emojis.white_check_mark} @{user}**'s Level has been updated`,
