@@ -59,7 +59,37 @@ module.exports = {
     if (level !== oldLevel)
       // Send congratulatory message
       type.user.send(
-        `🥳 **Congratulations**, ${type.user}!\nYou climbed from level **${oldLevel}** to **${level}**. Keep it up!`
+        client.i18n["en"].congrats
+          .replace("{type.user}", `${type.user}`)
+          .replace("{oldLevel}", oldLevel.toString())
+          .replace("{level}", level.toString())
+      );
+
+    // Fetch user data from the database
+    const guildId = type.guild.id;
+    const xpData_guild = (await client.db.get(`xp_${guildId}`)) || {};
+    const oldUserXp_guild = xpData_guild[userId]?.textXP || 0;
+
+    // Calculate level and XP on that level based on current XP
+    const { level: oldLevel_guild } = calculateLevelXP(oldUserXp_guild);
+
+    const newUserXp_guild = xp + oldUserXp_guild;
+
+    // Update user data
+    xpData_guild[userId] = { ...xpData_guild[userId], textXP: newUserXp_guild };
+    await client.db.set(`xp_${guildId}`, xpData_guild);
+
+    // Calculate level and XP on that level based on updated XP
+    const { level: level_guild } = calculateLevelXP(newUserXp_guild);
+
+    // Check if the user leveled up
+    if (level_guild !== oldLevel_guild)
+      // Send congratulatory message
+      type.user.send(
+        client.i18n["en"].congrats
+          .replace("{type.user}", `${type.user}`)
+          .replace("{oldLevel}", oldLevel_guild.toString())
+          .replace("{level}", level_guild.toString())
       );
   },
 };

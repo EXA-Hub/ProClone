@@ -181,16 +181,43 @@ Looking for support? https://discord.gg/probot`,
           }
         }
 
-        const response = await command.execute(
-          client,
-          undefined,
-          message,
-          message.guild,
-          message.member!,
-          message.author,
-          message.channel,
-          message.content.split(" ")
+        const helpData = require("../database/help.json").find(
+          (c: { [x: string]: any }) => c[command.data.name]
         );
+
+        const response =
+          (await command.execute(
+            client,
+            undefined,
+            message,
+            message.guild,
+            message.member!,
+            message.author,
+            message.channel,
+            message.content.split(" ")
+          )) ||
+          (await message.reply({
+            allowedMentions: { repliedUser: false },
+            embeds: [
+              new EmbedBuilder()
+                .setTitle("Command: " + command.data.name)
+                .setDescription(command.data.description as string)
+                .setFields([
+                  {
+                    name: client.i18n[
+                      await client.getLanguage(message.guild.id)
+                    ].help[2],
+                    value: helpData.usage,
+                  },
+                  {
+                    name: client.i18n[
+                      await client.getLanguage(message.guild.id)
+                    ].help[1],
+                    value: helpData.examples,
+                  },
+                ]),
+            ],
+          }));
 
         if (response) {
           const replyMsg = (

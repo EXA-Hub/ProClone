@@ -6,16 +6,6 @@ import { QuickDB, JSONDriver } from "quick.db";
 
 dotenv.config();
 
-// Define CustomClient interface extending Client
-// interface CustomClient extends Client {
-//   cmdsec: any;
-//   i8: string;
-//   db: QuickDB;
-//   commands: Collection<any, any>;
-//   i18n: Record<string, any>;
-//   getLanguage(guildId: string): Promise<string>;
-// }
-
 import { CustomClient } from "./types";
 
 // Create a new instance of CustomClient
@@ -33,6 +23,7 @@ client.i8 = `${process.env.I8PHPSESSID}`;
 client.db = new QuickDB({ driver: new JSONDriver("./src/database/data.json") });
 
 client.deletedMessages = new Collection();
+client.voiceTimes = new Collection();
 client.commands = new Collection();
 
 const i18n: Record<string, any> = {};

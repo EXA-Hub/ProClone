@@ -8,6 +8,7 @@ import {
   GuildMember,
   Interaction,
   Message,
+  Options,
   ReplyOptions,
   Snowflake,
   TextBasedChannel,
@@ -32,10 +33,12 @@ interface Command {
     default_member_permissions?: string;
     description: String;
     name: string;
+    options: Options;
   };
 }
 
 export interface CustomClient extends Client {
+  voiceTimes: Collection<string, number>;
   i8: string;
   db: QuickDB;
   commands: Collection<string, Command>;

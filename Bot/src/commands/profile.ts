@@ -45,9 +45,11 @@ module.exports = {
         : message.mentions.users.first() || client.users.cache.get(args[1])) ||
       user;
 
-    const i18n = client.i18n[await client.getLanguage(guild.id)].profile;
-
-    if (targetUser.bot) return i18n.replace("{user}", user.username);
+    if (targetUser.bot)
+      return client.i18n[await client.getLanguage(guild.id)].botRanks.replace(
+        "{user}",
+        user.username
+      );
 
     // Fetch user data and all users' XP data from the database
     const xpData = (await client.db.get("xp")) || {};

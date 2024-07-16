@@ -11,6 +11,7 @@ import {
   Channel,
   User,
 } from "discord.js";
+import { calculateXPLevel } from "../methods/lvlxp";
 module.exports = {
   data: {
     name: "setlevel",
@@ -58,6 +59,47 @@ module.exports = {
     channel: Channel,
     args: string[]
   ) => {
-    return "Working on that command!";
+    const i18n = client.i18n[await client.getLanguage(guild.id)].setlvl;
+
+    let targetUser: GuildMember | undefined;
+    let xpType;
+    let newXp: string | number;
+
+    if (interaction) {
+      targetUser = interaction.options.get("user")?.member as GuildMember;
+      xpType = interaction.options.get("type")?.value;
+      newXp = interaction.options.get("level")?.value as string;
+    } else {
+      targetUser =
+        message.mentions.members?.first() || guild.members.cache.get(args[1]);
+      xpType = args[2];
+      newXp = args[3];
+    }
+
+    if (targetUser?.user.bot) return i18n.bot;
+    newXp = parseInt(newXp?.toString());
+    if (!targetUser || !xpType || !newXp) return;
+
+    const guildId = guild.id;
+    const userId = targetUser!.id;
+
+    // Fetch guild-specific user data from the database
+    const xpData_guild = (await client.db.get(`xp_${guildId}`)) || {};
+    xpData_guild[userId] = xpData_guild[userId] || {
+      textXP: 0,
+      voiceXP: 0,
+      history: [],
+    };
+
+    // Set the new XP
+    if (xpType === "text")
+      xpData_guild[userId].textXP = calculateXPLevel(newXp + 1);
+    else if (xpType === "voice")
+      xpData_guild[userId].voiceXP = calculateXPLevel(newXp + 1);
+
+    // Save the updated user data to the database
+    await client.db.set(`xp_${guildId}`, xpData_guild);
+
+    return i18n.done.replace("{user}", targetUser?.user.username);
   },
 };

@@ -7,6 +7,8 @@ import {
   TextChannel,
   Message,
   CommandInteraction,
+  EmbedBuilder,
+  InteractionResponse,
 } from "discord.js";
 import { commandData, CustomClient } from "../types"; // Make sure to define and import CustomClient type
 
@@ -165,20 +167,48 @@ module.exports = {
     }
 
     try {
-      const response = await command.execute(
-        client,
-        interaction,
-        undefined,
-        interaction.guild,
-        interaction.member!,
-        interaction.user,
-        interaction.channel!,
-        undefined
+      const helpData = require("../database/help.json").find(
+        (c: { [x: string]: any }) => c[command.data.name]
       );
+
+      const response =
+        (await command.execute(
+          client,
+          interaction,
+          undefined,
+          interaction.guild,
+          interaction.member!,
+          interaction.user,
+          interaction.channel!,
+          undefined
+        )) ||
+        (await interaction.reply({
+          allowedMentions: { repliedUser: false },
+          ephemeral: true,
+          embeds: [
+            new EmbedBuilder()
+              .setTitle("Command: " + command.data.name)
+              .setDescription(command.data.description as string)
+              .setFields([
+                {
+                  name: client.i18n[
+                    await client.getLanguage(interaction.guild.id)
+                  ].help[2],
+                  value: helpData.usage,
+                },
+                {
+                  name: client.i18n[
+                    await client.getLanguage(interaction.guild.id)
+                  ].help[1],
+                  value: helpData.examples,
+                },
+              ]),
+          ],
+        }));
 
       if (response) {
         const msg =
-          response instanceof Message
+          response instanceof Message || response instanceof InteractionResponse
             ? response
             : await interaction.reply(
                 typeof response === "string"

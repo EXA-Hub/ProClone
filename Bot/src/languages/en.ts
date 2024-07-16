@@ -42,12 +42,22 @@ const emojis = {
   information_source: "ℹ️",
   mag: "🔍",
   robot: "🤖",
+  partying_face: "🥳",
 };
 
 export { emojis };
 
 export default {
-  profile: `${emojis.robot}  **| {user}**, bots do not have ranks!`,
+  setlvl: {
+    bot: `${emojis.robot} This action cannot be taken against bots.`,
+    done: `**${emojis.white_check_mark} @{user}**'s Level has been updated`,
+  },
+  setxp: {
+    bot: `${emojis.robot} This action cannot be taken against bots.`,
+    done: `**${emojis.white_check_mark} @{user}**'s XP has been updated`,
+  },
+  congrats: `${emojis.partying_face} **Congratulations**, {type.user}!\nYou climbed from level **{oldLevel}** to **{level}**. Keep it up!`,
+  botRanks: `${emojis.robot}  **| {user}**, bots do not have ranks!`,
   warnings: {
     warningsTitle: "Warnings",
     requestedBy: "Requested by",
