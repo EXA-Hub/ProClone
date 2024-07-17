@@ -88,7 +88,6 @@ module.exports = {
     xpData_guild[userId] = xpData_guild[userId] || {
       textXP: 0,
       voiceXP: 0,
-      history: [],
     };
 
     // Set the new XP

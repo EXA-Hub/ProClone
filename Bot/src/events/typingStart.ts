@@ -82,6 +82,9 @@ module.exports = {
     // Calculate level and XP on that level based on updated XP
     const { level: level_guild } = calculateLevelXP(newUserXp_guild);
 
+    // Emit event for recorder
+    client.emit("xpUpdate", guildId, userId, xp, "textXP");
+
     // Check if the user leveled up
     if (level_guild !== oldLevel_guild)
       // Send congratulatory message

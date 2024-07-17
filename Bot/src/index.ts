@@ -1,8 +1,11 @@
 import dotenv from "dotenv";
-import { Client, GatewayIntentBits, Collection, Guild } from "discord.js";
+
+import { Client, GatewayIntentBits, Collection } from "discord.js";
+import { QuickDB, JSONDriver } from "quick.db";
 import path from "path";
 import fs from "fs";
-import { QuickDB, JSONDriver } from "quick.db";
+
+import record from "./database/guilds/recorder";
 
 dotenv.config();
 
@@ -68,6 +71,8 @@ eventFiles.forEach((file) => {
   }
 });
 
+record(client);
+
 client.login(process.env.DISCORD_BOT_TOKEN);
 
 // Handle unhandled promise rejections globally
@@ -108,113 +113,3 @@ process.on("warning", (warning) => {
  * TEST ZONE!!
  *
  */
-
-import { v4 as uuidv4 } from "uuid";
-const GUILD_ID = "1153834735102070855";
-const DATA_FILE_PATH = path.join(__dirname, "serverData.json");
-
-let serverData: {
-  id: any;
-  guild: string;
-  date: string;
-  messages: number;
-  members: any;
-  joined: number;
-  left: number;
-}[] = [];
-
-// Load existing data
-if (fs.existsSync(DATA_FILE_PATH)) {
-  serverData = JSON.parse(fs.readFileSync(DATA_FILE_PATH, "utf-8"));
-}
-
-// Function to save data to file
-function saveData() {
-  fs.writeFileSync(DATA_FILE_PATH, JSON.stringify(serverData, null, 2));
-}
-
-// Function to get today's date in YYYY-MM-DD format
-function getTodayDate() {
-  return new Date().toISOString().split("T")[0];
-}
-
-// Initialize today's record if it doesn't exist
-function initializeTodayRecord(guild: Guild) {
-  const today = getTodayDate();
-  const todayRecord = serverData.find(
-    (record) => record.date === today && record.guild === GUILD_ID
-  );
-
-  if (!todayRecord) {
-    const newRecord = {
-      id: uuidv4(),
-      guild: GUILD_ID,
-      date: today,
-      messages: 0,
-      members: guild.memberCount,
-      joined: 0,
-      left: 0,
-    };
-    serverData.push(newRecord);
-    saveData();
-  }
-}
-
-client.on("ready", async () => {
-  const guild = client.guilds.cache.get(GUILD_ID);
-  if (guild) {
-    initializeTodayRecord(guild);
-  }
-
-  // Reset the record at midnight
-  setInterval(() => {
-    const guild = client.guilds.cache.get(GUILD_ID);
-    if (guild) {
-      initializeTodayRecord(guild);
-    }
-  }, 24 * 60 * 60 * 1000); // 24 hours
-});
-
-client.on("messageCreate", (message) => {
-  if (message.guild && message.guild.id === GUILD_ID) {
-    const today = getTodayDate();
-    const todayRecord = serverData.find(
-      (record) => record.date === today && record.guild === GUILD_ID
-    );
-
-    if (todayRecord) {
-      todayRecord.messages += 1;
-      saveData();
-    }
-  }
-});
-
-client.on("guildMemberAdd", (member) => {
-  if (member.guild.id === GUILD_ID) {
-    const today = getTodayDate();
-    const todayRecord = serverData.find(
-      (record) => record.date === today && record.guild === GUILD_ID
-    );
-
-    if (todayRecord) {
-      todayRecord.joined += 1;
-      todayRecord.members = member.guild.memberCount;
-      saveData();
-    }
-  }
-});
-
-client.on("guildMemberRemove", (member) => {
-  if (member.guild.id === GUILD_ID) {
-    const today = getTodayDate();
-    const todayRecord = serverData.find(
-      (record) => record.date === today && record.guild === GUILD_ID
-    );
-
-    if (todayRecord) {
-      todayRecord.left += 1;
-      todayRecord.members = member.guild.memberCount;
-      saveData();
-    }
-  }
-});
