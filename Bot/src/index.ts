@@ -52,7 +52,7 @@ const commandFiles = fs
 for (const file of commandFiles) {
   const command = require(path.join(__dirname, "commands", `${file}`));
   client.commands.set(command.data.name, command);
-  console.log(`🔧 Commands - /${command.name}`);
+  console.log(`🔧 Commands - /${command.data.name}`);
 }
 
 client.cmdsec = require("./database/sections.json");

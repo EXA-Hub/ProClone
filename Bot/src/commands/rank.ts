@@ -109,7 +109,7 @@ module.exports = {
           Math.random() * 6
         )}.png`
     );
-    ctx.drawImage(guildIcon, 400, 20, 64, 64);
+    ctx.drawImage(guildIcon, canvas.width - 84, 20, 64, 64);
 
     // Draw username
     ctx.fillStyle = "#FFFFFF";
