@@ -47,7 +47,7 @@ client.getLanguage = async (guildId: string) => {
 };
 
 const commandFiles: string[] =
-  // [] || // test api
+  [] || // test api
   fs
     .readdirSync(path.join(__dirname, "commands"))
     .filter((file) => file.endsWith(".ts"));
@@ -66,7 +66,7 @@ for (const file of commandFiles) {
 client.cmdsec = require("./database/sections.json");
 
 const eventFiles: string[] =
-  // [] || // test api
+  [] || // test api
   fs
     .readdirSync(path.join(__dirname, "events"))
     .filter((file) => file.endsWith(".ts"));
