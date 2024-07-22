@@ -43,11 +43,18 @@ const emojis = {
   mag: "🔍",
   robot: "🤖",
   partying_face: "🥳",
+  tada: "🎉",
+  hugging: "🤗",
 };
 
 export { emojis };
 
 export default {
+  vote: {
+    msg: `${emojis.tada} You are eligible to vote for the bot!`,
+    btn: `Vote Link`,
+    em: emojis.hugging,
+  },
   reset: {
     xp: `${emojis.white_check_mark} ** Stats have been reset successfully. **`,
   },

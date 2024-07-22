@@ -6,6 +6,7 @@ import path from "path";
 import fs from "fs";
 
 import record from "./database/guilds/recorder";
+import api from "./web/server";
 
 dotenv.config();
 
@@ -45,36 +46,53 @@ client.getLanguage = async (guildId: string) => {
   return lang || "en";
 };
 
-const commandFiles = fs
-  .readdirSync(path.join(__dirname, "commands"))
-  .filter((file) => file.endsWith(".ts"));
+const commandFiles: string[] =
+  // [] || // test api
+  fs
+    .readdirSync(path.join(__dirname, "commands"))
+    .filter((file) => file.endsWith(".ts"));
 
 for (const file of commandFiles) {
-  const command = require(path.join(__dirname, "commands", `${file}`));
-  client.commands.set(command.data.name, command);
-  console.log(`🔧 Commands - /${command.data.name}`);
+  try {
+    const command = require(path.join(__dirname, "commands", `${file}`));
+    client.commands.set(command.data.name, command);
+    console.log(`🔧 Commands - /${command.data.name}`);
+  } catch (error) {
+    console.log(`❌ Commands - ${file}`);
+    console.error(error);
+  }
 }
 
 client.cmdsec = require("./database/sections.json");
 
-const eventFiles = fs
-  .readdirSync(path.join(__dirname, "events"))
-  .filter((file) => file.endsWith(".ts"));
+const eventFiles: string[] =
+  // [] || // test api
+  fs
+    .readdirSync(path.join(__dirname, "events"))
+    .filter((file) => file.endsWith(".ts"));
 
 eventFiles.forEach((file) => {
-  const event = require(path.join(__dirname, "events", file));
-  const eventName = path.parse(file).name;
+  try {
+    const event = require(path.join(__dirname, "events", file));
+    const eventName = path.parse(file).name;
 
-  if (event.once) {
-    client.once(eventName, (...args: any[]) => event.execute(...args, client));
-  } else {
-    client.on(eventName, (...args: any[]) => event.execute(...args, client));
+    if (event.once) {
+      client.once(eventName, (...args: any[]) =>
+        event.execute(...args, client)
+      );
+    } else {
+      client.on(eventName, (...args: any[]) => event.execute(...args, client));
+    }
+
+    console.log(`📂 Events - ${file.split(".")[0]}`);
+  } catch (error) {
+    console.log(`❌ Events - ${file}`);
+    console.error(error);
   }
-
-  console.log(`📂 Events - ${file.split(".")[0]}`);
 });
 
 record(client);
+api(client);
 
 client.login(process.env.DISCORD_BOT_TOKEN);
 

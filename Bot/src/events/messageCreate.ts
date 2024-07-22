@@ -32,7 +32,10 @@ module.exports = {
 
       // Check if the command exists
       const command = client.commands.get(commandName);
-      if (!command) return message.reply(`> !? ---> \`${commandName}\``);
+      if (!command) {
+        return;
+        message.reply(`> !? ---> \`${commandName}\``);
+      }
 
       // If the command exists, inform the user to use the slash command instead
       if (command.data.name !== "help") {
