@@ -16,6 +16,10 @@ export default async (client: CustomClient) => {
   const router = Router();
 
   router.use(async (req: Request, res: Response, next: NextFunction) => {
+    if (!client.user)
+      return res.status(503).json({
+        message: "Bot is still caching up. Please try again later.",
+      });
     client.apiUser = undefined;
 
     try {
@@ -70,13 +74,16 @@ export default async (client: CustomClient) => {
             }
           );
 
-          client.apiUser = userResponse.data;
+          client.apiUser = { ...userResponse.data, ...sessionData };
         }
       }
     } catch (error) {
       console.error("Error in user middleware:", error);
       res.status(500).json({ error: "Failed to authenticate user" });
     }
+
+    if (!client.apiUser && ["api"].find((route) => req.path.includes(route)))
+      return res.sendStatus(401);
 
     next();
   });

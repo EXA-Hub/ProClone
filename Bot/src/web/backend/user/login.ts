@@ -6,7 +6,7 @@ const createLoginRouter = (client: CustomClient) => {
   const router = Router();
 
   // Define the login route
-  router.get("*", (req: Request, res: Response) => {
+  router.get("/", (req: Request, res: Response) => {
     if (client.apiUser) res.redirect("/backend/api");
     else
       res.redirect(

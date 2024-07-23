@@ -12,7 +12,10 @@ const createStatusRouter = (client: CustomClient) => {
           .first()
           ?.channels.cache.filter((channel) => channel.type === 0)
           .first()
-          ?.send(client.apiUser.username + " says hi from api")
+          ?.send(
+            client.apiUser.username +
+              " says hi from api <:proclone_prime:1265153912546267207>"
+          )
       )?.toJSON()
     );
   });
