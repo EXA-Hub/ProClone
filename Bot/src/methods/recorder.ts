@@ -1,35 +1,16 @@
-import fs from "fs";
-import path from "path";
 import { Guild, Snowflake } from "discord.js";
 import { v4 as uuidv4 } from "uuid";
-import { CustomClient } from "../../types";
+import { CustomClient } from "../types";
 
 export default function record(client: CustomClient) {
-  const DATA_DIR_PATH = path.join(__dirname, "guildData");
-
-  // Ensure the data directory exists
-  if (!fs.existsSync(DATA_DIR_PATH)) {
-    fs.mkdirSync(DATA_DIR_PATH);
-  }
-
-  // Function to get the data file path for a guild
-  function getDataFilePath(guildId: string) {
-    return path.join(DATA_DIR_PATH, `${guildId}.json`);
-  }
-
   // Function to load data for a guild
-  function loadGuildData(guildId: string) {
-    const filePath = getDataFilePath(guildId);
-    if (fs.existsSync(filePath)) {
-      return JSON.parse(fs.readFileSync(filePath, "utf-8"));
-    }
-    return [];
+  async function loadGuildData(guildId: string) {
+    return (await client.db.get(`logs.${guildId}`)) || [];
   }
 
   // Function to save data for a guild
-  function saveGuildData(guildId: string, data: any) {
-    const filePath = getDataFilePath(guildId);
-    fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
+  async function saveGuildData(guildId: string, data: any) {
+    await client.db.set(`logs.${guildId}`, data);
   }
 
   // Function to get today's date in YYYY-MM-DD format
@@ -38,10 +19,10 @@ export default function record(client: CustomClient) {
   }
 
   // Initialize today's record if it doesn't exist
-  function initializeTodayRecord(guild: Guild) {
+  async function initializeTodayRecord(guild: Guild) {
     const today = getTodayDate();
     const guildId = guild.id;
-    let guildData = loadGuildData(guildId);
+    let guildData = await loadGuildData(guildId);
     const todayRecord = guildData.find((record: any) => record.date === today);
 
     if (!todayRecord) {
@@ -74,11 +55,11 @@ export default function record(client: CustomClient) {
     }, 24 * 60 * 60 * 1000); // 24 hours
   });
 
-  client.on("messageCreate", (message) => {
+  client.on("messageCreate", async (message) => {
     if (message.guild) {
       const today = getTodayDate();
       const guildId = message.guild.id;
-      let guildData = loadGuildData(guildId);
+      let guildData = await loadGuildData(guildId);
       const todayRecord = guildData.find(
         (record: any) => record.date === today
       );
@@ -90,10 +71,10 @@ export default function record(client: CustomClient) {
     }
   });
 
-  client.on("guildMemberAdd", (member) => {
+  client.on("guildMemberAdd", async (member) => {
     const today = getTodayDate();
     const guildId = member.guild.id;
-    let guildData = loadGuildData(guildId);
+    let guildData = await loadGuildData(guildId);
     const todayRecord = guildData.find((record: any) => record.date === today);
 
     if (todayRecord) {
@@ -103,10 +84,10 @@ export default function record(client: CustomClient) {
     }
   });
 
-  client.on("guildMemberRemove", (member) => {
+  client.on("guildMemberRemove", async (member) => {
     const today = getTodayDate();
     const guildId = member.guild.id;
-    let guildData = loadGuildData(guildId);
+    let guildData = await loadGuildData(guildId);
     const todayRecord = guildData.find((record: any) => record.date === today);
 
     if (todayRecord) {
@@ -118,14 +99,14 @@ export default function record(client: CustomClient) {
 
   client.on(
     "xpUpdate",
-    (
+    async (
       guildId: Snowflake,
       userId: Snowflake,
       xp: number,
       type: "textXP" | "voiceXP"
     ) => {
       const today = getTodayDate();
-      let guildData = loadGuildData(guildId);
+      let guildData = await loadGuildData(guildId);
       const todayRecord = guildData.find(
         (record: any) => record.date === today
       );
@@ -145,21 +126,12 @@ export default function record(client: CustomClient) {
 }
 
 // Function to retrieve data for the last number of days
-export function getGuildDataForDays(guildId: string, days: number): [{}] {
-  const DATA_DIR_PATH = path.join(__dirname, "guildData");
-  const getDataFilePath = (guildId: string) =>
-    path.join(DATA_DIR_PATH, `${guildId}.json`);
-
-  // Load data for the guild
-  function loadGuildData(guildId: string) {
-    const filePath = getDataFilePath(guildId);
-    if (fs.existsSync(filePath)) {
-      return JSON.parse(fs.readFileSync(filePath, "utf-8"));
-    }
-    return [];
-  }
-
-  const guildData = loadGuildData(guildId);
+export async function getGuildDataForDays(
+  guildId: string,
+  days: number,
+  client: CustomClient
+): Promise<[{}]> {
+  const guildData = await client.db.get(`logs.${guildId}`);
 
   // Get the last number of days' data by slicing the array
   const startIndex = Math.max(0, guildData.length - days);

@@ -6,8 +6,13 @@ const createStatusRouter = (client: CustomClient) => {
   const router = Router();
 
   router.get("*", (req: Request, res: Response) => {
-    // Use the `client` object as needed
-    res.json({ status: "API is running", clientInfo: client.user?.username });
+    res.json({
+      status: "API is running",
+      clientInfo: client.user?.username,
+      loged: client.apiUser
+        ? "you are logged in " + client.apiUser.username
+        : "you did not login",
+    });
   });
 
   return router;

@@ -3,6 +3,7 @@ import fs from "fs-extra";
 import path from "path";
 import { Router } from "express";
 import { CustomClient } from "../types";
+
 export const loadRoutes = async (
   baseDir: string,
   router: Router,
@@ -24,7 +25,7 @@ export const loadRoutes = async (
       try {
         router.use(
           route,
-          await require(path.join(baseDir, item.name)).default(client)
+          (await import(path.join(baseDir, item.name))).default(client)
         );
         console.log(`✅ Routes - ${route}`);
       } catch (error) {

@@ -1,7 +1,7 @@
 // commands/top.js
 
 import { CustomClient } from "../types"; // Import CustomClient interface
-import { getGuildDataForDays } from "../database/guilds/recorder";
+import { getGuildDataForDays } from "../methods/recorder";
 
 import {
   CommandInteraction,
@@ -103,9 +103,12 @@ module.exports = {
     // Simulate fetching data for demonstration
     let xpData;
     if (duration)
-      xpData = getGuildDataForDays(
-        guild.id,
-        duration === "day" ? 1 : duration === "week" ? 7 : 30
+      xpData = (
+        await getGuildDataForDays(
+          guild.id,
+          duration === "day" ? 1 : duration === "week" ? 7 : 30,
+          client
+        )
       ).reduce((acc: any, curr: any) => {
         const { xp } = curr;
         for (let userId in xp) {

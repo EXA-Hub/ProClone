@@ -22,7 +22,7 @@ module.exports = {
     // await client.db.set(`aliases_${message.guild!.id}`, commandsJSal);
 
     const aliases = (await client.db.get(`aliases_${message.guild.id}`)) as any;
-    const prefix = "#"; // Replace with your bot's prefix
+    const prefix = client.config.prefix;
     if (message.content.startsWith(prefix)) {
       // Split the message content to get the command
       const args = message.content.slice(prefix.length).trim().split(/ +/);

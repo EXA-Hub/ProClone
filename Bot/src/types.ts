@@ -17,6 +17,7 @@ import {
 } from "discord.js";
 import { QuickDB } from "quick.db";
 import i18nJson from "./languages/en";
+import config from "../config.json";
 
 interface Command {
   execute: (
@@ -39,8 +40,10 @@ interface Command {
 
 export interface CustomClient extends Client {
   voiceTimes: Collection<string, number>;
+  apiUser: any | undefined;
   i8: string;
   db: QuickDB;
+  config: typeof config;
   commands: Collection<string, Command>;
   cmdsec: { [key: string]: string[] }; // Correct type for cmdsec
   i18n: { [key: string]: typeof i18nJson };
