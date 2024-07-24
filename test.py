@@ -1,22 +1,37 @@
-def calculate_level_xp(level):
-    current_xp = 0  # Initial XP value
-    total_xp = 0  # Total accumulated XP
+import json
 
-    # Calculate XP for levels up to the specified level
-    for i in range(1, level + 1):
-        if i == 1:
-            current_xp = 35  # Starting XP for level 1
-        elif i == 2:
-            current_xp = 103  # Starting XP for level 2
-        else:
-            current_xp += 70  # Increment by 70 for subsequent levels
-        
-        total_xp += current_xp  # Accumulate total XP
-    
-    return current_xp, total_xp
+def remove_duplicates(input_file, output_file):
+    try:
+        # Read the JSON array from the input file
+        with open(input_file, 'r') as file:
+            data = json.load(file)
 
-# Example usage:
-level_input = int(input("Enter the level you want to check: "))
-level_xp, accumulated_xp = calculate_level_xp(level_input)
-print(f"XP for level {level_input}: {level_xp}")
-print(f"Total accumulated XP up to level {level_input}: {accumulated_xp}")
+        # Check if the data is a list
+        if not isinstance(data, list):
+            raise ValueError("The input JSON file does not contain an array.")
+
+        # Remove duplicates by converting the list to a set and back to a list
+        unique_data = list(set(data))
+
+        # Sort the unique data to maintain a consistent order
+        unique_data.sort()
+
+        # Write the unique array back to the output file
+        with open(output_file, 'w') as file:
+            json.dump(unique_data, file, indent=4)
+
+        print(f"Processed JSON saved to {output_file}")
+
+    except FileNotFoundError:
+        print(f"File {input_file} not found.")
+    except json.JSONDecodeError:
+        print("Invalid JSON format.")
+    except Exception as e:
+        print(f"An error occurred: {e}")
+
+# File paths
+input_file = 'express/urls.json'
+output_file = 'express/urls_non.json'
+
+# Call the function
+remove_duplicates(input_file, output_file)
