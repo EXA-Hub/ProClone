@@ -8,11 +8,28 @@ const createStatusRouter = (client: CustomClient) => {
 
   router.get("/", async (req: Request, res: Response) => {
     try {
-      res.json({
-        status: "API is running",
-        clientInfo: client.user?.username,
-        userData: client.apiUser,
-      });
+      res.send(`
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>Close Window</title>
+      </head>
+      <body>
+        <script>
+          window.onload = function() {
+            window.close();
+          };
+        </script>
+        <p>Attempting to close the window...</p>
+      </body>
+      </html>
+    `);
+
+      // res.json({
+      //   status: "API is running",
+      //   clientInfo: client.user?.username,
+      //   userData: client.apiUser,
+      // });
     } catch (error) {
       console.error("api error:", error);
       res

@@ -7,7 +7,7 @@ import path from "path";
 import axios from "axios";
 
 const app = express();
-const port = 3000; // Port for your API server
+const port = 3001; // Port for your API server
 
 export default async (client: CustomClient) => {
   app.use(express.json()); // Middleware to parse JSON bodies

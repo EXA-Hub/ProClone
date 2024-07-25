@@ -1,6 +1,6 @@
 {
   "prefix": "#",
-  "redirectUri": "http://localhost:3000/backend/user/callback",
+  "redirectUri": "http://localhost:3001/backend/user/callback",
   "clientId": "817541222251626497",
   "db": "mongo"
 }

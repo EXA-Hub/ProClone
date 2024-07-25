@@ -1,37 +1,22 @@
-import json
+import os
 
-def remove_duplicates(input_file, output_file):
-    try:
-        # Read the JSON array from the input file
-        with open(input_file, 'r') as file:
-            data = json.load(file)
+# Directory path
+directory = r'C:\Users\ZAMPX\Downloads\Telegram Desktop\probot.io\Dashboard - ProBot_files'
 
-        # Check if the data is a list
-        if not isinstance(data, list):
-            raise ValueError("The input JSON file does not contain an array.")
+# List all files in the directory
+files = os.listdir(directory)
 
-        # Remove duplicates by converting the list to a set and back to a list
-        unique_data = list(set(data))
+# Iterate over each file
+for file_name in files:
+    # Check if the file ends with .download
+    if file_name.endswith('.download'):
+        # Create the new file name by removing the .download extension
+        new_file_name = file_name[:-9]
+        # Construct full file paths
+        old_file_path = os.path.join(directory, file_name)
+        new_file_path = os.path.join(directory, new_file_name)
+        # Rename the file
+        os.rename(old_file_path, new_file_path)
+        print(f'Renamed: {old_file_path} to {new_file_path}')
 
-        # Sort the unique data to maintain a consistent order
-        unique_data.sort()
-
-        # Write the unique array back to the output file
-        with open(output_file, 'w') as file:
-            json.dump(unique_data, file, indent=4)
-
-        print(f"Processed JSON saved to {output_file}")
-
-    except FileNotFoundError:
-        print(f"File {input_file} not found.")
-    except json.JSONDecodeError:
-        print("Invalid JSON format.")
-    except Exception as e:
-        print(f"An error occurred: {e}")
-
-# File paths
-input_file = 'express/urls.json'
-output_file = 'express/urls_non.json'
-
-# Call the function
-remove_duplicates(input_file, output_file)
+print('Renaming completed.')

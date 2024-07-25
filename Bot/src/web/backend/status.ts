@@ -10,8 +10,8 @@ const createRouter = (client: CustomClient) => {
       status: "API is running",
       clientInfo: client.user?.username,
       loged: client.apiUser
-        ? "you are logged in " + client.apiUser.username
-        : "you did not login",
+        ? "I know you " + client.apiUser.username
+        : "whoareyou",
     });
   });
 

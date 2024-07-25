@@ -36,27 +36,20 @@ export default function Home() {
 
     // Open the popup window
     const popup = window.open(
-      "/api/login",
+      "http://localhost:3001/backend/user/login",
       "LoginPopup",
       `width=${popupWidth},height=${popupHeight},left=${left},top=${top}`
     );
 
-    // Listen for messages from the popup
-    const handleMessage = (event: { origin: string; data: any }) => {
-      // Optionally validate the origin
-      if (event.origin !== window.location.origin) return;
-
-      const data = event.data;
-      console.log("Data received from popup:", data);
-      // Process the received data here
-    };
-
-    window.addEventListener("message", handleMessage);
-
-    // Clean up event listener when component unmounts
-    return () => {
-      window.removeEventListener("message", handleMessage);
-    };
+    if (popup) {
+      // Polling to check if popup is closed
+      const checkPopupClosed = setInterval(() => {
+        if (popup.closed) {
+          clearInterval(checkPopupClosed);
+          window.location.href = "/dashboard"; // Redirect to /dashboard
+        }
+      }, 1000); // Check every second
+    }
   };
 
   return (

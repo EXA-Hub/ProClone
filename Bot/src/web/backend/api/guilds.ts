@@ -29,10 +29,11 @@ const createRouter = (client: CustomClient) => {
   router.get("/", async (req: Request, res: Response) => {
     try {
       res.json({
-        guilds: (await getUserGuilds(client.apiUser.access_token)).filter(
-          (guild: any) =>
-            hasPermission(guild.permissions, PermissionFlagsBits.Administrator)
-        ),
+        guilds: await getUserGuilds(client.apiUser.access_token),
+        //   .filter(
+        //   (guild: any) =>
+        //     hasPermission(guild.permissions, PermissionFlagsBits.Administrator)
+        // ),
       });
     } catch (error) {
       console.error("Error processing request:", error);
