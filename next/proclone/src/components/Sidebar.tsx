@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
+import Loading from "./Loading";
 import { useRouter } from "next/router";
 
 interface Guild {
@@ -203,7 +204,7 @@ const defGSections: Section[] = [
     items: [
       {
         title: "Twitch",
-        path: "/notifications/twitch",
+        path: "/twitch",
         icon: "twitch",
         new: true,
         status: "module-on",
@@ -226,7 +227,7 @@ const defGSections: Section[] = [
 const Sidebar: React.FC = () => {
   const [guilds, setGuilds] = useState<Guild[]>([]);
   const [guild, setGuild] = useState<Guild>();
-  const [sections, setSections] = useState<Section[]>(defSections);
+  const [sections, setSections] = useState<Section[] | null>();
   const currentPath = useRouter().pathname.toString();
 
   useEffect(() => {
@@ -250,7 +251,12 @@ const Sidebar: React.FC = () => {
       .catch((error) => {
         console.error("Failed to fetch guilds", error);
         setGuilds([
-          { id: "1", name: "Guild 1", iconUrl: "/image.png" },
+          {
+            id: "1",
+            name: "Guild 1",
+            iconUrl:
+              "https://cdn.discordapp.com/icons/1117832389511622669/a_d305d829622b0291c3001f62873d39f3.gif",
+          },
           { id: "2", name: "Guild 2", iconUrl: "/image.png" },
           { id: "3", name: "Guild 3", iconUrl: "/image.png" },
         ]);
@@ -274,20 +280,24 @@ const Sidebar: React.FC = () => {
             </Link>
           </div>
         </div>
-        {guilds.map((guild) => (
-          <div className=" " key={guild.id} style={{ marginBottom: "6px" }}>
+        {guilds.map((guildE) => (
+          <div className=" " key={guildE.id} style={{ marginBottom: "6px" }}>
             <Link
               onClick={() => {
-                setGuild(guilds.find((g) => g.id === guild.id));
+                setGuild(guilds.find((g) => g.id === guildE.id));
               }}
-              href={`/server/${guild.id}`}
+              href={`/server/${guildE.id}`}
             >
               <Image
                 width={56}
                 height={56}
-                className="sidebar_guild__images__mjUJ3"
-                alt={guild.name}
-                src={guild.iconUrl}
+                className={`sidebar_guild__images__mjUJ3 ${
+                  guild && guildE.id === guild.id
+                    ? " sidebar_active-server__jGUqw"
+                    : ""
+                }`}
+                alt={guildE.name}
+                src={guildE.iconUrl}
                 draggable="false"
               />
             </Link>
@@ -322,68 +332,81 @@ const Sidebar: React.FC = () => {
             </div>
           </div>
           <div id="sidebar_sidebar__items__5Hd7R">
-            {sections.map((section) => (
-              <div key={section.title}>
-                <div className="sidebar_sidebar__general-item__gVnTX sidebar_category_opened__uVDac">
-                  <svg
-                    width="10"
-                    height="6"
-                    viewBox="0 0 10 6"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M1 1L5 5L9 1"
-                      stroke="#878787"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    ></path>
-                  </svg>
-                  <h3 style={{ marginBottom: "5px" }}>{section.title}</h3>
-                </div>
-                {section.items.map((item) => (
-                  <Link
-                    href={
-                      currentPath.startsWith("/server")
-                        ? `/server/${guild ? guild.id : ""}${item.path}`
-                        : item.path
-                    }
-                    key={item.path}
-                  >
-                    <div
-                      className={`sidebar_sidebar__general-item-row__0z2Gp ${
-                        currentPath.includes(item.path)
-                          ? "sidebar_sidebar__link-active__Jepms"
-                          : ""
-                      }`}
+            {sections ? (
+              sections.map((section) => (
+                <div key={section.title}>
+                  <div className="sidebar_sidebar__general-item__gVnTX sidebar_category_opened__uVDac">
+                    <svg
+                      width="10"
+                      height="6"
+                      viewBox="0 0 10 6"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
                     >
-                      <div className="sidebar_sidebar__sidebar-link__1NU9L">
-                        <div>
-                          <i className={`fas fa-${item.icon}`}></i>
-                          {item.title}
-                          {item.new && (
-                            <span className="sidebar_new-component-tag__LpRQP new-component-tag">
-                              NEW
-                            </span>
-                          )}
-                          {item.updated && (
-                            <span className="sidebar_updated-component-tag__LpRQP updated-component-tag">
-                              UPDATED
-                            </span>
-                          )}
-                          {item.premium && (
-                            <span className="sidebar_premium-component-tag__LpRQP premium-component-tag">
-                              PREMIUM
-                            </span>
+                      <path
+                        d="M1 1L5 5L9 1"
+                        stroke="#878787"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      ></path>
+                    </svg>
+                    <h3 style={{ marginBottom: "5px" }}>{section.title}</h3>
+                  </div>
+                  {section.items.map((item) => (
+                    <Link
+                      href={
+                        currentPath.startsWith("/server")
+                          ? `/server/${guild ? guild.id : ""}${item.path}`
+                          : item.path
+                      }
+                      key={item.path}
+                    >
+                      <div
+                        className={`sidebar_sidebar__general-item-row__0z2Gp ${
+                          currentPath.includes(item.path)
+                            ? "sidebar_sidebar__link-active__Jepms"
+                            : ""
+                        }`}
+                      >
+                        <div className="sidebar_sidebar__sidebar-link__1NU9L">
+                          <div>
+                            <i className={`fas fa-${item.icon}`}></i>
+                            {item.title}
+                            {item.new && (
+                              <span className="sidebar_new-component-tag__LpRQP new-component-tag">
+                                NEW
+                              </span>
+                            )}
+                            {item.updated && (
+                              <span className="sidebar_updated-component-tag__LpRQP updated-component-tag">
+                                UPDATED
+                              </span>
+                            )}
+                            {item.premium && (
+                              <span className="sidebar_premium-component-tag__LpRQP vip-component-tag">
+                                PREMIUM
+                              </span>
+                            )}
+                          </div>
+                          {item.status && (
+                            <i
+                              className={
+                                item.status.endsWith("on")
+                                  ? "fa fa-check-circle module-on success-circle"
+                                  : "fas fa-circle iconify sidebar-circle-icon"
+                              }
+                            />
                           )}
                         </div>
                       </div>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            ))}
+                    </Link>
+                  ))}
+                </div>
+              ))
+            ) : (
+              <Loading />
+            )}
           </div>
         </div>
       </aside>

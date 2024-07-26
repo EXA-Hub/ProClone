@@ -1,14 +1,12 @@
 import React from "react";
+import "./Dashboard.css"; // Import the regular CSS file
 
 // Basic inline styles and CSS-in-JS
-const styles = {
+const inlineStyles = {
   component: {
     padding: "16px",
     backgroundColor: "var(--gray-3)",
     transition: "all 0.4s",
-  },
-  overviewContainer: {
-    padding: "10px",
   },
   componentContainer: {
     maxWidth: "1200px",
@@ -30,90 +28,54 @@ const styles = {
 
 const Dashboard: React.FC = () => {
   return (
-    <section style={styles.dashboardContainer}>
-      <div style={styles.component}>
-        <div style={styles.componentContainer}>
+    <section style={inlineStyles.dashboardContainer}>
+      <div style={inlineStyles.component}>
+        <div style={inlineStyles.componentContainer}>
           <div style={{ opacity: 1 }}>
-            <div style={styles.overviewContainer}>
+            <div className="overview-container">
               <div className="row ms-1 me-1 mb-3 gap-3">
-                <div
-                  style={{
-                    border: "1px solid var(--gray-1)",
-                    borderRadius: "24px",
-                    padding: "24px",
-                    width: "100%",
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "space-between",
-                    gap: "1rem",
-                  }}
-                  className="overview_card__MsjbH col-md"
-                >
-                  <div style={styles.cardDiv}>
-                    <i className="fas fa-cedi-sign" style={styles.cardIcon}></i>
+                <div className="overview-card overview-credits col-md">
+                  <div style={inlineStyles.cardDiv}>
+                    <i
+                      className="fas fa-cedi-sign"
+                      style={inlineStyles.cardIcon}
+                    ></i>
                     <div>
                       <h5>Credits</h5>
                     </div>
                   </div>
                   <h3>3,412,700</h3>
                 </div>
-                <div
-                  style={{
-                    border: "1px solid var(--gray-1)",
-                    borderRadius: "24px",
-                    padding: "24px",
-                    width: "100%",
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "space-between",
-                    gap: "1rem",
-                  }}
-                  className="overview_card__MsjbH col-md"
-                >
-                  <div style={styles.cardDiv}>
-                    <i className="fas fa-star" style={styles.cardIcon}></i>
+                <div className="overview-card overview-level col-md">
+                  <div style={inlineStyles.cardDiv}>
+                    <i
+                      className="fas fa-star"
+                      style={inlineStyles.cardIcon}
+                    ></i>
                     <div>
                       <h5>Level</h5>
                     </div>
                   </div>
                   <h3>66</h3>
                 </div>
-                <div
-                  style={{
-                    border: "1px solid var(--gray-1)",
-                    borderRadius: "24px",
-                    padding: "24px",
-                    width: "100%",
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "space-between",
-                    gap: "1rem",
-                  }}
-                  className="overview_card__MsjbH col-md"
-                >
-                  <div style={styles.cardDiv}>
-                    <i className="fas fa-medal" style={styles.cardIcon}></i>
+                <div className="overview-card overview-rank col-md">
+                  <div style={inlineStyles.cardDiv}>
+                    <i
+                      className="fas fa-medal"
+                      style={inlineStyles.cardIcon}
+                    ></i>
                     <div>
                       <h5>Rank</h5>
                     </div>
                   </div>
                   <h3>202,038</h3>
                 </div>
-                <div
-                  style={{
-                    border: "1px solid var(--gray-1)",
-                    borderRadius: "24px",
-                    padding: "24px",
-                    width: "100%",
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "space-between",
-                    gap: "1rem",
-                  }}
-                  className="overview_card__MsjbH col-md"
-                >
-                  <div style={styles.cardDiv}>
-                    <i className="fas fa-star" style={styles.cardIcon}></i>
+                <div className="overview-card overview-reputation col-md">
+                  <div style={inlineStyles.cardDiv}>
+                    <i
+                      className="fas fa-star"
+                      style={inlineStyles.cardIcon}
+                    ></i>
                     <div>
                       <h5>Reputation</h5>
                     </div>
