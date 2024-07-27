@@ -4,11 +4,12 @@ import Image from "next/image";
 import Link from "next/link";
 import Loading from "./Loading";
 import { useRouter } from "next/router";
+import { apiClient } from "@/utils/apiClient";
 
 interface Guild {
   id: string;
   name: string;
-  iconUrl: string;
+  icon: string;
 }
 
 interface SectionItem {
@@ -25,6 +26,13 @@ interface SectionItem {
 interface Section {
   title: string;
   items: SectionItem[];
+}
+
+interface Data {
+  username: string;
+  id: string;
+  avatar: string;
+  guilds: Guild[];
 }
 
 const defSections: Section[] = [
@@ -224,44 +232,41 @@ const defGSections: Section[] = [
   },
 ];
 
+function uava(name: string) {
+  return `https://ui-avatars.com/api/?background=494d54&uppercase=false&color=dbdcdd&size=128&font-size=0.33&name=${encodeURIComponent(
+    name
+  )}`;
+}
+
 const Sidebar: React.FC = () => {
-  const [guilds, setGuilds] = useState<Guild[]>([]);
   const [guild, setGuild] = useState<Guild>();
   const [sections, setSections] = useState<Section[] | null>();
   const currentPath = useRouter().pathname.toString();
+  const [data, setData] = useState<undefined | Data>(undefined);
+
+  useEffect(() => {
+    if (!data)
+      apiClient("/backend/api/guilds", "GET").then((res) => {
+        if (res.data) setData(res.data);
+      });
+  }, [data]);
 
   useEffect(() => {
     if (currentPath.startsWith("/server")) {
-      setSections(defGSections);
-      const wanted = guilds.find((guild) =>
-        window.location.pathname.includes(guild.id)
-      );
-      setGuild(wanted);
+      if (data) {
+        setSections(defGSections);
+        setGuild(
+          data?.guilds.find((guild) =>
+            window.location.pathname.includes(guild.id)
+          )
+        );
+      }
     } else {
       setSections(defSections);
     }
-  }, [currentPath, guilds]);
+  }, [currentPath, data]);
 
-  useEffect(() => {
-    axios
-      .get("/backend/api/guilds")
-      .then((response) => {
-        setGuilds(response.data);
-      })
-      .catch((error) => {
-        console.error("Failed to fetch guilds", error);
-        setGuilds([
-          {
-            id: "1",
-            name: "Guild 1",
-            iconUrl:
-              "https://cdn.discordapp.com/icons/1117832389511622669/a_d305d829622b0291c3001f62873d39f3.gif",
-          },
-          { id: "2", name: "Guild 2", iconUrl: "/image.png" },
-          { id: "3", name: "Guild 3", iconUrl: "/image.png" },
-        ]);
-      });
-  }, []);
+  if (!data) return <Loading />;
 
   return (
     <div className="sidebar_ltr__kXJvp">
@@ -272,7 +277,11 @@ const Sidebar: React.FC = () => {
               <Image
                 width={56}
                 height={56}
-                src="https://cdn.discordapp.com/avatars/635933198035058700/4855c8d3f3dc75d8a0e0f53fe2e58263.png?size=1024"
+                src={
+                  data.avatar
+                    ? `https://cdn.discordapp.com/avatars/${data.id}/${data.avatar}.png`
+                    : uava(data.username)
+                }
                 className="sidebar_guild__images__mjUJ3 sidebar_user_image__aws4U"
                 alt="user"
                 draggable="false"
@@ -280,24 +289,28 @@ const Sidebar: React.FC = () => {
             </Link>
           </div>
         </div>
-        {guilds.map((guildE) => (
+        {data.guilds.map((guildE) => (
           <div className=" " key={guildE.id} style={{ marginBottom: "6px" }}>
             <Link
               onClick={() => {
-                setGuild(guilds.find((g) => g.id === guildE.id));
+                setGuild(data.guilds.find((g) => g.id === guildE.id));
               }}
               href={`/server/${guildE.id}`}
             >
               <Image
-                width={56}
-                height={56}
+                width={128}
+                height={128}
                 className={`sidebar_guild__images__mjUJ3 ${
                   guild && guildE.id === guild.id
                     ? " sidebar_active-server__jGUqw"
                     : ""
                 }`}
                 alt={guildE.name}
-                src={guildE.iconUrl}
+                src={
+                  guildE.icon
+                    ? `https://cdn.discordapp.com/icons/${guildE.id}/${guildE.icon}.png`
+                    : uava(guildE.name)
+                }
                 draggable="false"
               />
             </Link>
@@ -317,8 +330,12 @@ const Sidebar: React.FC = () => {
                 draggable="false"
                 src={
                   currentPath.startsWith("/server") && guild
-                    ? guild.iconUrl
-                    : "https://cdn.discordapp.com/avatars/635933198035058700/4855c8d3f3dc75d8a0e0f53fe2e58263.png?size=1024"
+                    ? guild.icon
+                      ? `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png`
+                      : uava(guild.name)
+                    : data.avatar
+                    ? `https://cdn.discordapp.com/avatars/${data.id}/${data.avatar}.png`
+                    : uava(data.username)
                 }
                 alt="avatar"
               />
@@ -327,7 +344,7 @@ const Sidebar: React.FC = () => {
               <h4>
                 {currentPath.startsWith("/server") && guild
                   ? guild.name
-                  : "zampx"}
+                  : data.username}
               </h4>
             </div>
           </div>

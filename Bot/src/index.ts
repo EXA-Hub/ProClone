@@ -30,7 +30,7 @@ const client: CustomClient = new Client({
       client.config.db === "json"
         ? new JSONDriver("./src/database/data.json")
         : client.config.db === "mongo"
-        ? await new MongoDriver("mongodb://localhost:27017/").connect()
+        ? await new MongoDriver("mongodb://localhost:27017/zampx").connect()
         : client.config.db === "memory"
         ? new MemoryDriver()
         : undefined,
@@ -103,29 +103,53 @@ const client: CustomClient = new Client({
     }
   });
 
-  record(client);
-  api(client);
+  try {
+    record(client);
+    console.log(`👁 Recorder Started`);
+  } catch (error) {
+    console.log(`❌ Recorder Failed`);
+    console.error(error);
+  }
+
+  try {
+    api(client);
+    console.log(`🌐 WEB Started`);
+  } catch (error) {
+    console.log(`❌ WEB Failed`);
+    console.error(error);
+  }
 
   client.login(process.env.DISCORD_BOT_TOKEN);
 })();
 
-// Handle unhandled promise rejections globally
-process.on("unhandledRejection", (error) => {
-  console.error("Unhandled promise rejection:", error);
-  // Optionally, you can notify developers or take other actions as necessary
+//! Handle Errors -------------------------------
+client.on("error", async (error) => {
+  console.error(`[Index] `.padEnd(100, "-"));
+  console.error(error.name + ` : ` + error.message);
+  console.error(error.stack);
 });
 
-// Handle uncaught exceptions globally
-process.on("uncaughtException", (error) => {
-  console.error("Uncaught exception occurred:", error);
-  // Optionally, you can handle or log the error, perform cleanup, and gracefully exit
-  // process.exit(1); // Exit the process with a non-zero status code (1 indicates an error)
+process.on("uncaughtException", async (error, origin) => {
+  console.error(`[Index] uncaughtException `.padEnd(100, "-"));
+  console.error(error.name);
+  console.error(error.message);
 });
 
-// Handle warnings globally (optional)
-process.on("warning", (warning) => {
-  console.warn("Warning occurred:", warning);
-  // Optionally, you can log the warning or take other actions as necessary
+process.on("uncaughtExceptionMonitor", async (error, origin) => {
+  console.error(`[Index] uncaughtExceptionMonitor `.padEnd(100, "-"));
+  console.error(error.name);
+  console.error(error.message);
+});
+
+process.on("unhandledRejection", async (reason, promise) => {
+  console.error(`[Index] unhandledRejection `.padEnd(100, "-"));
+  console.error(reason);
+});
+
+process.on("warning", async (warn) => {
+  console.error(`[Index] warning `.padEnd(100, "-"));
+  console.error(warn.name);
+  console.error(warn.message);
 });
 
 /**

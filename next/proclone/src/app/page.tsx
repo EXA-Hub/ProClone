@@ -6,6 +6,7 @@ import "./page.module.css"; // Import your CSS Module
 import { useEffect, useState } from "react";
 import AOS from "aos";
 import "aos/dist/aos.css"; // Import AOS styles
+import { BASE_URL } from "../utils/apiClient";
 
 export default function Home() {
   const [htmlContent, setHtmlContent] = useState<string | null>(null);
@@ -36,7 +37,7 @@ export default function Home() {
 
     // Open the popup window
     const popup = window.open(
-      "http://localhost:3001/backend/user/login",
+      BASE_URL + "/backend/user/login",
       "LoginPopup",
       `width=${popupWidth},height=${popupHeight},left=${left},top=${top}`
     );
@@ -728,12 +729,16 @@ export default function Home() {
                     <Image
                       alt="Welcome Messages"
                       loading="lazy"
+                      style={{
+                        width: "auto",
+                        height: "auto",
+                        color: "transparent",
+                      }}
                       width="25"
                       height="24"
                       decoding="async"
                       data-nimg="1"
                       className="tw-block"
-                      style={{ color: "transparent" }}
                       src="/welcome-icon.svg"
                     />
                   </div>
@@ -1164,6 +1169,8 @@ export default function Home() {
       <div className="tw-pointer-events-none tw-absolute tw-top-0 tw-w-[100vw] tw-overflow-clip">
         <Image
           src="/landing-bg-min.png"
+          priority
+          style={{ width: "auto", height: "auto" }}
           width="1131"
           height="739"
           alt="bg-min"

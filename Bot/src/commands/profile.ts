@@ -72,16 +72,15 @@ module.exports = {
 
     const title =
       (await client.db.get("title_" + userId)) || "@zampx made that bot";
+    const userBalance = (await client.db.get(`credits.${user.id}`)) || 0;
+    const { image, badges } = (await client.db.get(`profile.${user.id}`)) || {
+      image: null,
+      badges: null,
+    };
 
-    const backgroundFile = "490.png";
+    const backgroundFile = image || "490.png";
     // Array of badge filenames
-    const badgeFiles: string | any[] = [
-      // "001-sign.png",
-      // "003-axe.png",
-      // "fernandez.png",
-      // "006-tent.png",
-      // "014-trailer.png",
-    ];
+    const badgeFiles: string | any[] = badges || [];
 
     // Create canvas
     const canvas = createCanvas(400, 400);
@@ -122,9 +121,7 @@ module.exports = {
     // Load background image
     const icon = await loadImage(
       guild.iconURL({ extension: "png", size: 32 }) ||
-        `https://cdn.discordapp.com/embed/avatars/${Math.floor(
-          Math.random() * 6
-        )}.png`
+        require("../methods/avatar")
     );
     ctx.drawImage(icon, canvas.width - 42, 10, 32, 32);
 
@@ -135,9 +132,10 @@ module.exports = {
 
     // Draw user data
     ctx.fillText(targetUser.username, 150, 40);
-    ctx.fillText(`LVL: ${level}`, 150, 80);
-    ctx.fillText(`XP: ${userXp}`, 150, 100);
-    ctx.fillText(`Rank: #${rank}`, 150, 120);
+    ctx.fillText(`LVL: ${level}`, 150, 70);
+    ctx.fillText(`XP: ${userXp}`, 150, 90);
+    ctx.fillText(`Rank: #${rank}`, 150, 110);
+    ctx.fillText(`Credits: $${userBalance}`, 150, 130);
 
     // Draw progress bar
     const barWidth = canvas.width - 20;

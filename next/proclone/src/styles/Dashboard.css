@@ -1,0 +1,90 @@
+.overview-container {
+  padding: 10px;
+}
+
+.overview-card {
+  border: 1px solid var(--gray-1);
+  border-radius: 24px;
+  padding: 24px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.overview-card:first-child {
+  grid-column: 1/2;
+  grid-row: 1/2;
+}
+
+.overview-card:nth-child(2) {
+  grid-column: 2/3;
+  grid-row: 1/2;
+}
+
+.overview-card:nth-child(3) {
+  grid-column: 3/4;
+  grid-row: 1/2;
+}
+
+.overview-card:nth-child(4) {
+  grid-column: 4/5;
+  grid-row: 1/2;
+}
+
+.overview-card h5,
+.overview-card p {
+  margin: 0;
+}
+
+.overview-card p {
+  color: #c5c5c5;
+}
+
+.overview-card h3 {
+  display: flex;
+}
+
+.overview-card > div,
+.overview-card > div i {
+  display: flex;
+  align-items: center;
+}
+
+.overview-card > div i {
+  justify-content: center;
+  text-align: center;
+  min-height: 40px;
+  min-width: 40px;
+  border-radius: 14px;
+  margin-inline-end: 10px;
+  font-size: 25px;
+}
+
+.overview-credits i {
+  background-color: #6cc1ff;
+  color: #002642;
+}
+
+.overview-level i {
+  background-color: #ffbc6c;
+  color: #693900;
+}
+
+.overview-rank i {
+  background-color: #beff6c;
+  color: #2a4b00;
+}
+
+.overview-reputation i {
+  background-color: #ba9aff;
+  color: #360a6f;
+}
+
+@media screen and (max-width: 768px) {
+  .overview-card {
+    width: 100%;
+    margin: 10px 0;
+  }
+}

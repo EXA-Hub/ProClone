@@ -1,0 +1,194 @@
+.fields_filled-select-input__ZrP9K,
+.fields_outlinedInput__jGZEp {
+  display: flex;
+  flex-direction: column;
+}
+.fields_outlinedInput__jGZEp input {
+  outline: none;
+  background-color: transparent;
+  padding: 10px 15px;
+  border: 1px solid #434350;
+  border-radius: 12px;
+}
+.fields_filled-select-input__ZrP9K select {
+  border-radius: 13px;
+}
+.fields_filled-select-input__ZrP9K select > option {
+  border-radius: 13px !important;
+  width: 2000px;
+  margin: 10px;
+}
+.fields_filled-input__jCTkb {
+  border: none;
+  outline: none;
+  padding: 12px 16px;
+  border-radius: 12px;
+  background-color: var(--purple);
+}
+.fields_filled-input__jCTkb:hover {
+  opacity: 0.8;
+}
+.fields_textarea-Outlined__rmEWy {
+  display: flex;
+  flex-direction: column;
+}
+.fields_textarea-Outlined__rmEWy textarea {
+  padding: 1rem;
+  outline: none;
+  resize: vertical;
+  width: 100% !important;
+  background-color: transparent;
+  border-radius: 12px;
+  border: 1px solid #434350;
+}
+.fields_counting-input__A6ZeZ {
+  width: 151.33px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px;
+  border: 1px solid var(--gray-1);
+  border-radius: 12px;
+  font-size: 14px;
+}
+.fields_counting-input__A6ZeZ button {
+  background-color: var(--gray-1);
+  display: flex;
+  justify-content: center;
+  border-radius: 10px;
+  min-width: 33px;
+  min-height: 33px;
+  font-size: 1rem;
+  align-items: center;
+  border: none;
+}
+.fields_counting-input__A6ZeZ input {
+  width: 90%;
+  background: transparent;
+  text-align: center;
+  outline: none;
+  border: none;
+}
+.fields_counting-input__footer__4WVWQ {
+  color: var(--text-color);
+  font-size: 0.8rem;
+  margin: 5px 0 0;
+}
+.PagesTitle_pages-title__E_aAk {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 2px solid var(--gray-1);
+  margin-bottom: 1rem;
+  padding-bottom: 16px;
+}
+.PagesTitle_pages-title__E_aAk h4 {
+  font-size: 24px;
+}
+.PagesTitle_pages-title__E_aAk h5 {
+  font-size: 14px;
+  opacity: 70%;
+}
+.PagesTitle_pages-title__E_aAk > div:last-child {
+  align-self: center;
+}
+.PagesTitle_reset-settings-button__su_jU {
+  padding: 7px 10px;
+  background-color: transparent;
+  border: 2px solid var(--red);
+  color: var(--red);
+  border-radius: 12px;
+  height: 40px;
+}
+.PagesTitle_reset-settings-button__su_jU i {
+  -webkit-margin-end: 5px;
+  margin-inline-end: 5px;
+  margin-top: 1px;
+  vertical-align: top;
+  transform: rotate(-1turn) !important;
+  transition: all 0.8s ease-in;
+}
+.PagesTitle_reset-settings-button__su_jU:hover i {
+  transform: rotate(1turn) !important;
+  transition: all 0.8s cubic-bezier(0.46, -0.26, 0, 1.57);
+}
+.PagesTitle_reset-settings-button__su_jU:focus,
+.PagesTitle_reset-settings-button__su_jU:hover {
+  background-color: var(--hover-red);
+  border: 2px solid var(--red);
+}
+.PagesTitle_embed-end__pages-title__s2APx {
+  min-width: 35%;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.PagesTitle_embed-end__pages-title__s2APx button {
+  padding: 0.5rem 1rem;
+}
+@media screen and (max-width: 426px) {
+  .PagesTitle_embed-page-title__Mt8Gi {
+    flex-direction: column;
+  }
+  .PagesTitle_embed-end__pages-title__s2APx {
+    margin-top: 1rem;
+    width: 100%;
+  }
+}
+.css-1d8n9bt {
+  -webkit-box-align: center;
+  align-items: center;
+  display: grid;
+  flex: 1 1 0%;
+  flex-wrap: wrap;
+  padding: 2px 8px;
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+.css-1wy0on6 {
+  -webkit-box-align: center;
+  align-items: center;
+  align-self: stretch;
+  display: flex;
+  flex-shrink: 0;
+  box-sizing: border-box;
+}
+.formselect__input {
+  color: #fff !important;
+}
+.css-11unzgr {
+  max-height: 300px;
+  overflow-y: auto;
+  padding-bottom: 4px;
+  padding-top: 4px;
+  position: relative;
+  box-sizing: border-box;
+  margin-top: 10px;
+}
+.css-1pahdxg-control {
+  -webkit-box-align: center;
+  align-items: center;
+  background-color: rgb(255, 255, 255);
+  border-color: rgb(38, 132, 255);
+  border-radius: 4px;
+  border-style: solid;
+  border-width: 1px;
+  box-shadow: rgb(38, 132, 255) 0px 0px 0px 1px;
+  cursor: default;
+  display: flex;
+  flex-wrap: wrap;
+  -webkit-box-pack: justify;
+  justify-content: space-between;
+  min-height: 38px;
+  position: relative;
+  transition: all 100ms ease 0s;
+  box-sizing: border-box;
+  outline: 0px !important;
+}
+.css-1gtu0rj-indicatorContainer {
+  color: rgb(102, 102, 102);
+  display: flex;
+  padding: 8px;
+  transition: color 150ms ease 0s;
+  box-sizing: border-box;
+}

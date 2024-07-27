@@ -1,5 +1,6 @@
-import React from "react";
-import "./Dashboard.css"; // Import the regular CSS file
+import React, { useEffect, useState } from "react";
+import "@/styles/Dashboard.css"; // Import the regular CSS file
+import { apiClient } from "@/utils/apiClient";
 
 // Basic inline styles and CSS-in-JS
 const inlineStyles = {
@@ -26,7 +27,26 @@ const inlineStyles = {
   },
 };
 
+import Loading from "@/components/Loading";
+
 const Dashboard: React.FC = () => {
+  const [data, setData] = useState<
+    | undefined
+    | {
+        Credits: number;
+        level: number;
+        rank: number;
+        rep: number;
+      }
+  >(undefined);
+
+  useEffect(() => {
+    apiClient("/backend/api/user", "GET").then((res) => {
+      setData(res.data);
+    });
+  }, []);
+
+  if (!data) return <Loading />;
   return (
     <section style={inlineStyles.dashboardContainer}>
       <div style={inlineStyles.component}>
@@ -44,7 +64,7 @@ const Dashboard: React.FC = () => {
                       <h5>Credits</h5>
                     </div>
                   </div>
-                  <h3>3,412,700</h3>
+                  <h3>{data.Credits}</h3>
                 </div>
                 <div className="overview-card overview-level col-md">
                   <div style={inlineStyles.cardDiv}>
@@ -56,7 +76,7 @@ const Dashboard: React.FC = () => {
                       <h5>Level</h5>
                     </div>
                   </div>
-                  <h3>66</h3>
+                  <h3>{data.level}</h3>
                 </div>
                 <div className="overview-card overview-rank col-md">
                   <div style={inlineStyles.cardDiv}>
@@ -68,7 +88,7 @@ const Dashboard: React.FC = () => {
                       <h5>Rank</h5>
                     </div>
                   </div>
-                  <h3>202,038</h3>
+                  <h3>{data.rank}</h3>
                 </div>
                 <div className="overview-card overview-reputation col-md">
                   <div style={inlineStyles.cardDiv}>
@@ -80,7 +100,7 @@ const Dashboard: React.FC = () => {
                       <h5>Reputation</h5>
                     </div>
                   </div>
-                  <h3>90</h3>
+                  <h3>{data.rep}</h3>
                 </div>
               </div>
             </div>

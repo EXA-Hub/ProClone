@@ -5,13 +5,42 @@ import { loadRoutes } from "../methods/routers";
 import cookieParser from "cookie-parser";
 import path from "path";
 import axios from "axios";
+import fs from "fs-extra";
+import cors from "cors";
+import NodeCache from "node-cache";
 
 const app = express();
-const port = 3001; // Port for your API server
+
+// Initialize the cache with a TTL of 300 seconds (5 minutes)
+const cache = new NodeCache({ stdTTL: 300 });
 
 export default async (client: CustomClient) => {
+  const port = client.config.port; // Port for your API server
   app.use(express.json()); // Middleware to parse JSON bodies
   app.use(cookieParser()); // Middleware to parse cookies
+
+  if (client.config.CORS) {
+    // Use the CORS middleware
+    app.use(
+      cors({
+        origin: [
+          "http://127.0.0.1:3000",
+          "http://localhost:3000",
+          "http://localhost:3001",
+          "http://127.0.0.1:3001",
+        ], // Allow requests from this origin
+        credentials: true, // Allow credentials (cookies)
+        // optionsSuccessStatus: 200,
+      })
+    );
+  }
+
+  if (client.config.logTraffic) {
+    app.use((req, res, next) => {
+      console.log(`🔗 - ${req.path}`);
+      next();
+    });
+  } else console.log(`🔗 - STOPED LOG TRAFFIC ⭕`);
 
   const router = Router();
 
@@ -64,17 +93,31 @@ export default async (client: CustomClient) => {
             console.log(sessionData);
           }
 
-          // Fetch user data from Discord using the access token from sessionData
-          const userResponse = await axios.get(
-            "https://discord.com/api/v10/users/@me",
-            {
-              headers: {
-                Authorization: `Bearer ${sessionData.access_token}`,
-              },
-            }
-          );
+          const fetchUserData = async (accessToken: string) => {
+            // Check if the data is in the cache
+            const cachedUser = cache.get(accessToken);
+            if (cachedUser) return cachedUser;
 
-          client.apiUser = { ...userResponse.data, ...sessionData };
+            // Fetch user data from Discord API
+            const response = await axios.get(
+              "https://discord.com/api/v10/users/@me",
+              {
+                headers: {
+                  Authorization: `Bearer ${accessToken}`,
+                },
+              }
+            );
+
+            // Cache the user data
+            const userData = response.data;
+            cache.set(accessToken, userData);
+            return userData;
+          };
+
+          // Fetch user data from Discord using the access token from sessionData
+          const userResponse = await fetchUserData(sessionData.access_token);
+
+          client.apiUser = { ...userResponse, ...sessionData };
         }
       }
     } catch (error) {
@@ -82,8 +125,10 @@ export default async (client: CustomClient) => {
       res.status(500).json({ error: "Failed to authenticate user" });
     }
 
-    if (!client.apiUser && ["api"].find((route) => req.path.includes(route)))
-      return res.sendStatus(401);
+    if (!client.apiUser) {
+      if (["api"].find((route) => req.path.includes(route)))
+        return res.sendStatus(401);
+    } else console.log(`᲼↳ From ${client.apiUser.username}`);
 
     next();
   });
@@ -96,6 +141,19 @@ export default async (client: CustomClient) => {
   );
 
   app.use("/", router);
+
+  // Define the path to the images folder
+  fs.readdirSync(path.resolve(__dirname, "../../../Images"), {
+    withFileTypes: true,
+  }).forEach((item) => {
+    if (item.isDirectory()) {
+      app.use(
+        `/cdn/${item.name}`,
+        express.static(path.join(item.parentPath, item.name))
+      );
+      console.log(`🔰 Host - /cdn/${item.name}`);
+    }
+  });
 
   // Error handling middleware
   app.use((err: any, req: Request, res: Response, next: NextFunction) => {

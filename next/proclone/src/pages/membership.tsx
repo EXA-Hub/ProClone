@@ -1,6 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import "./Membership.css";
+import "@/styles/Membership.css";
 
 const Memberships: React.FC = () => {
   return (

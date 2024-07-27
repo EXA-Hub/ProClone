@@ -69,7 +69,7 @@ module.exports = {
     // await client.db.add(`credits_${user.id}`, 570000);
 
     const i18n = client.i18n[await client.getLanguage(guild.id)].credits;
-    const userBalance = (await client.db.get(`credits_${user.id}`)) || 0;
+    const userBalance = (await client.db.get(`credits.${user.id}`)) || 0;
 
     if (!targetUser || targetUser.id === user.id)
       return i18n.balance
@@ -78,7 +78,7 @@ module.exports = {
 
     if (targetUser.bot) return i18n.noBots.replace("{username}", user.username);
 
-    const userCredits = (await client.db.get(`credits_${targetUser.id}`)) || 0;
+    const userCredits = (await client.db.get(`credits.${targetUser.id}`)) || 0;
 
     if (amount === null) {
       // Show balance

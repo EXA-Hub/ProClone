@@ -75,7 +75,11 @@ module.exports = {
         .sort((a: any, b: any) => b[1].voiceXP - a[1].voiceXP)
         .findIndex((u: any) => u[0] === targetUser.id) + 1;
 
-    const backgroundFile = "17.png";
+    const { rank } = (await client.db.get(`profile.${user.id}`)) || {
+      rank: null,
+    };
+
+    const backgroundFile = rank || "17.png";
 
     // Prepare rank card canvas
     const canvas = createCanvas(500, 210);
@@ -104,10 +108,7 @@ module.exports = {
 
     // Load and draw guild icon
     const guildIcon = await loadImage(
-      guild.iconURL({ extension: "png" }) ||
-        `https://cdn.discordapp.com/embed/avatars/${Math.floor(
-          Math.random() * 6
-        )}.png`
+      guild.iconURL({ extension: "png" }) || require("../methods/avatar")
     );
     ctx.drawImage(guildIcon, canvas.width - 84, 20, 64, 64);
 

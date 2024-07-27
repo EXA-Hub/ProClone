@@ -1,0 +1,92 @@
+#transactions_container__E67JK {
+  overflow: auto;
+  border-radius: 20px;
+  border: 1px solid var(--gray-2) !important;
+}
+.transactions_user__NkBQY {
+  justify-content: space-around;
+  height: 60px;
+  align-items: center;
+}
+.transactions_user-balance__9IhCi {
+  width: 100px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.transactions_user-balance__9IhCi img {
+  -webkit-margin-start: 10px;
+  margin-inline-start: 10px;
+}
+.transactions_user-info__lW_MB {
+  width: 300px;
+  align-items: center;
+  display: flex;
+  -webkit-padding-start: 2rem;
+  padding-inline-start: 2rem;
+  -webkit-padding-end: 20px;
+  padding-inline-end: 20px;
+}
+.transactions_user-info__lW_MB p {
+  gap: 5px;
+  margin: 0;
+  unicode-bidi: plaintext;
+  display: flex;
+  direction: ltr;
+}
+.transactions_user-info__lW_MB img {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  pointer-events: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+.transactions_user-credits__tevdX p {
+  margin: 0;
+  display: flex;
+}
+.transactions_user-balance__9IhCi,
+.transactions_user-credits__tevdX,
+.transactions_user-date__zoRT0 {
+  width: 200px;
+}
+.transactions_table__Ge1Ih {
+  width: 100%;
+}
+.transactions_head__u6q1O {
+  height: 60px;
+  background-color: var(--gray-2);
+  -webkit-margin-start: 1rem;
+  margin-inline-start: 1rem;
+}
+.transactions_head__u6q1O > th:first-child {
+  -webkit-padding-start: 2.5rem;
+  padding-inline-start: 2.5rem;
+}
+#transactions_container__E67JK :not(.transactions_border-bottom__2NUQP) {
+  border: 0 !important;
+}
+.transactions_border-bottom__2NUQP {
+  border-bottom: 1px solid #393943 !important;
+}
+@media screen and (max-width: 768px) {
+  .transactions_user-info__lW_MB p {
+    font-size: 13px;
+    overflow: hidden;
+    display: inline-block;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+@media screen and (max-width: 376px) {
+  #transactions_container__E67JK,
+  .transactions_user-credits__tevdX p {
+    font-size: 10px;
+  }
+  .transactions_user-balance__9IhCi img {
+    width: 8px;
+    height: 5px;
+  }
+}

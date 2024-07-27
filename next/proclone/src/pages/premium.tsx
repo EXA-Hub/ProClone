@@ -1,5 +1,5 @@
 import React from "react";
-import "./manage-premium.css";
+import "@/styles/manage-premium.css";
 
 const Premium: React.FC = () => {
   return (

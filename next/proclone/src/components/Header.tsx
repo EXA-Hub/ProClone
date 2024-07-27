@@ -15,6 +15,7 @@ const Header: React.FC = () => {
             height={23.05}
             draggable="false"
             src="/static/logo2.svg"
+            priority
             alt="brand"
           />
         </a>

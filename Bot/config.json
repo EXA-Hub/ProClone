@@ -2,5 +2,8 @@
   "prefix": "#",
   "redirectUri": "http://localhost:3001/backend/user/callback",
   "clientId": "817541222251626497",
-  "db": "mongo"
+  "db": "mongo",
+  "port": 3001,
+  "CORS": true,
+  "logTraffic": false
 }

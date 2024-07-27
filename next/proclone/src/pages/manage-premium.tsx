@@ -1,5 +1,5 @@
 import React from "react";
-import "./manage-premium.css";
+import "@/styles/manage-premium.css";
 import Link from "next/link";
 
 const Premium: React.FC = () => {

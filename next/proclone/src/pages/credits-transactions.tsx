@@ -1,6 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import "./credits.css";
+import "@/styles/credits.css";
 
 const Transactions: React.FC = () => {
   return (

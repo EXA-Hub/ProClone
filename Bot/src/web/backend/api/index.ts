@@ -1,7 +1,6 @@
 // web/api/status.ts
 import { Router, Request, Response } from "express";
 import { CustomClient } from "../../../types";
-import axios from "axios";
 
 const createStatusRouter = (client: CustomClient) => {
   const router = Router();

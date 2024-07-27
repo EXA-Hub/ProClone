@@ -8,7 +8,6 @@ const createRouter = (client: CustomClient) => {
   const router = Router();
 
   router.get("/", async (req: Request, res: Response) => {
-    const { guildId } = req.query;
     try {
       const guildId = req.query.guildId as string;
 
