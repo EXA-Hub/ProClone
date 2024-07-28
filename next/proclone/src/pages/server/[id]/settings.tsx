@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Saver from "@/components/save";
-import "./settings.css";
+import "@/styles/settings.css";
 
 const Settings: React.FC = () => {
   const [lang, setLang] = useState<string>("English");

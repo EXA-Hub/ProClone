@@ -1,5 +1,6 @@
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
+import LazyImage from "@/components/LazyImage";
 import { apiClient, BASE_URL } from "@/utils/apiClient";
 
 interface Image {
@@ -18,6 +19,7 @@ const Profile: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
   const [sort, setSort] = useState<string>("newest");
   const [buy, setBuy] = useState<Image | undefined>(undefined);
+  const [own, setOwn] = useState<boolean>(false);
 
   useEffect(() => {
     apiClient("/backend/api/profile", "get", {
@@ -88,9 +90,19 @@ const Profile: React.FC = () => {
                 </h5>
                 <div
                   className="mt-20 btn btn-success btn-rounded ld-over-inverse"
-                  onClick={() => setBuy(undefined)}
+                  onClick={async () => {
+                    if (!buy.ownerid)
+                      await apiClient("/backend/api/profile", "post", {
+                        data: {
+                          imageKey: buy.filename,
+                          folder: "badges",
+                        },
+                      });
+                    // await apiClient("", "post");
+                    setBuy(undefined);
+                  }}
                 >
-                  Buy &amp; Use{" "}
+                  {!buy.ownerid && "Buy & "}Use{" "}
                 </div>
               </div>
             </div>
@@ -139,6 +151,7 @@ const Profile: React.FC = () => {
                 id="checkbox2"
                 className="form-check-input"
                 type="checkbox"
+                onClick={() => setOwn(!own)}
               />
               <label className="form-check-label ps-2" htmlFor="checkbox2">
                 Owned
@@ -150,9 +163,12 @@ const Profile: React.FC = () => {
         <div className="bglist badges">
           {images
             .filter((img) => {
-              if (selectedCategory !== "All")
-                return img.category === selectedCategory;
-              else return true;
+              if (selectedCategory === "All")
+                return own ? img.ownerid : !img.hidden;
+              else
+                return own
+                  ? img.category === selectedCategory && img.ownerid
+                  : img.category === selectedCategory;
             })
             .sort((a: Image, b: Image) => {
               if (sort === "low_price") return a.price - b.price;
@@ -169,15 +185,13 @@ const Profile: React.FC = () => {
                   <i className="fa-solid fa-cedi-sign" />
                   {img.price}
                 </div>
-                <a className="full-width">
-                  <Image
-                    width={160}
-                    height={220}
-                    className="badges-img"
-                    src={`${BASE_URL}/cdn/badges/${img.filename}`}
-                    alt={img.name}
-                  />
-                </a>
+                <LazyImage
+                  width={160}
+                  height={220}
+                  className="badges-img"
+                  src={`${BASE_URL}/cdn/badges/${img.filename}`}
+                  alt={img.name}
+                />
               </div>
             ))}
         </div>

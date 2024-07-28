@@ -8,6 +8,8 @@ import axios from "axios";
 import fs from "fs-extra";
 import cors from "cors";
 import NodeCache from "node-cache";
+import rateLimiter from "./rateLimiter";
+import chalk from "chalk";
 
 const app = express();
 
@@ -61,7 +63,7 @@ export default async (client: CustomClient) => {
 
           // Check if the access token has expired
           if (currentTime >= sessionData.expires_at) {
-            console.log("token refresh");
+            console.log(chalk.bgBlue(chalk.red(chalk.bold("token refresh"))));
             console.log(sessionData);
             // Access token is expired, attempt to refresh it
             const refreshTokenResponse = await axios.post(
@@ -125,13 +127,16 @@ export default async (client: CustomClient) => {
       res.status(500).json({ error: "Failed to authenticate user" });
     }
 
-    if (!client.apiUser) {
-      if (["api"].find((route) => req.path.includes(route)))
-        return res.sendStatus(401);
-    } else console.log(`᲼↳ From ${client.apiUser.username}`);
+    if (["api"].find((route) => req.path.includes(route)))
+      if (!client.apiUser) return res.sendStatus(401);
+      else if (client.config.logTraffic)
+        console.log(`᲼↳ From ${client.apiUser.username}`);
 
     next();
   });
+
+  if (client.config.rateLimiter) rateLimiter(client, router);
+  else console.log(`⌛ - STOPED RATE LIMITER ⭕`);
 
   await loadRoutes(
     path.join(__dirname, "backend"),
@@ -140,20 +145,20 @@ export default async (client: CustomClient) => {
     client
   );
 
-  app.use("/", router);
-
   // Define the path to the images folder
   fs.readdirSync(path.resolve(__dirname, "../../../Images"), {
     withFileTypes: true,
   }).forEach((item) => {
     if (item.isDirectory()) {
-      app.use(
+      router.use(
         `/cdn/${item.name}`,
         express.static(path.join(item.parentPath, item.name))
       );
       console.log(`🔰 Host - /cdn/${item.name}`);
     }
   });
+
+  app.use("/", router);
 
   // Error handling middleware
   app.use((err: any, req: Request, res: Response, next: NextFunction) => {

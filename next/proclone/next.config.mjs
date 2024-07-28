@@ -2,7 +2,8 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    // formats: ["image/avif", "image/webp", "image/svg+xml"], // Add SVG format
+    formats: ["image/avif", "image/webp"], // Add additional formats if needed
+    dangerouslyAllowSVG: true, // Allow SVG images
     remotePatterns: [
       {
         protocol: "https",
@@ -29,6 +30,13 @@ const nextConfig = {
         pathname: "/**",
       },
     ],
+  },
+  webpack(config) {
+    config.module.rules.push({
+      test: /\.svg$/,
+      use: ["@svgr/webpack"],
+    });
+    return config;
   },
 };
 

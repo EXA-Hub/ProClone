@@ -11,6 +11,13 @@ module.exports = {
   ) {
     // Check if the user is a bot
     if (oldState.member?.user.bot || newState.member?.user.bot) return;
+    if (
+      (oldState.member &&
+        (await client.db.get(`bannedUsers.${oldState.member.user.id}`))) ||
+      (newState.member &&
+        (await client.db.get(`bannedUsers.${newState.member.user.id}`)))
+    )
+      return;
 
     // User joins a voice channel
     if (!oldState.channelId && newState.channelId)

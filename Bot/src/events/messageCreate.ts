@@ -11,6 +11,7 @@ import { CustomClient, commandData } from "../types";
 module.exports = {
   async execute(message: Message, client: CustomClient) {
     if (message.author.bot) return;
+    if (await client.db.get(`bannedUsers.${message.author.id}`)) return;
     if (!message.inGuild()) return;
 
     // Added all commands to aliases fo test Only!?

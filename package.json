@@ -1,0 +1,8 @@
+{
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "scripts": {
+    "dev": "concurrently \"cd next/proclone && npm run dev\" \"cd bot && npm run dev\""
+  }
+}

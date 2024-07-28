@@ -1,2 +1,4 @@
 *.txt
 *.html
+package-lock.json
+node_modules

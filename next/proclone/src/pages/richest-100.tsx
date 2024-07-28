@@ -2256,11 +2256,10 @@ const billionaires: React.FC = () => {
                         width={23}
                         height={23} // You can set the height to the same as width for a square aspect ratio
                         style={{
-                          width: "100%",
+                          width: "23px",
                           height: "auto",
-                          objectFit: "contain",
                         }}
-                        alt={""}
+                        alt={"king"}
                       />
                       <Image
                         height={100}
@@ -2647,11 +2646,10 @@ const billionaires: React.FC = () => {
                         width={23}
                         height={23} // You can set the height to the same as width for a square aspect ratio
                         style={{
-                          width: "100%",
+                          width: "23px",
                           height: "auto",
-                          objectFit: "contain",
                         }}
-                        alt={""}
+                        alt={"king"}
                       />
                       <Image
                         height={100}
@@ -3710,11 +3708,10 @@ const billionaires: React.FC = () => {
                         width={23}
                         height={23} // You can set the height to the same as width for a square aspect ratio
                         style={{
-                          width: "100%",
+                          width: "23px",
                           height: "auto",
-                          objectFit: "contain",
                         }}
-                        alt={""}
+                        alt={"king"}
                       />
                       <Image
                         height={100}

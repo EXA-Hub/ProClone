@@ -5,6 +5,7 @@ import { calculateLevelXP } from "../methods/lvlxp";
 module.exports = {
   async execute(type: Typing, client: CustomClient) {
     if (!type.inGuild() || type.user.bot) return;
+    if (await client.db.get(`bannedUsers.${type.user.id}`)) return;
 
     const collected = await type.channel.awaitMessages({
       filter: (m) => m.author.id === type.user.id,

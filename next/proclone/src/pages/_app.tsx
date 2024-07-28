@@ -1,5 +1,6 @@
 import "../app/globals.css";
 import "@/styles/app.css";
+
 import type { AppProps } from "next/app";
 import Layout from "../components/Layout";
 import Spinner from "@/components/Loading";

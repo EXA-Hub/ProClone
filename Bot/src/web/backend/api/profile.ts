@@ -36,8 +36,50 @@ const createStatusRouter = (client: CustomClient) => {
           }
         );
       else {
-        const data = require("../../../../../Images/imgs.json");
-        res.send(data[type.toString()] || data);
+        type OwnedImages = {
+          image?: string[];
+          badges?: string[];
+          rank?: string[];
+        };
+
+        interface Image {
+          id: number;
+          hidden: boolean;
+          price: number;
+          name: string;
+          store: string;
+          ownerid: null | boolean; // Adjusted to include boolean for owned images
+          filename: string;
+          category: string;
+        }
+
+        type Images = {
+          image: Image[];
+          badges: Image[];
+          rank: Image[];
+        };
+
+        const ownedImages: OwnedImages = (await client.db.get(
+          `ownedImages.${client.apiUser.id}`
+        )) || { image: [], badges: [], rank: [] };
+
+        const data: Images = require("../../../../../Images/imgs.json");
+
+        // Ensure the type is a valid key of Images
+        if (type.toString() in data) {
+          const imageType = type as keyof Images;
+
+          data[imageType].forEach((img) => {
+            if (
+              ownedImages[imageType] &&
+              ownedImages[imageType].includes(img.filename)
+            )
+              img.ownerid = true;
+            else img.ownerid = false;
+          });
+
+          res.send(data[imageType]);
+        } else res.send(data);
       }
     } catch (error) {
       console.error("api error:", error);

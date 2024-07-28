@@ -5,5 +5,6 @@
   "db": "mongo",
   "port": 3001,
   "CORS": true,
-  "logTraffic": false
+  "logTraffic": true,
+  "rateLimiter": true
 }

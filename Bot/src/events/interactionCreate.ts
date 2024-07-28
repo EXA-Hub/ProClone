@@ -31,6 +31,9 @@ default  {
 
 module.exports = {
   async execute(interaction: CommandInteraction, client: CustomClient) {
+    const ban = await client.db.get(`bannedUsers.${interaction.user.id}`);
+    if (ban) return interaction.reply({ ephemeral: true, content: ban });
+
     if (!interaction.guild)
       return interaction.reply({
         content: client.i18n["en"].disabled.serverOnly,
