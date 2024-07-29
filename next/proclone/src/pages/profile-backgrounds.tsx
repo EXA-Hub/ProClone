@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import LazyImage from "@/components/LazyImage";
 import { apiClient, BASE_URL } from "@/utils/apiClient";
+import Swal from "sweetalert2";
 
 interface Image {
   id: number;
@@ -9,7 +10,7 @@ interface Image {
   price: number;
   name: string;
   store: string;
-  ownerid: null;
+  ownerid: boolean;
   filename: string;
   category: string;
 }
@@ -92,14 +93,31 @@ const Profile: React.FC = () => {
                   className="mt-20 btn btn-success btn-rounded ld-over-inverse"
                   onClick={async () => {
                     if (!buy.ownerid)
-                      await apiClient("/backend/api/profile", "post", {
+                      await apiClient("/backend/api/profile/buy", "post", {
                         data: {
                           imageKey: buy.filename,
                           folder: "profile",
                         },
                       });
-                    // await apiClient("", "post");
+                    await apiClient("/backend/api/profile/set", "put", {
+                      data: { image: buy.filename },
+                    });
                     setBuy(undefined);
+                    setImages(
+                      images.map((img) => {
+                        if (img.id === buy.id) img.ownerid = true;
+                        return img;
+                      })
+                    );
+                    Swal.fire({
+                      title: "Background has been changed 👌",
+                      icon: "success",
+                      toast: true,
+                      position: "top-end",
+                      showConfirmButton: false,
+                      timer: 3000,
+                      timerProgressBar: true,
+                    });
                   }}
                 >
                   {!buy.ownerid && "Buy & "}Use{" "}

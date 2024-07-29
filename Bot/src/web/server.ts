@@ -128,7 +128,8 @@ export default async (client: CustomClient) => {
     }
 
     if (["api"].find((route) => req.path.includes(route)))
-      if (!client.apiUser) return res.sendStatus(401);
+      if (!client.apiUser || !client.apiUser.username)
+        return res.sendStatus(401);
       else if (client.config.logTraffic)
         console.log(`᲼↳ From ${client.apiUser.username}`);
 

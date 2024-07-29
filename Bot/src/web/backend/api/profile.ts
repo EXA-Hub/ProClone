@@ -15,8 +15,9 @@ const createStatusRouter = (client: CustomClient) => {
       const ownedImages: Array<string> =
         (await client.db.get(`ownedImages.${client.apiUser.id}.${folder}`)) ||
         [];
+
       return Array.isArray(image)
-        ? image.length > 6
+        ? image.length < 6
           ? image.every((img) => ownedImages.includes(img))
           : false
         : ownedImages.includes(image);
@@ -90,7 +91,7 @@ const createStatusRouter = (client: CustomClient) => {
   });
 
   // Handle PUT requests to update user profile
-  router.put("/", async (req: Request, res: Response) => {
+  router.put("/set", async (req: Request, res: Response) => {
     try {
       if (Object.entries(req.body).length === 0)
         return res.status(400).json({ error: "Request body cannot be empty" });
@@ -114,6 +115,7 @@ const createStatusRouter = (client: CustomClient) => {
           return fs.existsSync(filePath);
         },
         array: (value: string[], folder: string) => {
+          if (value.length > 5) return res.status(400).send("max badges is 5");
           return [...value].every((v) => {
             const filePath = path.join(
               __dirname,
@@ -153,7 +155,10 @@ const createStatusRouter = (client: CustomClient) => {
           }
 
           if (await imageOwnershipCheck(value, folder))
-            return client.db.set(`profile.${client.apiUser.id}.${key}`, value);
+            return await client.db.set(
+              `profile.${client.apiUser.id}.${key}`,
+              value
+            );
           else
             return Promise.reject(
               new Error(`User does not own the image ${value}`)
@@ -173,7 +178,7 @@ const createStatusRouter = (client: CustomClient) => {
     }
   });
 
-  router.post("/", async (req: Request, res: Response) => {
+  router.post("/buy", async (req: Request, res: Response) => {
     try {
       if (Object.keys(req.body).length === 0) {
         return res.status(400).json({ error: "Request body cannot be empty" });
@@ -188,25 +193,30 @@ const createStatusRouter = (client: CustomClient) => {
 
       if (!images) return res.status(400).json({ error: "Invalid folder" });
 
-      const image = images.find((img: any) => img.filename === imageKey);
+      const purchasePromises = [...imageKey].map(async (imgKey) => {
+        const image = images.find((img: any) => img.filename === imgKey);
 
-      if (!image) return res.status(400).json({ error: "Image not found" });
+        if (!image) return res.status(400).json({ error: "Image not found" });
 
-      const userId = client.apiUser.id; // Assuming client.apiUser.id is the logged-in user ID
-      const userCredits = (await client.db.get(`credits.${userId}`)) || 0;
+        const userId = client.apiUser.id; // Assuming client.apiUser.id is the logged-in user ID
+        const userCredits = (await client.db.get(`credits.${userId}`)) || 0;
 
-      if (userCredits < image.price)
-        return res.status(400).json({ error: "You poor!" });
+        if (userCredits < image.price)
+          return res.status(400).json({ error: "You poor!" });
 
-      // Deduct the price and complete the purchase
-      await client.db.sub(`credits.${userId}`, image.price);
-      // You might want to store the purchase or update user's profile with the purchased image here
+        // Deduct the price and complete the purchase
+        await client.db.sub(`credits.${userId}`, image.price);
+        // You might want to store the purchase or update user's profile with the purchased image here
 
-      // Add purchased image to the user's owned images
-      await client.db.push(
-        `ownedImages.${client.apiUser.id}.${folder}`,
-        image.filename
-      );
+        // Add purchased image to the user's owned images
+        await client.db.push(
+          `ownedImages.${client.apiUser.id}.${folder}`,
+          image.filename
+        );
+      });
+
+      // Wait for all purchase promises to complete
+      await Promise.all(purchasePromises);
 
       res.json({ success: "Image purchased successfully" });
     } catch (error) {

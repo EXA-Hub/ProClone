@@ -3,9 +3,6 @@ import { CustomClient } from "../types"; // Ensure this import points to the cor
 import rateLimit from "express-rate-limit";
 import apicache from "apicache";
 
-// Initialize the cache
-const cache = apicache.middleware;
-
 const rateLimiter = (client: CustomClient, app: Router) => {
   // Rate limiter configuration
   const limiter = rateLimit({
@@ -33,7 +30,15 @@ const rateLimiter = (client: CustomClient, app: Router) => {
         return res.sendStatus(403);
 
       // Apply the apicache middleware for response caching
-      cache("5 minutes")(req, res, next);
+      apicache
+        .options({
+          debug: true,
+          enabled: true,
+          respectCacheControl: true,
+          jsonp: true,
+          defaultDuration: "1 minutes",
+        })
+        .middleware("1 minutes")(req, res, next);
     } else next();
   });
 };
