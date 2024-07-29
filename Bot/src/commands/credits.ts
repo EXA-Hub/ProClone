@@ -83,16 +83,16 @@ module.exports = {
     if (amount === null) {
       // Show balance
       return i18n.otherBalance
-        .replace("{username}", user.username)
+        .replace("{username}", targetUser.username)
         .replace("{balance}", userCredits);
     } else {
       // Transfer credits
       if (userBalance < amount) return i18n.lessMoney;
 
-      const afterTax = amount - (amount * 5) / 100;
+      const afterTax = Math.floor(amount - (amount * 5) / 100);
 
-      await client.db.add(`credits_${targetUser.id}`, afterTax);
-      await client.db.sub(`credits_${user.id}`, amount);
+      await client.db.add(`credits.${targetUser.id}`, afterTax);
+      await client.db.sub(`credits.${user.id}`, amount);
 
       await targetUser
         .send(

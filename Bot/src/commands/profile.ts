@@ -51,6 +51,8 @@ module.exports = {
         user.username
       );
 
+    interaction.deferReply();
+
     // Fetch user data and all users' XP data from the database
     const xpData = (await client.db.get("xp")) || {};
     const userId = targetUser.id;
@@ -72,8 +74,10 @@ module.exports = {
 
     const title =
       (await client.db.get("title_" + userId)) || "@zampx made that bot";
-    const userBalance = (await client.db.get(`credits.${user.id}`)) || 0;
-    const { image, badges } = (await client.db.get(`profile.${user.id}`)) || {
+    const userBalance = (await client.db.get(`credits.${targetUser.id}`)) || 0;
+    const { image, badges } = (await client.db.get(
+      `profile.${targetUser.id}`
+    )) || {
       image: null,
       badges: null,
     };
@@ -228,14 +232,14 @@ module.exports = {
     // Convert canvas to buffer and send as an attachment
     const buffer = canvas.toBuffer();
 
-    return {
+    return interaction.followUp({
       files: [
         {
           attachment: buffer,
           name: "profile.png",
         },
       ],
-    };
+    });
   },
 };
 

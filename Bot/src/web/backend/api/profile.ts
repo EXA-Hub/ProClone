@@ -10,19 +10,21 @@ const createStatusRouter = (client: CustomClient) => {
   const imageOwnershipCheck = async (
     image: string | Array<string>,
     folder: string
-  ) => {
-    if (image) {
-      const ownedImages: Array<string> =
-        (await client.db.get(`ownedImages.${client.apiUser.id}.${folder}`)) ||
-        [];
+  ): Promise<boolean> => {
+    // Retrieve owned images for the user from the database
+    const ownedImages: Array<string> =
+      (await client.db.get(`ownedImages.${client.apiUser.id}.${folder}`)) || [];
 
-      return Array.isArray(image)
-        ? image.length < 6
-          ? image.every((img) => ownedImages.includes(img))
-          : false
-        : ownedImages.includes(image);
+    // Check if the input is an array or a single string
+    if (Array.isArray(image)) {
+      // Check if the array length is less than 6 and if all images are owned
+      return (
+        image.length < 6 && image.every((img) => ownedImages.includes(img))
+      );
+    } else {
+      // Check if the single image is owned
+      return ownedImages.includes(image);
     }
-    return true;
   };
 
   router.get("/", async (req: Request, res: Response) => {
@@ -180,9 +182,8 @@ const createStatusRouter = (client: CustomClient) => {
 
   router.post("/buy", async (req: Request, res: Response) => {
     try {
-      if (Object.keys(req.body).length === 0) {
+      if (Object.keys(req.body).length === 0)
         return res.status(400).json({ error: "Request body cannot be empty" });
-      }
 
       const { imageKey, folder } = req.body;
 
@@ -193,32 +194,43 @@ const createStatusRouter = (client: CustomClient) => {
 
       if (!images) return res.status(400).json({ error: "Invalid folder" });
 
-      const purchasePromises = [...imageKey].map(async (imgKey) => {
-        const image = images.find((img: any) => img.filename === imgKey);
+      // Normalize imageKey to an array
+      const imageKeys = Array.isArray(imageKey) ? imageKey : [imageKey];
 
-        if (!image) return res.status(400).json({ error: "Image not found" });
+      // Find images and user credits in parallel
+      const userId = client.apiUser.id; // Assuming client.apiUser.id is the logged-in user ID
+      const userCredits = (await client.db.get(`credits.${userId}`)) || 0;
 
-        const userId = client.apiUser.id; // Assuming client.apiUser.id is the logged-in user ID
-        const userCredits = (await client.db.get(`credits.${userId}`)) || 0;
+      // Check if all images exist and the user has enough credits
+      const imageDetails = imageKeys.map((imgKey) =>
+        images.find((img: any) => img.filename === imgKey)
+      );
+      const missingImages = imageDetails.filter((img) => !img);
+      if (missingImages.length > 0)
+        return res.status(400).json({ error: "Some images not found" });
 
-        if (userCredits < image.price)
-          return res.status(400).json({ error: "You poor!" });
+      const totalPrice = imageDetails.reduce(
+        (total, img) => total + img.price,
+        0
+      );
+      if (totalPrice > userCredits)
+        return res.status(402).json({ error: "Insufficient credits" });
 
-        // Deduct the price and complete the purchase
-        await client.db.sub(`credits.${userId}`, image.price);
-        // You might want to store the purchase or update user's profile with the purchased image here
+      // Deduct the price in one call
+      await client.db.sub(`credits.${userId}`, totalPrice);
 
-        // Add purchased image to the user's owned images
-        await client.db.push(
-          `ownedImages.${client.apiUser.id}.${folder}`,
-          image.filename
-        );
-      });
+      // Prepare images to push
+      const imagesToPush = imageDetails.map((img) => img.filename);
 
-      // Wait for all purchase promises to complete
-      await Promise.all(purchasePromises);
+      // Fetch existing images and merge with new images
+      const existingImages =
+        (await client.db.get(`ownedImages.${userId}.${folder}`)) || [];
+      const updatedImages = [...new Set([...existingImages, ...imagesToPush])]; // Use Set to avoid duplicates
 
-      res.json({ success: "Image purchased successfully" });
+      // Save updated images
+      await client.db.set(`ownedImages.${userId}.${folder}`, updatedImages);
+
+      res.json({ success: "Images purchased successfully" });
     } catch (error) {
       console.error("API error:", error);
       res

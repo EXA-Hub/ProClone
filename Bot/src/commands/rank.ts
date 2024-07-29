@@ -49,6 +49,8 @@ module.exports = {
         user.username
       );
 
+    interaction.deferReply();
+
     // Fetch user data and all users' XP data from the database
     const xpData = (await client.db.get(`xp_${guild.id}`)) || {};
     const userData: {
@@ -75,7 +77,7 @@ module.exports = {
         .sort((a: any, b: any) => b[1].voiceXP - a[1].voiceXP)
         .findIndex((u: any) => u[0] === targetUser.id) + 1;
 
-    const { rank } = (await client.db.get(`profile.${user.id}`)) || {
+    const { rank } = (await client.db.get(`profile.${targetUser.id}`)) || {
       rank: null,
     };
 
@@ -204,13 +206,13 @@ module.exports = {
       );
     }
 
-    return {
+    return interaction.followUp({
       files: [
         {
           attachment: buffer,
           name: "profile.png",
         },
       ],
-    };
+    });
   },
 };

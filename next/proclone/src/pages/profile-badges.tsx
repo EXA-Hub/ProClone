@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import LazyImage from "@/components/LazyImage";
 import { apiClient, BASE_URL } from "@/utils/apiClient";
 import Swal from "sweetalert2";
-import Saver from "@/components/save";
 import Save from "@/components/save";
 
 // Define the Image interface
@@ -200,28 +199,24 @@ const Badges: React.FC = () => {
             },
           })
             .then((data) => {
-              if (data.success)
-                return Promise.resolve(); // Resolve when successful
-              else {
-                Swal.fire(`${data.error}`, "", "info");
-                return Promise.reject(new Error(`${data.error}`)); // Reject if there's an error
-              }
-            })
-            .catch((error) => {
-              console.error(error);
-              Swal.fire("ERROR!", "", "error");
-              return Promise.reject(error); // Reject on error
-            });
-
-          // Send updated badges to server
-          await apiClient("/backend/api/profile/set", "PUT", {
-            data: { badges: userBadges },
-          })
-            .then((data) => {
               if (data.success) {
-                setSaver({ view: false, userBadges });
-                Swal.fire("Saved!", "", "success");
-              } else Swal.fire("Not Saved!", "", "warning");
+                // Send updated badges to server
+                apiClient("/backend/api/profile/set", "PUT", {
+                  data: { badges: userBadges },
+                })
+                  .then((data) => {
+                    if (data.success) {
+                      setSaver({ view: false, userBadges });
+                      Swal.fire("Saved!", "", "success");
+                    } else Swal.fire("Not Saved!", "", "warning");
+                  })
+                  .catch((error) => {
+                    console.error(error);
+                    Swal.fire("ERROR!", "", "error");
+                  });
+              } else {
+                Swal.fire(`${data.error}`, "", "info");
+              }
             })
             .catch((error) => {
               console.error(error);
