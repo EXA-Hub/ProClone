@@ -3,6 +3,7 @@
     "concurrently": "^8.2.2"
   },
   "scripts": {
-    "dev": "concurrently \"cd next/proclone && npm run dev\" \"cd bot && npm run dev\""
+    "dev": "concurrently \"cd next/proclone && npm run dev\" \"cd bot && npm run dev\"",
+    "github": "concurrently \"cd next/proclone && npm i && npm run dev\" \"cd bot && npm i && npm run dev\""
   }
 }

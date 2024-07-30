@@ -92,31 +92,56 @@ const Backgrounds: React.FC = () => {
                 <div
                   className="mt-20 btn btn-success btn-rounded ld-over-inverse"
                   onClick={async () => {
-                    if (!buy.ownerid)
-                      await apiClient("/backend/api/profile/buy", "post", {
-                        data: {
-                          imageKey: buy.filename,
-                          folder: "bg",
-                        },
+                    if (
+                      !buy.ownerid &&
+                      !(
+                        await apiClient("/backend/api/profile/buy", "post", {
+                          data: {
+                            imageKey: buy.filename,
+                            folder: "bg",
+                          },
+                        })
+                      ).success
+                    )
+                      return Swal.fire({
+                        title: "Can't buy Image",
+                        icon: "error",
+                        toast: true,
+                        position: "top-end",
+                        showConfirmButton: false,
+                        timer: 3000,
+                        timerProgressBar: true,
                       });
                     await apiClient("/backend/api/profile/set", "put", {
                       data: { rank: buy.filename },
-                    });
-                    setBuy(undefined);
-                    setImages(
-                      images.map((img) => {
-                        if (img.id === buy.id) img.ownerid = true;
-                        return img;
-                      })
-                    );
-                    Swal.fire({
-                      title: "Background has been changed 👌",
-                      icon: "success",
-                      toast: true,
-                      position: "top-end",
-                      showConfirmButton: false,
-                      timer: 3000,
-                      timerProgressBar: true,
+                    }).then((data) => {
+                      if (data.success) {
+                        setBuy(undefined);
+                        setImages(
+                          images.map((img) => {
+                            if (img.id === buy.id) img.ownerid = true;
+                            return img;
+                          })
+                        );
+                        Swal.fire({
+                          title: "Background has been changed 👌",
+                          icon: "success",
+                          toast: true,
+                          position: "top-end",
+                          showConfirmButton: false,
+                          timer: 3000,
+                          timerProgressBar: true,
+                        });
+                      } else
+                        Swal.fire({
+                          title: "Can't use Image",
+                          icon: "error",
+                          toast: true,
+                          position: "top-end",
+                          showConfirmButton: false,
+                          timer: 3000,
+                          timerProgressBar: true,
+                        });
                     });
                   }}
                 >

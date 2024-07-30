@@ -51,19 +51,20 @@ const rateLimiter = (client: CustomClient, app: Router) => {
       .digest("hex");
 
     // Check if response is cached
-    const cachedResponse = cache.get(key);
+    const cachedResponse = cache.get(key) as any;
     if (cachedResponse) {
       console.log(
         chalk.green("[ CACHE RESPONSE ]: " + keyData.method + keyData.path)
       );
-      return res.send(cachedResponse);
+      res.status(cachedResponse.statusCode).send(cachedResponse.body);
+      return;
     }
 
     // Override res.send to cache the response
     const originalSend = res.send.bind(res);
     res.send = (body) => {
       if (!res.headersSent) {
-        cache.set(key, body);
+        cache.set(key, { statusCode: res.statusCode, body });
         return originalSend(body);
       }
       return res;
@@ -73,7 +74,7 @@ const rateLimiter = (client: CustomClient, app: Router) => {
     const originalJson = res.json.bind(res);
     res.json = (body) => {
       if (!res.headersSent) {
-        cache.set(key, body);
+        cache.set(key, { statusCode: res.statusCode, body });
         return originalJson(body);
       }
       return res;
@@ -83,7 +84,7 @@ const rateLimiter = (client: CustomClient, app: Router) => {
     const originalJsonp = res.jsonp.bind(res);
     res.jsonp = (body) => {
       if (!res.headersSent) {
-        cache.set(key, body);
+        cache.set(key, { statusCode: res.statusCode, body });
         return originalJsonp(body);
       }
       return res;
@@ -93,7 +94,7 @@ const rateLimiter = (client: CustomClient, app: Router) => {
     const originalSendStatus = res.sendStatus.bind(res);
     res.sendStatus = (statusCode) => {
       if (!res.headersSent) {
-        cache.set(key, statusCode);
+        cache.set(key, { statusCode, body: null });
         return originalSendStatus(statusCode);
       }
       return res;

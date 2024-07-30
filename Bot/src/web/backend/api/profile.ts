@@ -100,6 +100,8 @@ const createStatusRouter = (client: CustomClient) => {
 
       const { image, badges, rank } = req.body;
 
+      if (!(image || badges || rank)) res.status(404).send("Only DATA!");
+
       const validations = [
         { key: "image", value: image, type: "string", folder: "profile" },
         { key: "badges", value: badges, type: "array", folder: "badges" },

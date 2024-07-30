@@ -14,7 +14,7 @@ import chalk from "chalk";
 const app = express();
 
 // Initialize the cache with a TTL of 300 seconds (5 minutes)
-const cache = new NodeCache({ stdTTL: 300 });
+const cache = new NodeCache({ stdTTL: 3000 });
 
 export default async (client: CustomClient) => {
   const port = client.config.port; // Port for your API server
@@ -97,8 +97,13 @@ export default async (client: CustomClient) => {
 
           const fetchUserData = async (accessToken: string) => {
             // Check if the data is in the cache
-            const cachedUser = cache.get(accessToken);
-            if (cachedUser) return cachedUser;
+            const cachedUser = cache.get(accessToken) as any;
+            if (cachedUser) {
+              console.log(
+                chalk.green("[ CACHE USER ]: " + cachedUser.username)
+              );
+              return cachedUser;
+            }
 
             // Fetch user data from Discord API
             const response = await axios.get(
