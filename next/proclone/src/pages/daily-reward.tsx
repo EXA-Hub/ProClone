@@ -325,7 +325,6 @@ Z
                     className="daily-logo-text"
                     onClick={async () => {
                       const res = await addDaily();
-                      console.log(res);
                       if (res.success) setData(res.data);
                       else setErr(true);
                     }}

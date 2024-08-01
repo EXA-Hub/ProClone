@@ -10,7 +10,8 @@ const createStatusRouter = (client: CustomClient) => {
       const { type } = req.query;
       if (!type || !["xp", "credits"].includes(type.toString()))
         return res.status(404).send("Invalid Top Type");
-      res.json(
+
+      const topUsers = await Promise.all(
         Object.entries(
           ((await client.db.get(type.toString())) || {}) as {
             [userId: string]: number;
@@ -30,6 +31,8 @@ const createStatusRouter = (client: CustomClient) => {
             };
           })
       );
+
+      res.json(topUsers);
     } catch (error) {
       console.error("api error:", error);
       res.status(500).json({ error: "An error occurred while retrieving top" });

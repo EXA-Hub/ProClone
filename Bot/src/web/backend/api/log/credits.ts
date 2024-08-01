@@ -4,15 +4,37 @@ import { CustomClient } from "../../../../types";
 const creditsLogsRouter = (client: CustomClient) => {
   const router = Router();
 
+  interface User {
+    Date: number;
+    Amount: number;
+    Balance: number;
+    User: string;
+    Reason?: string;
+  }
+
   router.get("/", async (req: Request, res: Response) => {
     try {
       const page = parseInt(req.query.page?.toString() || "0");
-      res.json(
-        ((await client.db.get(`creditsLogs.${client.apiUser.id}`)) as []).slice(
-          page * 20,
-          20 + page * 20
-        )
+
+      // Use Promise.all to handle asynchronous operations inside map
+      const enrichedLogs = await Promise.all(
+        ((await client.db.get(`creditsLogs.${client.apiUser.id}`)) as User[])
+          .slice(page * 20, (page + 1) * 20)
+          .map(async (user) => {
+            const userData =
+              client.users.cache.get(user.User) ||
+              (await client.users.fetch(user.User));
+            return {
+              ...user,
+              User: {
+                username: userData.username,
+                avatar: userData.displayAvatarURL(),
+              },
+            };
+          })
       );
+
+      res.json(enrichedLogs);
     } catch (error) {
       console.error("api error:", error);
       res

@@ -1,8 +1,25 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import "@/styles/credits.css";
+import { apiClient } from "@/utils/apiClient";
+
+interface User {
+  Date: number;
+  Amount: number;
+  Balance: number;
+  User: string;
+  Reason?: string;
+}
 
 const Transactions: React.FC = () => {
+  const [Data, setData] = useState<User[]>([]);
+
+  useEffect(() => {
+    apiClient("/backend/api/log/credits", "get").then((res) => {
+      if (res.success) setData(res.data);
+    });
+  }, []);
+
   return (
     <section className="dashboard-container ">
       <div className="component">
@@ -748,7 +765,7 @@ const Transactions: React.FC = () => {
                 </tbody>
               </table>
             </div>
-            <nav aria-label="Page navigation" className="pagination-parent ">
+            {/* <nav aria-label="Page navigation" className="pagination-parent ">
               <ul className="pagination">
                 <li className="previous disabled">
                   <a>
@@ -797,7 +814,22 @@ const Transactions: React.FC = () => {
                   </a>
                 </li>
               </ul>
-            </nav>
+            </nav> */}
+            {/* <nav aria-label="Page navigation" className="pagination-parent ">
+              <>
+                <ReactPaginate
+                  previousLabel={<i className="fas fa-angle-left"></i>}
+                  nextLabel={<i className="fas fa-angle-right"></i>}
+                  breakLabel="..."
+                  pageCount={57}
+                  marginPagesDisplayed={1}
+                  pageRangeDisplayed={3}
+                  onPageChange={(selectedItem) => console.log(selectedItem)}
+                  containerClassName={"pagination"}
+                  activeClassName={"active"}
+                />
+              </>
+            </nav> */}
           </div>
           <div style={{ height: "100px" }} />
         </div>
