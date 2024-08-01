@@ -123,6 +123,25 @@ export default function record(client: CustomClient) {
       }
     }
   );
+
+  client.on(
+    "credits",
+    async (
+      userId: Snowflake,
+      Amount: number,
+      Balance: number,
+      User: Snowflake,
+      Reason
+    ) => {
+      await client.db.push(`creditsLogs.${userId}`, {
+        Date: Date.now(),
+        Amount,
+        Balance,
+        User,
+        Reason,
+      });
+    }
+  );
 }
 
 // Function to retrieve data for the last number of days

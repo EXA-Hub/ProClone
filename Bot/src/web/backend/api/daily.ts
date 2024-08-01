@@ -53,8 +53,8 @@ const createStatusRouter = (client: CustomClient) => {
 
       // Update the user's credits in the database
       const creditsKey = `credits.${userId}`;
-      const currentCredits = (await client.db.get(creditsKey)) || 0;
-      const newCredits = currentCredits + randomCredits;
+      const newCredits =
+        ((await client.db.get(creditsKey)) || 0) + randomCredits;
       await client.db.set(creditsKey, newCredits);
 
       // Update the last claimed timestamp to the current time
@@ -64,6 +64,15 @@ const createStatusRouter = (client: CustomClient) => {
         daily: randomCredits,
         db: newCredits,
       });
+
+      client.emit(
+        "credits",
+        userId,
+        randomCredits,
+        newCredits,
+        client.user?.id || userId,
+        "Daily claimed"
+      );
     } catch (error) {
       console.error("api error:", error);
       res

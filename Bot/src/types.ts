@@ -1,7 +1,7 @@
 import {
   APIInteractionGuildMember,
-  Channel,
   Client,
+  ClientEvents,
   Collection,
   CommandInteraction,
   Guild,
@@ -38,6 +38,23 @@ interface Command {
   };
 }
 
+// Extend ClientEvents to include custom events
+interface CustomClientEvents extends ClientEvents {
+  xpUpdate: [
+    guildId: Snowflake,
+    userId: Snowflake,
+    xp: number,
+    type: "textXP" | "voiceXP"
+  ];
+  credits: [
+    userId: Snowflake,
+    amount: number,
+    balance: number,
+    user: Snowflake,
+    reason?: string
+  ];
+}
+
 export interface CustomClient extends Client {
   voiceTimes: Collection<string, number>;
   apiUser: any | undefined;
@@ -49,6 +66,49 @@ export interface CustomClient extends Client {
   i18n: { [key: string]: typeof i18nJson };
   deletedMessages: Collection<Snowflake, Snowflake[]>;
   getLanguage: (guildId: string) => Promise<string>;
+
+  on<Event extends keyof CustomClientEvents>(
+    event: Event,
+    listener: (...args: CustomClientEvents[Event]) => void
+  ): this;
+  on<Event extends string | symbol>(
+    event: Exclude<Event, keyof CustomClientEvents>,
+    listener: (...args: any[]) => void
+  ): this;
+
+  once<Event extends keyof CustomClientEvents>(
+    event: Event,
+    listener: (...args: CustomClientEvents[Event]) => void
+  ): this;
+  once<Event extends string | symbol>(
+    event: Exclude<Event, keyof CustomClientEvents>,
+    listener: (...args: any[]) => void
+  ): this;
+
+  emit<Event extends keyof CustomClientEvents>(
+    event: Event,
+    ...args: CustomClientEvents[Event]
+  ): boolean;
+  emit<Event extends string | symbol>(
+    event: Exclude<Event, keyof CustomClientEvents>,
+    ...args: unknown[]
+  ): boolean;
+
+  off<Event extends keyof CustomClientEvents>(
+    event: Event,
+    listener: (...args: CustomClientEvents[Event]) => void
+  ): this;
+  off<Event extends string | symbol>(
+    event: Exclude<Event, keyof CustomClientEvents>,
+    listener: (...args: any[]) => void
+  ): this;
+
+  removeAllListeners<Event extends keyof CustomClientEvents>(
+    event?: Event
+  ): this;
+  removeAllListeners<Event extends string | symbol>(
+    event?: Exclude<Event, keyof CustomClientEvents>
+  ): this;
 }
 
 export interface commandData {

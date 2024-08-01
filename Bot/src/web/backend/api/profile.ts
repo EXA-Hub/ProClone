@@ -196,43 +196,50 @@ const createStatusRouter = (client: CustomClient) => {
 
       if (!images) return res.status(400).json({ error: "Invalid folder" });
 
-      // Normalize imageKey to an array
-      const imageKeys = Array.isArray(imageKey) ? imageKey : [imageKey];
-
       // Find images and user credits in parallel
       const userId = client.apiUser.id; // Assuming client.apiUser.id is the logged-in user ID
-      const userCredits = (await client.db.get(`credits.${userId}`)) || 0;
 
       // Check if all images exist and the user has enough credits
-      const imageDetails = imageKeys.map((imgKey) =>
-        images.find((img: any) => img.filename === imgKey)
-      );
-      const missingImages = imageDetails.filter((img) => !img);
-      if (missingImages.length > 0)
+      const imageDetails = (
+        Array.isArray(imageKey) ? imageKey : [imageKey]
+      ).map((imgKey) => images.find((img: any) => img.filename === imgKey));
+
+      if (imageDetails.filter((img) => !img).length > 0)
         return res.status(400).json({ error: "Some images not found" });
 
       const totalPrice = imageDetails.reduce(
         (total, img) => total + img.price,
         0
       );
-      if (totalPrice > userCredits)
+
+      if (totalPrice > ((await client.db.get(`credits.${userId}`)) || 0))
         return res.status(402).json({ error: "Insufficient credits" });
 
       // Deduct the price in one call
-      await client.db.sub(`credits.${userId}`, totalPrice);
+      const sub = await client.db.sub(`credits.${userId}`, totalPrice);
 
-      // Prepare images to push
-      const imagesToPush = imageDetails.map((img) => img.filename);
-
-      // Fetch existing images and merge with new images
-      const existingImages =
-        (await client.db.get(`ownedImages.${userId}.${folder}`)) || [];
-      const updatedImages = [...new Set([...existingImages, ...imagesToPush])]; // Use Set to avoid duplicates
+      const updatedImages = [
+        ...new Set([
+          ...((await client.db.get(`ownedImages.${userId}.${folder}`)) || []),
+          ...imageDetails.map((img) => img.filename),
+        ]),
+      ]; // Use Set to avoid duplicates
 
       // Save updated images
       await client.db.set(`ownedImages.${userId}.${folder}`, updatedImages);
 
       res.json({ success: "Images purchased successfully" });
+
+      client.emit(
+        "credits",
+        userId,
+        totalPrice,
+        sub,
+        client.user?.id || userId,
+        `Store - ${folder} (${imageDetails.reduceRight(
+          (img) => `${img.name} `
+        )})`
+      );
     } catch (error) {
       console.error("API error:", error);
       res
