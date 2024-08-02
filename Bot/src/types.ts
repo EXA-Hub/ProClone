@@ -51,7 +51,7 @@ interface CustomClientEvents extends ClientEvents {
     amount: number,
     balance: number,
     user: Snowflake,
-    reason?: string
+    reason?: string | null
   ];
 }
 

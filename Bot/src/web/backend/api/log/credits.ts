@@ -16,25 +16,26 @@ const creditsLogsRouter = (client: CustomClient) => {
     try {
       const page = parseInt(req.query.page?.toString() || "0");
 
+      const data: User[] =
+        (await client.db.get(`creditsLogs.${client.apiUser.id}`)) || [];
+
       // Use Promise.all to handle asynchronous operations inside map
       const enrichedLogs = await Promise.all(
-        ((await client.db.get(`creditsLogs.${client.apiUser.id}`)) as User[])
-          .slice(page * 20, (page + 1) * 20)
-          .map(async (user) => {
-            const userData =
-              client.users.cache.get(user.User) ||
-              (await client.users.fetch(user.User));
-            return {
-              ...user,
-              User: {
-                username: userData.username,
-                avatar: userData.displayAvatarURL(),
-              },
-            };
-          })
+        data.slice(page * 20, (page + 1) * 20).map(async (user) => {
+          const userData =
+            client.users.cache.get(user.User) ||
+            (await client.users.fetch(user.User));
+          return {
+            ...user,
+            User: {
+              username: userData.username,
+              avatar: userData.displayAvatarURL(),
+            },
+          };
+        })
       );
 
-      res.json(enrichedLogs);
+      res.json({ enrichedLogs, pages: Math.ceil(data.length / 20) });
     } catch (error) {
       console.error("api error:", error);
       res

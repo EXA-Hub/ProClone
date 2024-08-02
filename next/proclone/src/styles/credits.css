@@ -90,3 +90,8 @@
     height: 5px;
   }
 }
+
+.form-control::placeholder {
+  color: #888888; /* Change this color to your desired placeholder color */
+  opacity: 1; /* Ensures the placeholder text isn't transparent */
+}

@@ -2,29 +2,138 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import "@/styles/credits.css";
 import { apiClient } from "@/utils/apiClient";
+import Pagination from "@/components/Pagination";
 
-interface User {
+interface TransType {
   Date: number;
   Amount: number;
   Balance: number;
-  User: string;
+  User: {
+    username: string;
+    avatar: string;
+  };
   Reason?: string;
 }
 
+interface DataType {
+  enrichedLogs: TransType[];
+  pages: number;
+}
+
 const Transactions: React.FC = () => {
-  const [Data, setData] = useState<User[]>([]);
+  const [Trans, setTrans] = useState<TransType | undefined>();
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [Data, setData] = useState<DataType | undefined>();
 
   useEffect(() => {
-    apiClient("/backend/api/log/credits", "get").then((res) => {
-      if (res.success) setData(res.data);
-    });
-  }, []);
+    apiClient("/backend/api/log/credits?page=" + (currentPage - 1), "get").then(
+      (res) => {
+        if (res.success) setData(res.data);
+      }
+    );
+  }, [currentPage]);
 
   return (
     <section className="dashboard-container ">
       <div className="component">
         <div className="component-container">
           <div style={{ opacity: 1 }}>
+            {Trans && (
+              <div className="ReactModalPortal">
+                <div
+                  className="ReactModal__Overlay ReactModal__Overlay--after-open"
+                  style={{
+                    position: "fixed",
+                    inset: "0px",
+                    backgroundColor: "rgba(255, 255, 255, 0.75)",
+                  }}
+                  onClick={() => setTrans(undefined)} // Close modal when clicking outside
+                >
+                  <div
+                    className="ReactModal__Content ReactModal__Content--after-open smallModal bg-modal"
+                    tabIndex={-1}
+                    role="dialog"
+                    aria-label="more information"
+                    aria-modal="true"
+                    onClick={(e) => e.stopPropagation()} // Prevent click inside modal from closing
+                  >
+                    <div id="transactions-model-parent" className="ltr">
+                      <div className="Modalhead">
+                        <Image
+                          src={Trans.User.avatar} // Use dynamic avatar URL
+                          className="trans-avatar"
+                          alt={Trans.User.username}
+                          width={40}
+                          height={40}
+                        />
+                        <div className="transactions-model-user" dir="ltr">
+                          <h5>
+                            {Trans.User.username}
+                            <div>
+                              <span>#</span>
+                              <span>0000</span>
+                            </div>
+                          </h5>
+                        </div>
+                      </div>
+                      <div className="row modalDram">
+                        <div className="transactions-modal-reason">
+                          <h5>Reason</h5>
+                          <p>{Trans.Reason || "لم يتم تقديم سبب"}</p>{" "}
+                          {/* Use dynamic reason */}
+                        </div>
+                        <div className="transactions-modal-reason">
+                          <h5>USER ID</h5>
+                          <p>{Trans.User.username}</p>{" "}
+                          {/* Use dynamic user ID */}
+                        </div>
+                        <div className="transactions-modal-reason">
+                          <h5>Amount</h5>
+                          <p />
+                          <p
+                            dir="ltr"
+                            className={
+                              (Trans.Amount > 0 ? "plus" : "negative") +
+                              " d-flex align-items-center"
+                            }
+                          >
+                            <i className="fa-solid fa-cedi-sign me-1" />
+                            {Trans.Amount > 0 ? "+" : ""}
+                            {Trans.Amount}
+                          </p>
+                          <p />
+                        </div>
+                        <div className="transactions-modal-reason">
+                          <h5>Balance</h5>
+                          <p className="d-flex gap-2 align-items-center">
+                            {Trans.Balance}
+                            <i
+                              className={`fa-solid ${
+                                Trans.Amount > 0
+                                  ? "fa-angle-up"
+                                  : "fa-angle-down"
+                              }`}
+                            />
+                          </p>
+                        </div>
+                      </div>
+                      <div className="transactions-modal-footer">
+                        <p>{new Date(Trans.Date).toLocaleString()}</p>{" "}
+                        {/* Convert milliseconds to date */}
+                        <button
+                          className="btn btn-green"
+                          onClick={() => setTrans(undefined)}
+                        >
+                          {" "}
+                          {/* Close modal on button click */}
+                          done
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
             <div id="transactions_container__E67JK" className=" ">
               <table className="transactions_table__Ge1Ih">
                 <thead>
@@ -36,800 +145,75 @@ const Transactions: React.FC = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr className="transactions_user__NkBQY pointer transactions_border-bottom__2NUQP">
-                    <td>
-                      <div className="transactions_user-info__lW_MB">
-                        <Image
-                          width={40}
-                          height={40}
-                          src="https://cdn.discordapp.com/avatars/779100799035899945/a2f40231e6c059ff445caded24023a79.jpg?size=1024"
-                          alt="3w_9"
-                        />
-                        <p className="ms-2">
-                          3w_9{" "}
-                          <span className="text-muted">
-                            <span>#</span>
-                            <span>0000</span>
-                          </span>
-                        </p>
-                      </div>
-                    </td>
-                    <td>
-                      <div className="transactions_user-date__zoRT0">
-                        26/07/2024 6:33:51 am
-                      </div>
-                    </td>
-                    <td>
-                      <div className="transactions_user-credits__tevdX d-flex align-items-center">
-                        <p dir="ltr" className="plus align-items-center">
-                          <i className="fa-solid fa-cedi-sign me-1" />
-                          +4750000
-                        </p>
-                      </div>
-                    </td>
-                    <td>
-                      <div className="transactions_user-balance__9IhCi">
-                        3412700
-                        <i className="fa-solid fa-angle-up" />
-                      </div>
-                    </td>
-                  </tr>
-                  <tr className="transactions_user__NkBQY pointer transactions_border-bottom__2NUQP">
-                    <td>
-                      <div className="transactions_user-info__lW_MB">
-                        <Image
-                          width={40}
-                          height={40}
-                          src="https://cdn.discordapp.com/avatars/779100799035899945/a2f40231e6c059ff445caded24023a79.jpg?size=1024"
-                          alt="3w_9"
-                        />
-                        <p className="ms-2">
-                          3w_9{" "}
-                          <span className="text-muted">
-                            <span>#</span>
-                            <span>0000</span>
-                          </span>
-                        </p>
-                      </div>
-                    </td>
-                    <td>
-                      <div className="transactions_user-date__zoRT0">
-                        21/07/2024 12:26:24 am
-                      </div>
-                    </td>
-                    <td>
-                      <div className="transactions_user-credits__tevdX d-flex align-items-center">
-                        <p dir="ltr" className="plus align-items-center">
-                          <i className="fa-solid fa-cedi-sign me-1" />
-                          +1900000
-                        </p>
-                      </div>
-                    </td>
-                    <td>
-                      <div className="transactions_user-balance__9IhCi">
-                        1512700
-                        <i className="fa-solid fa-angle-up" />
-                      </div>
-                    </td>
-                  </tr>
-                  <tr className="transactions_user__NkBQY pointer transactions_border-bottom__2NUQP">
-                    <td>
-                      <div className="transactions_user-info__lW_MB">
-                        <Image
-                          width={40}
-                          height={40}
-                          src="https://cdn.discordapp.com/avatars/282859044593598464/156a0d2872579f1ffcaa5d2127239bfd.jpg?size=1024"
-                          alt="ProBot ✨"
-                        />
-                        <p className="ms-2">ProBot ✨ </p>
-                      </div>
-                    </td>
-                    <td>
-                      <div className="transactions_user-date__zoRT0">
-                        16/07/2024 1:57:12 am
-                      </div>
-                    </td>
-                    <td>
-                      <div className="transactions_user-credits__tevdX d-flex align-items-center">
-                        <p dir="ltr" className="negative align-items-center">
-                          <i className="fa-solid fa-cedi-sign me-1" />
-                          -2000
-                        </p>
-                      </div>
-                    </td>
-                    <td>
-                      <div className="transactions_user-balance__9IhCi">
-                        1512700
-                        <i className="fa-solid fa-angle-down" />
-                      </div>
-                    </td>
-                  </tr>
-                  <tr className="transactions_user__NkBQY pointer transactions_border-bottom__2NUQP">
-                    <td>
-                      <div className="transactions_user-info__lW_MB">
-                        <Image
-                          width={40}
-                          height={40}
-                          src="https://cdn.discordapp.com/avatars/282859044593598464/156a0d2872579f1ffcaa5d2127239bfd.jpg?size=1024"
-                          alt="ProBot ✨"
-                        />
-                        <p className="ms-2">ProBot ✨ </p>
-                      </div>
-                    </td>
-                    <td>
-                      <div className="transactions_user-date__zoRT0">
-                        16/07/2024 1:57:06 am
-                      </div>
-                    </td>
-                    <td>
-                      <div className="transactions_user-credits__tevdX d-flex align-items-center">
-                        <p dir="ltr" className="negative align-items-center">
-                          <i className="fa-solid fa-cedi-sign me-1" />
-                          -2000
-                        </p>
-                      </div>
-                    </td>
-                    <td>
-                      <div className="transactions_user-balance__9IhCi">
-                        1514700
-                        <i className="fa-solid fa-angle-down" />
-                      </div>
-                    </td>
-                  </tr>
-                  <tr className="transactions_user__NkBQY pointer transactions_border-bottom__2NUQP">
-                    <td>
-                      <div className="transactions_user-info__lW_MB">
-                        <Image
-                          width={40}
-                          height={40}
-                          src="https://cdn.discordapp.com/avatars/282859044593598464/156a0d2872579f1ffcaa5d2127239bfd.jpg?size=1024"
-                          alt="ProBot ✨"
-                        />
-                        <p className="ms-2">ProBot ✨ </p>
-                      </div>
-                    </td>
-                    <td>
-                      <div className="transactions_user-date__zoRT0">
-                        16/07/2024 1:57:00 am
-                      </div>
-                    </td>
-                    <td>
-                      <div className="transactions_user-credits__tevdX d-flex align-items-center">
-                        <p dir="ltr" className="negative align-items-center">
-                          <i className="fa-solid fa-cedi-sign me-1" />
-                          -3000
-                        </p>
-                      </div>
-                    </td>
-                    <td>
-                      <div className="transactions_user-balance__9IhCi">
-                        1516700
-                        <i className="fa-solid fa-angle-down" />
-                      </div>
-                    </td>
-                  </tr>
-                  <tr className="transactions_user__NkBQY pointer transactions_border-bottom__2NUQP">
-                    <td>
-                      <div className="transactions_user-info__lW_MB">
-                        <Image
-                          width={40}
-                          height={40}
-                          src="https://cdn.discordapp.com/avatars/779100799035899945/a2f40231e6c059ff445caded24023a79.jpg?size=1024"
-                          alt="3w_9"
-                        />
-                        <p className="ms-2">
-                          3w_9{" "}
-                          <span className="text-muted">
-                            <span>#</span>
-                            <span>0000</span>
-                          </span>
-                        </p>
-                      </div>
-                    </td>
-                    <td>
-                      <div className="transactions_user-date__zoRT0">
-                        15/07/2024 12:37:45 am
-                      </div>
-                    </td>
-                    <td>
-                      <div className="transactions_user-credits__tevdX d-flex align-items-center">
-                        <p dir="ltr" className="plus align-items-center">
-                          <i className="fa-solid fa-cedi-sign me-1" />
-                          +950000
-                        </p>
-                      </div>
-                    </td>
-                    <td>
-                      <div className="transactions_user-balance__9IhCi">
-                        569700
-                        <i className="fa-solid fa-angle-up" />
-                      </div>
-                    </td>
-                  </tr>
-                  <tr className="transactions_user__NkBQY pointer transactions_border-bottom__2NUQP">
-                    <td>
-                      <div className="transactions_user-info__lW_MB">
-                        <Image
-                          width={40}
-                          height={40}
-                          src="https://cdn.discordapp.com/avatars/718847838464770080/86f2a78cf0ccd643203b4ba98e55f1e0.jpg?size=1024"
-                          alt="exatube"
-                        />
-                        <p className="ms-2">
-                          exatube{" "}
-                          <span className="text-muted">
-                            <span>#</span>
-                            <span>0000</span>
-                          </span>
-                        </p>
-                      </div>
-                    </td>
-                    <td>
-                      <div className="transactions_user-date__zoRT0">
-                        09/07/2024 7:00:04 pm
-                      </div>
-                    </td>
-                    <td>
-                      <div className="transactions_user-credits__tevdX d-flex align-items-center">
-                        <p dir="ltr" className="negative align-items-center">
-                          <i className="fa-solid fa-cedi-sign me-1" />
-                          -100
-                        </p>
-                      </div>
-                    </td>
-                    <td>
-                      <div className="transactions_user-balance__9IhCi">
-                        569700
-                        <i className="fa-solid fa-angle-down" />
-                      </div>
-                    </td>
-                  </tr>
-                  <tr className="transactions_user__NkBQY pointer transactions_border-bottom__2NUQP">
-                    <td>
-                      <div className="transactions_user-info__lW_MB">
-                        <Image
-                          width={40}
-                          height={40}
-                          src="https://cdn.discordapp.com/avatars/718847838464770080/86f2a78cf0ccd643203b4ba98e55f1e0.jpg?size=1024"
-                          alt="exatube"
-                        />
-                        <p className="ms-2">
-                          exatube{" "}
-                          <span className="text-muted">
-                            <span>#</span>
-                            <span>0000</span>
-                          </span>
-                        </p>
-                      </div>
-                    </td>
-                    <td>
-                      <div className="transactions_user-date__zoRT0">
-                        09/07/2024 6:57:43 pm
-                      </div>
-                    </td>
-                    <td>
-                      <div className="transactions_user-credits__tevdX d-flex align-items-center">
-                        <p dir="ltr" className="plus align-items-center">
-                          <i className="fa-solid fa-cedi-sign me-1" />
-                          +0.95
-                        </p>
-                      </div>
-                    </td>
-                    <td>
-                      <div className="transactions_user-balance__9IhCi">
-                        569799
-                        <i className="fa-solid fa-angle-up" />
-                      </div>
-                    </td>
-                  </tr>
-                  <tr className="transactions_user__NkBQY pointer transactions_border-bottom__2NUQP">
-                    <td>
-                      <div className="transactions_user-info__lW_MB">
-                        <Image
-                          width={40}
-                          height={40}
-                          src="https://cdn.discordapp.com/avatars/718847838464770080/86f2a78cf0ccd643203b4ba98e55f1e0.jpg?size=1024"
-                          alt="exatube"
-                        />
-                        <p className="ms-2">
-                          exatube{" "}
-                          <span className="text-muted">
-                            <span>#</span>
-                            <span>0000</span>
-                          </span>
-                        </p>
-                      </div>
-                    </td>
-                    <td>
-                      <div className="transactions_user-date__zoRT0">
-                        09/07/2024 6:55:01 pm
-                      </div>
-                    </td>
-                    <td>
-                      <div className="transactions_user-credits__tevdX d-flex align-items-center">
-                        <p dir="ltr" className="negative align-items-center">
-                          <i className="fa-solid fa-cedi-sign me-1" />
-                          -100
-                        </p>
-                      </div>
-                    </td>
-                    <td>
-                      <div className="transactions_user-balance__9IhCi">
-                        569799
-                        <i className="fa-solid fa-angle-down" />
-                      </div>
-                    </td>
-                  </tr>
-                  <tr className="transactions_user__NkBQY pointer transactions_border-bottom__2NUQP">
-                    <td>
-                      <div className="transactions_user-info__lW_MB">
-                        <Image
-                          width={40}
-                          height={40}
-                          src="https://cdn.discordapp.com/avatars/718847838464770080/86f2a78cf0ccd643203b4ba98e55f1e0.jpg?size=1024"
-                          alt="exatube"
-                        />
-                        <p className="ms-2">
-                          exatube{" "}
-                          <span className="text-muted">
-                            <span>#</span>
-                            <span>0000</span>
-                          </span>
-                        </p>
-                      </div>
-                    </td>
-                    <td>
-                      <div className="transactions_user-date__zoRT0">
-                        09/07/2024 6:52:36 pm
-                      </div>
-                    </td>
-                    <td>
-                      <div className="transactions_user-credits__tevdX d-flex align-items-center">
-                        <p dir="ltr" className="negative align-items-center">
-                          <i className="fa-solid fa-cedi-sign me-1" />
-                          -100
-                        </p>
-                      </div>
-                    </td>
-                    <td>
-                      <div className="transactions_user-balance__9IhCi">
-                        569899
-                        <i className="fa-solid fa-angle-down" />
-                      </div>
-                    </td>
-                  </tr>
-                  <tr className="transactions_user__NkBQY pointer transactions_border-bottom__2NUQP">
-                    <td>
-                      <div className="transactions_user-info__lW_MB">
-                        <Image
-                          width={40}
-                          height={40}
-                          src="https://cdn.discordapp.com/avatars/718847838464770080/86f2a78cf0ccd643203b4ba98e55f1e0.jpg?size=1024"
-                          alt="exatube"
-                        />
-                        <p className="ms-2">
-                          exatube{" "}
-                          <span className="text-muted">
-                            <span>#</span>
-                            <span>0000</span>
-                          </span>
-                        </p>
-                      </div>
-                    </td>
-                    <td>
-                      <div className="transactions_user-date__zoRT0">
-                        09/07/2024 5:08:21 pm
-                      </div>
-                    </td>
-                    <td>
-                      <div className="transactions_user-credits__tevdX d-flex align-items-center">
-                        <p dir="ltr" className="negative align-items-center">
-                          <i className="fa-solid fa-cedi-sign me-1" />
-                          -1
-                        </p>
-                      </div>
-                    </td>
-                    <td>
-                      <div className="transactions_user-balance__9IhCi">
-                        569999
-                        <i className="fa-solid fa-angle-down" />
-                      </div>
-                    </td>
-                  </tr>
-                  <tr className="transactions_user__NkBQY pointer transactions_border-bottom__2NUQP">
-                    <td>
-                      <div className="transactions_user-info__lW_MB">
-                        <Image
-                          width={40}
-                          height={40}
-                          src="https://cdn.discordapp.com/avatars/1067376627610292245/b988b276cb9c2205086000e2d41a38b5.jpg?size=1024"
-                          alt="1djs"
-                        />
-                        <p className="ms-2">
-                          1djs{" "}
-                          <span className="text-muted">
-                            <span>#</span>
-                            <span>0000</span>
-                          </span>
-                        </p>
-                      </div>
-                    </td>
-                    <td>
-                      <div className="transactions_user-date__zoRT0">
-                        03/07/2024 10:24:11 pm
-                      </div>
-                    </td>
-                    <td>
-                      <div className="transactions_user-credits__tevdX d-flex align-items-center">
-                        <p dir="ltr" className="plus align-items-center">
-                          <i className="fa-solid fa-cedi-sign me-1" />
-                          +570000
-                        </p>
-                      </div>
-                    </td>
-                    <td>
-                      <div className="transactions_user-balance__9IhCi">
-                        0<i className="fa-solid fa-angle-up" />
-                      </div>
-                    </td>
-                  </tr>
-                  <tr className="transactions_user__NkBQY pointer transactions_border-bottom__2NUQP">
-                    <td>
-                      <div className="transactions_user-info__lW_MB">
-                        <Image
-                          width={40}
-                          height={40}
-                          src="https://cdn.discordapp.com/avatars/1067376627610292245/b988b276cb9c2205086000e2d41a38b5.jpg?size=1024"
-                          alt="1djs"
-                        />
-                        <p className="ms-2">
-                          1djs{" "}
-                          <span className="text-muted">
-                            <span>#</span>
-                            <span>0000</span>
-                          </span>
-                        </p>
-                      </div>
-                    </td>
-                    <td>
-                      <div className="transactions_user-date__zoRT0">
-                        03/07/2024 10:23:35 pm
-                      </div>
-                    </td>
-                    <td>
-                      <div className="transactions_user-credits__tevdX d-flex align-items-center">
-                        <p dir="ltr" className="negative align-items-center">
-                          <i className="fa-solid fa-cedi-sign me-1" />
-                          -950000
-                        </p>
-                      </div>
-                    </td>
-                    <td>
-                      <div className="transactions_user-balance__9IhCi">
-                        0<i className="fa-solid fa-angle-down" />
-                      </div>
-                    </td>
-                  </tr>
-                  <tr className="transactions_user__NkBQY pointer transactions_border-bottom__2NUQP">
-                    <td>
-                      <div className="transactions_user-info__lW_MB">
-                        <Image
-                          width={40}
-                          height={40}
-                          src="https://cdn.discordapp.com/avatars/779100799035899945/a2f40231e6c059ff445caded24023a79.jpg?size=1024"
-                          alt="3w_9"
-                        />
-                        <p className="ms-2">
-                          3w_9{" "}
-                          <span className="text-muted">
-                            <span>#</span>
-                            <span>0000</span>
-                          </span>
-                        </p>
-                      </div>
-                    </td>
-                    <td>
-                      <div className="transactions_user-date__zoRT0">
-                        03/07/2024 10:16:38 pm
-                      </div>
-                    </td>
-                    <td>
-                      <div className="transactions_user-credits__tevdX d-flex align-items-center">
-                        <p dir="ltr" className="plus align-items-center">
-                          <i className="fa-solid fa-cedi-sign me-1" />
-                          +950000
-                        </p>
-                      </div>
-                    </td>
-                    <td>
-                      <div className="transactions_user-balance__9IhCi">
-                        0<i className="fa-solid fa-angle-up" />
-                      </div>
-                    </td>
-                  </tr>
-                  <tr className="transactions_user__NkBQY pointer transactions_border-bottom__2NUQP">
-                    <td>
-                      <div className="transactions_user-info__lW_MB">
-                        <Image
-                          width={40}
-                          height={40}
-                          src="https://cdn.discordapp.com/avatars/1058096640185086032/fc95e950258f8db361b987e643b29587.jpg?size=1024"
-                          alt=".7wx"
-                        />
-                        <p className="ms-2">
-                          .7wx{" "}
-                          <span className="text-muted">
-                            <span>#</span>
-                            <span>0000</span>
-                          </span>
-                        </p>
-                      </div>
-                    </td>
-                    <td>
-                      <div className="transactions_user-date__zoRT0">
-                        07/12/2023 3:27:57 am
-                      </div>
-                    </td>
-                    <td>
-                      <div className="transactions_user-credits__tevdX d-flex align-items-center">
-                        <p dir="ltr" className="negative align-items-center">
-                          <i className="fa-solid fa-cedi-sign me-1" />
-                          -34511
-                        </p>
-                      </div>
-                    </td>
-                    <td>
-                      <div className="transactions_user-balance__9IhCi">
-                        0<i className="fa-solid fa-angle-down" />
-                      </div>
-                    </td>
-                  </tr>
-                  <tr className="transactions_user__NkBQY pointer transactions_border-bottom__2NUQP">
-                    <td>
-                      <div className="transactions_user-info__lW_MB">
-                        <Image
-                          width={40}
-                          height={40}
-                          src="https://cdn.discordapp.com/embed/avatars/0.png"
-                          alt="toaruecchinoneko"
-                        />
-                        <p className="ms-2">
-                          toaruecchinoneko{" "}
-                          <span className="text-muted">
-                            <span>#</span>
-                            <span>0000</span>
-                          </span>
-                        </p>
-                      </div>
-                    </td>
-                    <td>
-                      <div className="transactions_user-date__zoRT0">
-                        17/10/2023 7:11:53 pm
-                      </div>
-                    </td>
-                    <td>
-                      <div className="transactions_user-credits__tevdX d-flex align-items-center">
-                        <p dir="ltr" className="plus align-items-center">
-                          <i className="fa-solid fa-cedi-sign me-1" />
-                          +2373
-                        </p>
-                      </div>
-                    </td>
-                    <td>
-                      <div className="transactions_user-balance__9IhCi">
-                        32138
-                        <i className="fa-solid fa-angle-up" />
-                      </div>
-                    </td>
-                  </tr>
-                  <tr className="transactions_user__NkBQY pointer transactions_border-bottom__2NUQP">
-                    <td>
-                      <div className="transactions_user-info__lW_MB">
-                        <Image
-                          width={40}
-                          height={40}
-                          src="https://cdn.discordapp.com/avatars/282859044593598464/156a0d2872579f1ffcaa5d2127239bfd.jpg?size=1024"
-                          alt="ProBot ✨"
-                        />
-                        <p className="ms-2">ProBot ✨ </p>
-                      </div>
-                    </td>
-                    <td>
-                      <div className="transactions_user-date__zoRT0">
-                        17/10/2023 5:46:15 pm
-                      </div>
-                    </td>
-                    <td>
-                      <div className="transactions_user-credits__tevdX d-flex align-items-center">
-                        <p dir="ltr" className="plus align-items-center">
-                          <i className="fa-solid fa-cedi-sign me-1" />
-                          +1819
-                        </p>
-                      </div>
-                    </td>
-                    <td>
-                      <div className="transactions_user-balance__9IhCi">
-                        32138
-                        <i className="fa-solid fa-angle-up" />
-                      </div>
-                    </td>
-                  </tr>
-                  <tr className="transactions_user__NkBQY pointer transactions_border-bottom__2NUQP">
-                    <td>
-                      <div className="transactions_user-info__lW_MB">
-                        <Image
-                          width={40}
-                          height={40}
-                          src="https://cdn.discordapp.com/embed/avatars/0.png"
-                          alt="ben.7300"
-                        />
-                        <p className="ms-2">
-                          ben.7300{" "}
-                          <span className="text-muted">
-                            <span>#</span>
-                            <span>0000</span>
-                          </span>
-                        </p>
-                      </div>
-                    </td>
-                    <td>
-                      <div className="transactions_user-date__zoRT0">
-                        17/10/2023 5:44:50 pm
-                      </div>
-                    </td>
-                    <td>
-                      <div className="transactions_user-credits__tevdX d-flex align-items-center">
-                        <p dir="ltr" className="plus align-items-center">
-                          <i className="fa-solid fa-cedi-sign me-1" />
-                          +4516
-                        </p>
-                      </div>
-                    </td>
-                    <td>
-                      <div className="transactions_user-balance__9IhCi">
-                        25803
-                        <i className="fa-solid fa-angle-up" />
-                      </div>
-                    </td>
-                  </tr>
-                  <tr className="transactions_user__NkBQY pointer transactions_border-bottom__2NUQP">
-                    <td>
-                      <div className="transactions_user-info__lW_MB">
-                        <Image
-                          width={40}
-                          height={40}
-                          src="https://cdn.discordapp.com/avatars/282859044593598464/156a0d2872579f1ffcaa5d2127239bfd.jpg?size=1024"
-                          alt="ProBot ✨"
-                        />
-                        <p className="ms-2">ProBot ✨ </p>
-                      </div>
-                    </td>
-                    <td>
-                      <div className="transactions_user-date__zoRT0">
-                        17/10/2023 5:41:22 pm
-                      </div>
-                    </td>
-                    <td>
-                      <div className="transactions_user-credits__tevdX d-flex align-items-center">
-                        <p dir="ltr" className="plus align-items-center">
-                          <i className="fa-solid fa-cedi-sign me-1" />
-                          +2556
-                        </p>
-                      </div>
-                    </td>
-                    <td>
-                      <div className="transactions_user-balance__9IhCi">
-                        25803
-                        <i className="fa-solid fa-angle-up" />
-                      </div>
-                    </td>
-                  </tr>
-                  <tr className="transactions_user__NkBQY pointer false">
-                    <td>
-                      <div className="transactions_user-info__lW_MB">
-                        <Image
-                          width={40}
-                          height={40}
-                          src="https://cdn.discordapp.com/embed/avatars/0.png"
-                          alt="ben.7300"
-                        />
-                        <p className="ms-2">
-                          ben.7300{" "}
-                          <span className="text-muted">
-                            <span>#</span>
-                            <span>0000</span>
-                          </span>
-                        </p>
-                      </div>
-                    </td>
-                    <td>
-                      <div className="transactions_user-date__zoRT0">
-                        15/10/2023 11:25:28 pm
-                      </div>
-                    </td>
-                    <td>
-                      <div className="transactions_user-credits__tevdX d-flex align-items-center">
-                        <p dir="ltr" className="plus align-items-center">
-                          <i className="fa-solid fa-cedi-sign me-1" />
-                          +4263
-                        </p>
-                      </div>
-                    </td>
-                    <td>
-                      <div className="transactions_user-balance__9IhCi">
-                        18984
-                        <i className="fa-solid fa-angle-up" />
-                      </div>
-                    </td>
-                  </tr>
+                  {Data &&
+                    Data.enrichedLogs.map((transaction, index) => (
+                      <tr
+                        onClick={() => {
+                          setTrans(transaction);
+                        }}
+                        key={index}
+                        className="transactions_user__NkBQY pointer transactions_border-bottom__2NUQP"
+                      >
+                        <td>
+                          <div className="transactions_user-info__lW_MB">
+                            <Image
+                              width={40}
+                              height={40}
+                              src={transaction.User.avatar}
+                              alt={transaction.User.username}
+                            />
+                            <p className="ms-2">
+                              {transaction.User.username}{" "}
+                              <span className="text-muted">
+                                <span>#</span>
+                                <span>0000</span>
+                              </span>
+                            </p>
+                          </div>
+                        </td>
+                        <td>
+                          <div className="transactions_user-date__zoRT0">
+                            {new Date(transaction.Date).toLocaleString()}
+                          </div>
+                        </td>
+                        <td>
+                          <div className="transactions_user-credits__tevdX d-flex align-items-center">
+                            <p
+                              dir="ltr"
+                              className={`align-items-center ${
+                                transaction.Amount > 0 ? "plus" : "negative"
+                              }`}
+                            >
+                              <i className="fa-solid fa-cedi-sign me-1" />
+                              {transaction.Amount > 0 ? "+" : ""}
+                              {transaction.Amount}
+                            </p>
+                          </div>
+                        </td>
+                        <td>
+                          <div className="transactions_user-balance__9IhCi">
+                            {transaction.Balance}
+                            <i
+                              className={`fa-solid ${
+                                transaction.Amount > 0
+                                  ? "fa-angle-up"
+                                  : "fa-angle-down"
+                              }`}
+                            />
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
                 </tbody>
               </table>
             </div>
-            {/* <nav aria-label="Page navigation" className="pagination-parent ">
-              <ul className="pagination">
-                <li className="previous disabled">
-                  <a>
-                    <i className="fas fa-angle-left" />
-                  </a>
-                </li>
-                <div>
-                  <li className="active">
-                    <a>1</a>
-                  </li>
-                  <li className=" ">
-                    <a>2</a>
-                  </li>
-                  <li className=" ">
-                    <a>3</a>
-                  </li>
-                  <li className=" ">
-                    <a>4</a>
-                  </li>
-                  <li className=" ">
-                    <a>5</a>
-                  </li>
-                  <li>
-                    <form style={{ display: "none" }}>
-                      <input
-                        className="form-control pagination-input"
-                        type="number"
-                        placeholder="Page"
-                        // defaultValue
-                        style={{
-                          height: "24px",
-                          borderRadius: "6px",
-                          padding: "5px",
-                        }}
-                      />
-                    </form>
-                    <a style={{ display: "flex" }}>...</a>
-                  </li>
-                  <li className=" ">
-                    <a>57</a>
-                  </li>
-                </div>
-                <li className="next">
-                  <a>
-                    <i className="fas fa-angle-right" />
-                  </a>
-                </li>
-              </ul>
-            </nav> */}
-            {/* <nav aria-label="Page navigation" className="pagination-parent ">
-              <>
-                <ReactPaginate
-                  previousLabel={<i className="fas fa-angle-left"></i>}
-                  nextLabel={<i className="fas fa-angle-right"></i>}
-                  breakLabel="..."
-                  pageCount={57}
-                  marginPagesDisplayed={1}
-                  pageRangeDisplayed={3}
-                  onPageChange={(selectedItem) => console.log(selectedItem)}
-                  containerClassName={"pagination"}
-                  activeClassName={"active"}
-                />
-              </>
-            </nav> */}
+            {Data && (
+              <Pagination
+                totalPages={Data.pages}
+                currentPage={currentPage}
+                onPageChange={setCurrentPage}
+              />
+            )}
           </div>
           <div style={{ height: "100px" }} />
         </div>

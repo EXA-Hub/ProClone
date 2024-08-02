@@ -92,7 +92,7 @@ module.exports = {
       const afterTax = Math.floor(amount - (amount * 5) / 100);
 
       const sub = await client.db.sub(`credits.${user.id}`, amount);
-      client.emit("credits", user.id, amount, sub, targetUser.id, reason);
+      client.emit("credits", user.id, -amount, sub, targetUser.id, reason);
       const add = await client.db.add(`credits.${targetUser.id}`, afterTax);
       client.emit("credits", targetUser.id, afterTax, add, user.id, reason);
 

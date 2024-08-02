@@ -133,7 +133,7 @@ export default function record(client: CustomClient) {
       User: Snowflake,
       Reason
     ) => {
-      await client.db.push(`creditsLogs.${userId}`, {
+      await client.db.unshift(`creditsLogs.${userId}`, {
         Date: Date.now(),
         Amount,
         Balance,

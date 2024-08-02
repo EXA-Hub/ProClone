@@ -213,7 +213,7 @@ const createStatusRouter = (client: CustomClient) => {
       );
 
       if (totalPrice > ((await client.db.get(`credits.${userId}`)) || 0))
-        return res.status(402).json({ error: "Insufficient credits" });
+        return res.status(402).send("You POoR! 🤣🤣😁");
 
       // Deduct the price in one call
       const sub = await client.db.sub(`credits.${userId}`, totalPrice);
@@ -233,11 +233,12 @@ const createStatusRouter = (client: CustomClient) => {
       client.emit(
         "credits",
         userId,
-        totalPrice,
+        -totalPrice,
         sub,
         client.user?.id || userId,
         `Store - ${folder} (${imageDetails.reduceRight(
-          (img) => `${img.name} `
+          (acc, img) => `${acc}${img.name} `,
+          ""
         )})`
       );
     } catch (error) {
