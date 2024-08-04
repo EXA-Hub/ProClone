@@ -49,7 +49,7 @@ module.exports = {
         user.username
       );
 
-    interaction.deferReply();
+    await interaction.deferReply();
 
     // Fetch user data and all users' XP data from the database
     const xpData = (await client.db.get(`xp_${guild.id}`)) || {};
@@ -206,7 +206,7 @@ module.exports = {
       );
     }
 
-    return interaction.followUp({
+    return await interaction.editReply({
       files: [
         {
           attachment: buffer,

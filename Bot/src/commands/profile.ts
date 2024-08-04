@@ -51,7 +51,7 @@ module.exports = {
         user.username
       );
 
-    interaction.deferReply();
+    await interaction.deferReply();
 
     // Fetch user data and all users' XP data from the database
     const xpData = (await client.db.get("xp")) || {};
@@ -232,7 +232,7 @@ module.exports = {
     // Convert canvas to buffer and send as an attachment
     const buffer = canvas.toBuffer();
 
-    return interaction.followUp({
+    return await interaction.editReply({
       files: [
         {
           attachment: buffer,

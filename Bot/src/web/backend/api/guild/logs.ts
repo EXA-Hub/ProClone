@@ -1,15 +1,16 @@
 // web/api/status.ts
 import { Router, Request, Response } from "express";
-import { CustomClient } from "../../../types";
+import { CustomClient } from "../../../../types";
 import { PermissionFlagsBits } from "discord.js";
-import { getGuildDataForDays } from "../../../methods/recorder";
+import { getGuildDataForDays } from "../../../../methods/recorder";
 
 const createRouter = (client: CustomClient) => {
   const router = Router();
 
   router.get("/", async (req: Request, res: Response) => {
     try {
-      const guildId = req.query.guildId as string;
+      const guildId = req.query.guildId?.toString();
+      const days = parseInt(req.query.days?.toString() || "7");
 
       if (!guildId) {
         return res.status(400).json({ error: "Missing guildId parameter" });
@@ -36,14 +37,9 @@ const createRouter = (client: CustomClient) => {
         });
       }
 
-      res.json({
-        guild: {
-          name: guild.name,
-          icon: guild.iconURL(),
-          lang: await client.getLanguage(guild.id),
-        },
-        logs: await getGuildDataForDays(guild.id, 7, client),
-      });
+      const logs = await getGuildDataForDays(guild.id, days, client);
+
+      res.json({ logs });
     } catch (error) {
       console.error("Error processing request:", error);
       res.status(500).json({ error: "Failed to process request" });

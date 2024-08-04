@@ -1,3 +1,9 @@
+.legal-markdown h1,
+h2 {
+  font-weight: 700;
+  font-feature-settings: "pnum" on, "lnum" on;
+}
+
 .dashboard-container {
   overflow-y: auto; /* Enable vertical scrolling */
   width: 100%;

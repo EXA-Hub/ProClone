@@ -238,17 +238,29 @@ function uava(name: string) {
   )}`;
 }
 
-const Sidebar: React.FC = () => {
+// Define the prop types
+interface SidebarProps {
+  showSidebar: boolean;
+}
+
+const Sidebar: React.FC<SidebarProps> = ({ showSidebar }) => {
   const [guild, setGuild] = useState<Guild>();
   const [sections, setSections] = useState<Section[] | null>();
   const currentPath = useRouter().pathname.toString();
   const [data, setData] = useState<undefined | Data>(undefined);
+  const [secs, setSecs] = useState<string[]>([]);
 
   useEffect(() => {
     if (!data)
       apiClient("/backend/api/guilds", "GET").then((res) => {
         if (res.data) setData(res.data);
       });
+    // Check if we're in the browser environment
+    if (typeof window !== "undefined") {
+      // Get data from localStorage
+      const storedData = localStorage.getItem("sections");
+      if (storedData) setSecs(JSON.parse(storedData));
+    }
   }, [data]);
 
   useEffect(() => {
@@ -273,7 +285,12 @@ const Sidebar: React.FC = () => {
       <div className="sidebar_sidebar__servers__rR6kY">
         <div className="user-image">
           <div className=" ">
-            <Link href="/dashboard">
+            <Link
+              onClick={() => {
+                setGuild(undefined);
+              }}
+              href="/dashboard"
+            >
               <Image
                 width={56}
                 height={56}
@@ -317,116 +334,167 @@ const Sidebar: React.FC = () => {
           </div>
         ))}
       </div>
-      <div className="sidebar_slider-background-color__pn060"></div>
-      <aside className="sidebar_sidebar__1af5q">
-        <div className="sidebar_sidebar__links__e439P">
-          <div id="sidebar_sidebar__server-info__03ViT">
-            <div className="tw-relative" style={{ textAlign: "center" }}>
-              <Image
-                width={56}
-                style={{ display: "math" }}
-                height={56}
-                id="sidebar_sidebar__avatar__QDGRP"
-                draggable="false"
-                src={
-                  currentPath.startsWith("/server") && guild
-                    ? guild.icon
-                      ? `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png`
-                      : uava(guild.name)
-                    : data.avatar
-                    ? `https://cdn.discordapp.com/avatars/${data.id}/${data.avatar}.png`
-                    : uava(data.username)
-                }
-                alt="avatar"
-              />
-            </div>
-            <div className="tw-flex tw-w-full tw-mt-2 tw-items-center tw-justify-center tw-gap-2">
-              <h4>
-                {currentPath.startsWith("/server") && guild
-                  ? guild.name
-                  : data.username}
-              </h4>
-            </div>
-          </div>
-          <div id="sidebar_sidebar__items__5Hd7R">
-            {sections ? (
-              sections.map((section) => (
-                <div key={section.title}>
-                  <div className="sidebar_sidebar__general-item__gVnTX sidebar_category_opened__uVDac">
-                    <svg
-                      width="10"
-                      height="6"
-                      viewBox="0 0 10 6"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M1 1L5 5L9 1"
-                        stroke="#878787"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      ></path>
-                    </svg>
-                    <h3 style={{ marginBottom: "5px" }}>{section.title}</h3>
-                  </div>
-                  {section.items.map((item) => (
-                    <Link
-                      href={
-                        currentPath.startsWith("/server")
-                          ? `/server/${guild ? guild.id : ""}${item.path}`
-                          : item.path
-                      }
-                      key={item.path}
-                    >
-                      <div
-                        className={`sidebar_sidebar__general-item-row__0z2Gp ${
-                          currentPath.includes(item.path)
-                            ? "sidebar_sidebar__link-active__Jepms"
-                            : ""
-                        }`}
-                      >
-                        <div className="sidebar_sidebar__sidebar-link__1NU9L">
-                          <div>
-                            <i className={`fas fa-${item.icon}`}></i>
-                            {item.title}
-                            {item.new && (
-                              <span className="sidebar_new-component-tag__LpRQP new-component-tag">
-                                NEW
-                              </span>
-                            )}
-                            {item.updated && (
-                              <span className="sidebar_updated-component-tag__LpRQP updated-component-tag">
-                                UPDATED
-                              </span>
-                            )}
-                            {item.premium && (
-                              <span className="sidebar_premium-component-tag__LpRQP vip-component-tag">
-                                PREMIUM
-                              </span>
-                            )}
-                          </div>
-                          {item.status && (
-                            <i
-                              className={
-                                item.status.endsWith("on")
-                                  ? "fa fa-check-circle module-on success-circle"
-                                  : "fas fa-circle iconify sidebar-circle-icon"
-                              }
-                            />
-                          )}
-                        </div>
-                      </div>
-                    </Link>
-                  ))}
+      {showSidebar && (
+        <>
+          <div className="sidebar_slider-background-color__pn060"></div>
+          <aside className="sidebar_sidebar__1af5q">
+            <div className="sidebar_sidebar__links__e439P">
+              <div id="sidebar_sidebar__server-info__03ViT">
+                <div className="tw-relative" style={{ textAlign: "center" }}>
+                  <Image
+                    width={56}
+                    style={{ display: "math" }}
+                    height={56}
+                    id="sidebar_sidebar__avatar__QDGRP"
+                    draggable="false"
+                    src={
+                      currentPath.startsWith("/server") && guild
+                        ? guild.icon
+                          ? `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png`
+                          : uava(guild.name)
+                        : data.avatar
+                        ? `https://cdn.discordapp.com/avatars/${data.id}/${data.avatar}.png`
+                        : uava(data.username)
+                    }
+                    alt="avatar"
+                  />
                 </div>
-              ))
-            ) : (
-              <Loading />
-            )}
-          </div>
-        </div>
-      </aside>
+                <div className="tw-flex tw-w-full tw-mt-2 tw-items-center tw-justify-center tw-gap-2">
+                  <h4>
+                    {currentPath.startsWith("/server") && guild
+                      ? guild.name
+                      : data.username}
+                  </h4>
+                </div>
+              </div>
+              <div id="sidebar_sidebar__items__5Hd7R">
+                {sections ? (
+                  sections.map((section) => (
+                    <div key={section.title}>
+                      <div
+                        onClick={() => {
+                          // Retrieve the current sections from localStorage and parse it into an array
+                          const nowSec = JSON.parse(
+                            localStorage.getItem("sections") || "[]"
+                          );
+
+                          const sections: string[] =
+                            nowSec && Array.isArray(nowSec) ? nowSec : [];
+
+                          // Check if the section title is already in the array
+                          const titleIndex = sections.indexOf(section.title);
+
+                          if (titleIndex !== -1)
+                            // If title exists, remove it
+                            sections.splice(titleIndex, 1);
+                          // If title does not exist, add it
+                          else sections.push(section.title);
+
+                          setSecs(sections);
+
+                          // Store the updated array back in localStorage
+                          localStorage.setItem(
+                            "sections",
+                            JSON.stringify(sections)
+                          );
+                        }}
+                        className="sidebar_sidebar__general-item__gVnTX sidebar_category_opened__uVDac"
+                      >
+                        {!secs.includes(section.title) ? (
+                          <svg
+                            width="10"
+                            height="6"
+                            viewBox="0 0 10 6"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M1 1L5 5L9 1"
+                              stroke="#878787"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            ></path>
+                          </svg>
+                        ) : (
+                          <svg
+                            width="6"
+                            height="10"
+                            viewBox="0 0 6 10"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M1 1L5 5L1 9"
+                              stroke="#878787"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            ></path>
+                          </svg>
+                        )}
+                        <h3 style={{ marginBottom: "5px" }}>{section.title}</h3>
+                      </div>
+                      {!secs.includes(section.title) &&
+                        section.items.map((item) => (
+                          <Link
+                            href={
+                              currentPath.startsWith("/server")
+                                ? `/server/${guild ? guild.id : ""}${item.path}`
+                                : item.path
+                            }
+                            key={item.path}
+                          >
+                            <div
+                              className={`sidebar_sidebar__general-item-row__0z2Gp ${
+                                currentPath.includes(item.path)
+                                  ? "sidebar_sidebar__link-active__Jepms"
+                                  : ""
+                              }`}
+                            >
+                              <div className="sidebar_sidebar__sidebar-link__1NU9L">
+                                <div>
+                                  <i className={`fas fa-${item.icon}`}></i>
+                                  {item.title}
+                                  {item.new && (
+                                    <span className="sidebar_new-component-tag__LpRQP new-component-tag">
+                                      NEW
+                                    </span>
+                                  )}
+                                  {item.updated && (
+                                    <span className="sidebar_updated-component-tag__LpRQP updated-component-tag">
+                                      UPDATED
+                                    </span>
+                                  )}
+                                  {item.premium && (
+                                    <span className="sidebar_premium-component-tag__LpRQP vip-component-tag">
+                                      PREMIUM
+                                    </span>
+                                  )}
+                                </div>
+                                {item.status && (
+                                  <i
+                                    className={
+                                      item.status.endsWith("on")
+                                        ? "fa fa-check-circle module-on success-circle"
+                                        : "fas fa-circle iconify sidebar-circle-icon"
+                                    }
+                                  />
+                                )}
+                              </div>
+                            </div>
+                          </Link>
+                        ))}
+                    </div>
+                  ))
+                ) : (
+                  <Loading />
+                )}
+              </div>
+            </div>
+          </aside>
+        </>
+      )}
     </div>
   );
 };

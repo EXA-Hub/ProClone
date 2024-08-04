@@ -1,7 +1,8 @@
+import Sub from "@/components/Sub";
 import React from "react";
 
 const TempLink: React.FC = () => {
-  return <>Temp Link</>;
+  return <Sub />;
 };
 
 export default TempLink;

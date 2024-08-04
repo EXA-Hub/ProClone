@@ -1,7 +1,8 @@
+import Sub from "@/components/Sub";
 import React from "react";
 
 const Voice: React.FC = () => {
-  return <>Voice Online</>;
+  return <Sub />;
 };
 
 export default Voice;

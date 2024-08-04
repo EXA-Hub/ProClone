@@ -5,9 +5,10 @@ import Head from "next/head";
 
 interface LayoutProps {
   children: React.ReactNode;
+  showSidebar: boolean;
 }
 
-const Layout: React.FC<LayoutProps> = ({ children }) => {
+const Layout: React.FC<LayoutProps> = ({ children, showSidebar }) => {
   return (
     <>
       <Head>
@@ -17,7 +18,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       <div className="tw-h-screen tw-flex tw-flex-col">
         <Header />
         <div className="tw-flex tw-flex-1 tw-overflow-hidden">
-          <Sidebar />
+          <Sidebar showSidebar={showSidebar} />
           {children}
         </div>
       </div>

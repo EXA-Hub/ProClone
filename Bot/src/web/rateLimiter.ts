@@ -54,50 +54,80 @@ const rateLimiter = (client: CustomClient, app: Router) => {
     const cachedResponse = cache.get(key) as any;
     if (cachedResponse) {
       console.log(
-        chalk.green("[ CACHE RESPONSE ]: " + keyData.method + keyData.path)
+        chalk.green(
+          `[ CACHE RESPONSE ]: ${cachedResponse.method} ${keyData.method} ${keyData.path}`
+        )
       );
-      res.status(cachedResponse.statusCode).send(cachedResponse.body);
-      return;
+
+      // Use the appropriate method to send the cached response
+      switch (cachedResponse.method) {
+        case "json":
+          return res
+            .status(cachedResponse.statusCode)
+            .json(cachedResponse.body);
+        case "jsonp":
+          return res
+            .status(cachedResponse.statusCode)
+            .jsonp(cachedResponse.body);
+        case "sendStatus":
+          return res.sendStatus(cachedResponse.statusCode);
+        default:
+          return res
+            .status(cachedResponse.statusCode)
+            .send(cachedResponse.body);
+      }
     }
 
     // Override res.send to cache the response
     const originalSend = res.send.bind(res);
     res.send = (body) => {
-      if (!res.headersSent) {
-        cache.set(key, { statusCode: res.statusCode, body });
-        return originalSend(body);
+      if (!res.headersSent && res.statusCode >= 200 && res.statusCode < 300) {
+        cache.set(key, {
+          method: "send",
+          statusCode: res.statusCode,
+          body,
+        });
       }
-      return res;
+      return originalSend(body);
     };
 
     // Override res.json to cache the response
     const originalJson = res.json.bind(res);
     res.json = (body) => {
-      if (!res.headersSent) {
-        cache.set(key, { statusCode: res.statusCode, body });
-        return originalJson(body);
+      if (!res.headersSent && res.statusCode >= 200 && res.statusCode < 300) {
+        cache.set(key, {
+          method: "json",
+          statusCode: res.statusCode,
+          body,
+        });
       }
-      return res;
+      return originalJson(body);
     };
 
     // Override res.jsonp to cache the response
     const originalJsonp = res.jsonp.bind(res);
     res.jsonp = (body) => {
-      if (!res.headersSent) {
-        cache.set(key, { statusCode: res.statusCode, body });
-        return originalJsonp(body);
+      if (!res.headersSent && res.statusCode >= 200 && res.statusCode < 300) {
+        cache.set(key, {
+          method: "jsonp",
+          statusCode: res.statusCode,
+          body,
+        });
       }
-      return res;
+      return originalJsonp(body);
     };
 
     // Override res.sendStatus to cache the response
     const originalSendStatus = res.sendStatus.bind(res);
     res.sendStatus = (statusCode) => {
-      if (!res.headersSent) {
-        cache.set(key, { statusCode, body: null });
-        return originalSendStatus(statusCode);
+      if (!res.headersSent && statusCode >= 200 && statusCode < 300) {
+        cache.set(key, {
+          method: "sendStatus",
+          statusCode,
+          body: null,
+        });
       }
-      return res;
+      return originalSendStatus(statusCode);
     };
 
     next();
