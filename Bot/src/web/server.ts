@@ -166,13 +166,42 @@ export default async (client: CustomClient) => {
 
   app.use("/", router);
 
+  /**
+   *
+   *
+   * هنا يتم إستدعاء ملفات الداشبورد
+   *
+   *
+   */
+
+  const out = path.resolve(__dirname, "../../../next/proclone/out");
+
+  // Serve static files (including Next.js static assets)
+  app.use("/_next", express.static(path.join(out, "_next")));
+  app.use(express.static(out));
+
+  // Serve the index.html file for all other routes
+  app.get("*", (req, res) => {
+    // Check if the requested path corresponds to a static file
+    if (path.extname(req.path)) {
+      res.sendFile(
+        path.resolve(out, `${req.path}.html`),
+        (err) => err && res.status(404).sendFile(path.join(out, "404.html"))
+      );
+    } else res.sendFile(path.join(out, `${req.path}.html`));
+  });
+
   // Error handling middleware
   app.use((err: any, req: Request, res: Response, next: NextFunction) => {
     console.error(err.stack);
-    res.status(500).json({ error: "Something went wrong!" });
+    res.status(500).sendFile(path.join(out, "404.html"));
   });
 
   app.listen(port, () => {
-    console.log(`API server running on http://localhost:${port}`);
+    console.log(
+      chalk.yellowBright.bgRed(
+        `☭ DashBoard running on http://localhost:${port}`
+      )
+    );
   });
 };

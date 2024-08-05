@@ -34,7 +34,7 @@ const rateLimiter = (client: CustomClient, app: Router) => {
 
     const { method, path, query, body } = req;
 
-    if (path.includes("cdn")) return next();
+    if (!path.includes("backend")) return next();
 
     const keyData = {
       method,

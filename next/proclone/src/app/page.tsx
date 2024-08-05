@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import AOS from "aos";
 import "aos/dist/aos.css"; // Import AOS styles
 import { BASE_URL } from "../utils/apiClient";
+import Link from "next/link";
 
 export default function Home() {
   const [htmlContent, setHtmlContent] = useState<string | null>(null);
@@ -61,13 +62,13 @@ export default function Home() {
             className="tw-flex tw-flex-row tw-items-center tw-justify-between tw-py-5 lg:tw-py-3"
             id="navbar"
           >
-            <a
+            <Link
               className="tw-block tw-h-fit sm:tw-h-[28px]"
               aria-label="Home page"
               href="/"
             >
               <Image src={"/probot.svg"} alt={"logo"} width={140} height={37} />
-            </a>
+            </Link>
             <nav
               aria-label="Main"
               data-orientation="horizontal"
@@ -139,7 +140,7 @@ export default function Home() {
                     </button>
                   </li>
                   <li>
-                    <a
+                    <Link
                       className="tw-flex tw-cursor-pointer tw-items-center tw-gap-2 tw-rounded-md tw-px-4 tw-py-2 tw-transition-all tw-duration-300 hover:tw-bg-[#EFB442]/10"
                       href="/pricing"
                     >
@@ -157,7 +158,7 @@ export default function Home() {
                         style={{ color: "transparent" }}
                         src="/premium.svg"
                       />
-                    </a>
+                    </Link>
                   </li>
                 </ul>
               </div>
@@ -211,11 +212,11 @@ export default function Home() {
               <button className="button tw-bg-[#605ceb] tw-border-solid tw-border-[#6965F5] hover:tw-bg-[#807eea] tw-transition-all tw-duration-150 tw-rounded-md tw-text-base tw-py-3 tw-px-6 sm:tw-py-4 tw-text-sm lg:tw-w-full">
                 Add To Discord
               </button>
-              <a className="lg:tw-w-full" href="/#features">
+              <Link className="lg:tw-w-full" href="/#features">
                 <button className="button tw-bg-gray-850 tw-border-solid tw-border-gray-800 hover:tw-bg-gray-800 tw-transition-all tw-duration-150 tw-rounded-md tw-text-base tw-py-3 tw-px-6 sm:tw-py-4 tw-w-full tw-text-sm">
                   Browse Features
                 </button>
-              </a>
+              </Link>
             </div>
           </div>
         </section>
@@ -756,11 +757,11 @@ export default function Home() {
                 </div>
               </div>
               <div>
-                <a href="/features/welcome-messages">
+                <Link href="/features/welcome-messages">
                   <button className="button tw-bg-gray-850 tw-border-solid tw-border-gray-800 hover:tw-bg-gray-800 tw-transition-all tw-duration-150 tw-rounded-md tw-text-base tw-py-3 tw-px-6 sm:tw-py-4 sm:tw-text-sm">
                     Learn more about Welcome &amp; GoodBye
                   </button>
-                </a>
+                </Link>
               </div>
             </div>
             <Image
@@ -811,11 +812,11 @@ export default function Home() {
                 </div>
               </div>
               <div>
-                <a href="/features/embed-messages">
+                <Link href="/features/embed-messages">
                   <button className="button tw-bg-gray-850 tw-border-solid tw-border-gray-800 hover:tw-bg-gray-800 tw-transition-all tw-duration-150 tw-rounded-md tw-text-base tw-py-3 tw-px-6 sm:tw-py-4 sm:tw-text-sm">
                     Learn more about Embed Messages
                   </button>
-                </a>
+                </Link>
               </div>
             </div>
             <Image
@@ -869,11 +870,11 @@ export default function Home() {
                 </div>
               </div>
               <div>
-                <a href="/features/self-assignable-role">
+                <Link href="/features/self-assignable-role">
                   <button className="button tw-bg-gray-850 tw-border-solid tw-border-gray-800 hover:tw-bg-gray-800 tw-transition-all tw-duration-150 tw-rounded-md tw-text-base tw-py-3 tw-px-6 sm:tw-py-4 sm:tw-text-sm">
                     Learn more about Self-Assignable Roles
                   </button>
-                </a>
+                </Link>
               </div>
             </div>
             <Image
@@ -923,11 +924,11 @@ export default function Home() {
                 </div>
               </div>
               <div>
-                <a href="/features/leveling-system">
+                <Link href="/features/leveling-system">
                   <button className="button tw-bg-gray-850 tw-border-solid tw-border-gray-800 hover:tw-bg-gray-800 tw-transition-all tw-duration-150 tw-rounded-md tw-text-base tw-py-3 tw-px-6 sm:tw-py-4 sm:tw-text-sm">
                     Learn more about Leveling System
                   </button>
-                </a>
+                </Link>
               </div>
             </div>
             <Image
@@ -1025,7 +1026,7 @@ export default function Home() {
                 <div className="tw-flex tw-flex-col tw-gap-6">
                   <div className="landing-para">Website Pages</div>
                   <div className="tw-flex tw-flex-col tw-gap-4">
-                    <a
+                    <Link
                       className="landing-para tw-flex tw-w-fit tw-items-center tw-gap-2 tw-text-sm tw-text-gray-400 tw-transition-all tw-duration-150 hover:tw-text-gray-200"
                       href="/memberships"
                     >
@@ -1033,77 +1034,77 @@ export default function Home() {
                       <p className="tw-m-0 tw-rounded tw-bg-[#ef67670f] tw-px-2 tw-py-[2px] tw-text-[12px] tw-font-extrabold tw-uppercase tw-text-[#EF6767]">
                         NEW
                       </p>
-                    </a>
-                    <a
+                    </Link>
+                    <Link
                       className="landing-para tw-flex tw-w-fit tw-items-center tw-gap-2 tw-text-sm tw-text-gray-400 tw-transition-all tw-duration-150 hover:tw-text-gray-200"
                       href="/dashboard"
                     >
                       Dashboard
-                    </a>
-                    <a
+                    </Link>
+                    <Link
                       className="landing-para tw-flex tw-w-fit tw-items-center tw-gap-2 tw-text-sm tw-text-gray-400 tw-transition-all tw-duration-150 hover:tw-text-gray-200"
                       href="https://docs.probot.io/"
                     >
                       Docs
-                    </a>
-                    <a
+                    </Link>
+                    <Link
                       className="landing-para tw-flex tw-w-fit tw-items-center tw-gap-2 tw-text-sm tw-text-gray-400 tw-transition-all tw-duration-150 hover:tw-text-gray-200"
                       href="/pricing"
                     >
                       Premium
-                    </a>
-                    <a
+                    </Link>
+                    <Link
                       className="landing-para tw-flex tw-w-fit tw-items-center tw-gap-2 tw-text-sm tw-text-gray-400 tw-transition-all tw-duration-150 hover:tw-text-gray-200"
                       href="/commands"
                     >
                       Commands
-                    </a>
+                    </Link>
                   </div>
                 </div>
                 <div className="tw-flex tw-flex-col tw-gap-6">
                   <div className="landing-para">Other Links</div>
                   <div className="tw-flex tw-flex-col tw-gap-4">
-                    <a
+                    <Link
                       className="landing-para tw-flex tw-w-fit tw-items-center tw-gap-2 tw-text-sm tw-text-gray-400 tw-transition-all tw-duration-150 hover:tw-text-gray-200"
                       href="https://twitter.com/TryProBot"
                     >
                       Twitter
-                    </a>
-                    <a
+                    </Link>
+                    <Link
                       className="landing-para tw-flex tw-w-fit tw-items-center tw-gap-2 tw-text-sm tw-text-gray-400 tw-transition-all tw-duration-150 hover:tw-text-gray-200"
                       href="https://discord.gg/ProBot"
                     >
                       Discord
-                    </a>
-                    <a
+                    </Link>
+                    <Link
                       className="landing-para tw-flex tw-w-fit tw-items-center tw-gap-2 tw-text-sm tw-text-gray-400 tw-transition-all tw-duration-150 hover:tw-text-gray-200"
                       href="https://top.gg/bot/probot"
                     >
                       Top.gg
-                    </a>
+                    </Link>
                   </div>
                 </div>
                 <div className="tw-flex tw-flex-col tw-gap-6">
                   <div className="landing-para">Rules</div>
                   <div className="tw-flex tw-flex-col tw-gap-4">
-                    <a
+                    <Link
                       className="landing-para tw-flex tw-w-fit tw-items-center tw-gap-2 tw-text-sm tw-text-gray-400 tw-transition-all tw-duration-150 hover:tw-text-gray-200"
                       href="/terms-of-use"
                     >
                       Terms Of Use
-                    </a>
-                    <a
+                    </Link>
+                    <Link
                       className="landing-para tw-flex tw-w-fit tw-items-center tw-gap-2 tw-text-sm tw-text-gray-400 tw-transition-all tw-duration-150 hover:tw-text-gray-200"
                       href="/privacy-policy"
                     >
                       Privacy Policy
-                    </a>
-                    <a
+                    </Link>
+                    <Link
                       className="landing-para tw-flex tw-w-fit tw-items-center tw-gap-2 tw-text-sm tw-text-gray-400 tw-transition-all tw-duration-150 hover:tw-text-gray-200"
                       href="/refund-policy"
                     >
                       Refund Policy
-                    </a>
+                    </Link>
                   </div>
                 </div>
               </div>
@@ -1113,7 +1114,7 @@ export default function Home() {
                 © 2024 All rights reserved.
               </p>
               <div className="tw-flex tw-flex-row tw-items-center tw-gap-4">
-                <a
+                <Link
                   className="tw-rounded-sm tw-transition-all tw-duration-200 hover:tw-bg-gray-850"
                   href="https://discord.gg/probot"
                 >
@@ -1128,8 +1129,8 @@ export default function Home() {
                     style={{ color: "transparent" }}
                     src="/discord.svg"
                   />
-                </a>
-                <a
+                </Link>
+                <Link
                   className="tw-rounded-sm tw-transition-all tw-duration-200 hover:tw-bg-gray-850"
                   href="https://www.reddit.com/r/probot"
                 >
@@ -1144,8 +1145,8 @@ export default function Home() {
                     style={{ color: "transparent" }}
                     src="/reddit.svg"
                   />
-                </a>
-                <a
+                </Link>
+                <Link
                   className="tw-rounded-sm tw-transition-all tw-duration-200 hover:tw-bg-gray-850"
                   href="https://twitter.com/TryProBot"
                 >
@@ -1160,7 +1161,7 @@ export default function Home() {
                     style={{ color: "transparent" }}
                     src="/twitter.svg"
                   />
-                </a>
+                </Link>
               </div>
             </div>
           </div>

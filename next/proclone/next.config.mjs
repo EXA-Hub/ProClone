@@ -1,7 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: "export",
   reactStrictMode: true,
   images: {
+    loader: "custom",
+    loaderFile: "./loader.js",
+    unoptimized: true,
     formats: ["image/avif", "image/webp"], // Add additional formats if needed
     dangerouslyAllowSVG: true, // Allow SVG images
     remotePatterns: [

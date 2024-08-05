@@ -57,3 +57,6 @@ tsconfig.tsbuildinfo
 # Sublime Text workspace settings
 *.sublime-project
 *.sublime-workspace
+
+# Next SerVer
+server

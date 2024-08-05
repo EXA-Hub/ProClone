@@ -11,6 +11,7 @@ import api from "./web/server";
 dotenv.config();
 
 import { CustomClient } from "./types";
+import chalk from "chalk";
 
 // Create a new instance of CustomClient
 const client: CustomClient = new Client({
@@ -171,3 +172,17 @@ process.on("warning", async (warn) => {
  * TEST ZONE!!
  *
  */
+
+console.log(
+  chalk.blue(
+    `
+███████╗ █████╗ ███╗   ███╗██████╗ ██╗  ██╗
+╚══███╔╝██╔══██╗████╗ ████║██╔══██╗╚██╗██╔╝
+  ███╔╝ ███████║██╔████╔██║██████╔╝ ╚███╔╝ 
+ ███╔╝  ██╔══██║██║╚██╔╝██║██╔═══╝  ██╔██╗ 
+███████╗██║  ██║██║ ╚═╝ ██║██║     ██╔╝ ██╗
+╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝╚═╝     ╚═╝  ╚═╝
+          https://dsc.gg/exa
+`
+  )
+);
