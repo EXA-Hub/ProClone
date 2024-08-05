@@ -58,7 +58,7 @@ const client: CustomClient = new Client({
   };
 
   const commandFiles: string[] =
-    [] || // test api
+    // [] || // test api
     fs
       .readdirSync(path.join(__dirname, "commands"))
       .filter((file) => file.endsWith(".ts"));
@@ -77,7 +77,7 @@ const client: CustomClient = new Client({
   client.cmdsec = require("./database/sections.json");
 
   const eventFiles: string[] =
-    [] || // test api
+    // [] || // test api
     fs
       .readdirSync(path.join(__dirname, "events"))
       .filter((file) => file.endsWith(".ts"));
