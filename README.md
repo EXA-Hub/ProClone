@@ -1,4 +1,4 @@
-# <strong> مقطع يوتيوب قادم للشرح... </strong>
+# <strong> [![شرح طريقة تشغيل البوت كاملا](https://img.youtube.com/vi/JxPRDzZspCM/0.jpg)](https://www.youtube.com/watch?v=JxPRDzZspCM) </strong>
 
 ![Picsart_24-07-18_04-46-46-002](https://github.com/user-attachments/assets/a07b551a-8694-4e79-9d18-93b773b756a4)
 
@@ -46,7 +46,7 @@ npm run test
 # شغّل اختبارات المشروع المحددة في ملف package.json.
 ```
 
-###### <a href="https://youtube.com/exa4ever" target="_blank">مقطع يوتيوب قريبا...</a>
+###### <a href="https://youtube.com/exa4ever" target="_blank">مقطع يوتيوب.</a>
 
 # شرح الملف config.json
 
